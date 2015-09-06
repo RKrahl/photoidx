@@ -6,6 +6,7 @@ import os.path
 import fnmatch
 from collections import MutableSequence
 import yaml
+from photo.idxitem import IdxItem
 
 
 class Index(MutableSequence):
@@ -56,7 +57,7 @@ class Index(MutableSequence):
         for f in sorted(os.listdir(self.directory)):
             if (os.path.isfile(os.path.join(self.directory,f)) and 
                 fnmatch.fnmatch(f, '*.jpg')):
-                self.items.append({'filename':f, 'tags':[]})
+                self.items.append(IdxItem(filename=f))
 
     def read(self, idxfile=None):
         """Read the index from a file.
@@ -64,13 +65,12 @@ class Index(MutableSequence):
         self.idxfilename = self._idxfilename(idxfile)
         self.directory = os.path.dirname(self.idxfilename)
         with open(self.idxfilename, 'rt') as f:
-            self.items = yaml.load(f)
+            self.items = [IdxItem(data=i) for i in yaml.load(f)]
 
     def write(self, idxfile=None):
         """Write the index to a file.
         """
-        self.idxfilename = self._idxfilename(idxfile)
-        self.directory = os.path.dirname(self.idxfilename)
-        with open(self.idxfilename, 'wt') as f:
-            yaml.dump(self.items, f, default_flow_style=False)
+        with open(self._idxfilename(idxfile), 'wt') as f:
+            items = [i.as_dict() for i in self.items]
+            yaml.dump(items, f, default_flow_style=False)
 
