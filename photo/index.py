@@ -7,6 +7,7 @@ import fnmatch
 from collections import MutableSequence
 import yaml
 from photo.idxitem import IdxItem
+from photo.helper import tmpchdir
 
 
 class Index(MutableSequence):
@@ -54,10 +55,10 @@ class Index(MutableSequence):
         """
         self.directory = os.path.abspath(imgdir)
         self.items = []
-        for f in sorted(os.listdir(self.directory)):
-            if (os.path.isfile(os.path.join(self.directory,f)) and 
-                fnmatch.fnmatch(f, '*.jpg')):
-                self.items.append(IdxItem(filename=f))
+        with tmpchdir(self.directory):
+            for f in sorted(os.listdir(self.directory)):
+                if (os.path.isfile(f) and fnmatch.fnmatch(f, '*.jpg')):
+                    self.items.append(IdxItem(filename=f))
 
     def read(self, idxfile=None):
         """Read the index from a file.
