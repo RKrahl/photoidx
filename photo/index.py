@@ -43,7 +43,10 @@ class Index(MutableSequence):
         """Determine the index file name for reading and writing.
         """
         if idxfile is not None:
-            return os.path.abspath(idxfile)
+            idxfile = os.path.abspath(idxfile)
+            if os.path.isdir(idxfile):
+                idxfile = os.path.join(idxfile, self.defIdxFilename)
+            return idxfile
         elif self.idxfilename is not None:
             return self.idxfilename
         else:
