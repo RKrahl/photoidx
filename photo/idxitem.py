@@ -28,6 +28,9 @@ class IdxItem(object):
         elif filename is not None:
             self.filename = filename
             self.md5 = _md5file(filename)
+        self.tags = set(self.tags)
 
     def as_dict(self):
-        return dict(self.__dict__)
+        d = self.__dict__.copy()
+        d['tags'] = list(d['tags'])
+        return d
