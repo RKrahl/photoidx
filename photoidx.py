@@ -13,13 +13,10 @@ def ls(args):
     idx = photo.index.Index(idxfile=args.directory)
     taglist = args.tags.split(",") if args.tags else []
     for i in idx.filtered(taglist=taglist, filelist=args.files):
-        print(i.filename)
-
-def md5(args):
-    idx = photo.index.Index(idxfile=args.directory)
-    taglist = args.tags.split(",") if args.tags else []
-    for i in idx.filtered(taglist=taglist, filelist=args.files):
-        print("%s  %s" % (i.md5, i.filename))
+        if args.md5:
+            print("%s  %s" % (i.md5, i.filename))
+        else:
+            print(i.filename)
 
 def addtag(args):
     idx = photo.index.Index(idxfile=args.directory)
@@ -36,13 +33,10 @@ subparsers = argparser.add_subparsers(title='subcommands')
 create_parser = subparsers.add_parser('create', help="create the index")
 create_parser.set_defaults(func=create)
 ls_parser = subparsers.add_parser('ls', help="list image files")
+ls_parser.add_argument('--md5', action='store_true', help="print md5 checksums")
 ls_parser.add_argument('--tags', help="comma separated list of tags")
 ls_parser.add_argument('files', nargs='*')
 ls_parser.set_defaults(func=ls)
-md5_parser = subparsers.add_parser('md5', help="print md5 checksums")
-md5_parser.add_argument('--tags', help="comma separated list of tags")
-md5_parser.add_argument('files', nargs='*')
-md5_parser.set_defaults(func=md5)
 addtag_parser = subparsers.add_parser('addtag', help="add tag to images")
 addtag_parser.add_argument('tag')
 addtag_parser.add_argument('--tags', help="comma separated list of tags")
