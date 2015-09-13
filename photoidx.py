@@ -25,6 +25,13 @@ def addtag(args):
         i.tags.add(args.tag)
     idx.write()
 
+def rmtag(args):
+    idx = photo.index.Index(idxfile=args.directory)
+    taglist = args.tags.split(",") if args.tags else []
+    for i in idx.filtered(taglist=taglist, filelist=args.files):
+        i.tags.discard(args.tag)
+    idx.write()
+
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('-d', '--directory', 
@@ -42,6 +49,11 @@ addtag_parser.add_argument('tag')
 addtag_parser.add_argument('--tags', help="comma separated list of tags")
 addtag_parser.add_argument('files', nargs='*')
 addtag_parser.set_defaults(func=addtag)
+rmtag_parser = subparsers.add_parser('rmtag', help="remove tag from images")
+rmtag_parser.add_argument('tag')
+rmtag_parser.add_argument('--tags', help="comma separated list of tags")
+rmtag_parser.add_argument('files', nargs='*')
+rmtag_parser.set_defaults(func=rmtag)
 
 args = argparser.parse_args()
 args.func(args)
