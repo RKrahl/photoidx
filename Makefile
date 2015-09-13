@@ -1,6 +1,9 @@
 PYTHON   = python
 
 
+build: 
+	$(PYTHON) setup.py build
+
 sdist: 
 	$(PYTHON) setup.py sdist
 
@@ -15,4 +18,4 @@ distclean: clean
 	rm -rf dist
 
 
-.PHONY: sdist clean distclean
+.PHONY: build sdist clean distclean
