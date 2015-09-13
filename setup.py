@@ -26,7 +26,7 @@ setup(
     author = AUTHOR_NAME,
     author_email = AUTHOR_EMAIL,
     license = "Apache-2.0",
-    requires = ["yaml"],
+    requires = ["yaml", "pyexiv2"],
     packages = ["photo"],
     scripts = ["photoidx.py"],
     classifiers = [

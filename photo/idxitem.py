@@ -2,6 +2,7 @@
 """
 
 import hashlib
+from photo.exif import Exif
 
 
 def _md5file(fname):
@@ -28,6 +29,10 @@ class IdxItem(object):
         elif filename is not None:
             self.filename = filename
             self.md5 = _md5file(filename)
+            exifdata = Exif(filename)
+            self.createdate = exifdata.createdate
+            self.orientation = exifdata.orientation
+            self.gpsPosition = exifdata.gpsPosition
         self.tags = set(self.tags)
 
     def as_dict(self):
