@@ -1,7 +1,7 @@
 %define pkgname		 photo
 
 Name:		python-%{pkgname}
-Version:	0.1
+Version:	0.2
 Release:	1
 Summary:	Tools for tagging photo collections
 License:	Apache-2.0
