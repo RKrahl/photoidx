@@ -18,6 +18,15 @@ def ls(args):
         else:
             print(i.filename)
 
+def lstags(args):
+    idx = photo.index.Index(idxfile=args.directory)
+    taglist = args.tags.split(",") if args.tags else []
+    tags = set()
+    for i in idx.filtered(taglist=taglist, filelist=args.files):
+        tags.update(i.tags)
+    for t in sorted(tags):
+        print(t)
+
 def addtag(args):
     idx = photo.index.Index(idxfile=args.directory)
     taglist = args.tags.split(",") if args.tags else []
@@ -44,6 +53,10 @@ ls_parser.add_argument('--md5', action='store_true', help="print md5 checksums")
 ls_parser.add_argument('--tags', help="comma separated list of tags")
 ls_parser.add_argument('files', nargs='*')
 ls_parser.set_defaults(func=ls)
+lstags_parser = subparsers.add_parser('lstags', help="list tags")
+lstags_parser.add_argument('--tags', help="comma separated list of tags")
+lstags_parser.add_argument('files', nargs='*')
+lstags_parser.set_defaults(func=lstags)
 addtag_parser = subparsers.add_parser('addtag', help="add tag to images")
 addtag_parser.add_argument('tag')
 addtag_parser.add_argument('--tags', help="comma separated list of tags")
