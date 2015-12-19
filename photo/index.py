@@ -78,7 +78,7 @@ class Index(MutableSequence):
             items = [i.as_dict() for i in self.items]
             yaml.dump(items, f, default_flow_style=False)
 
-    def filtered(self, taglist=None, filelist=None):
+    def filtered(self, taglist=None, date=None, filelist=None):
         """Return a filtered version of the index.
 
         Generator function that yield the items matching the filter
@@ -97,5 +97,7 @@ class Index(MutableSequence):
                         break;
                 if missing:
                     continue
+            if date and item.createdate.date() != date:
+                continue
             yield item
 
