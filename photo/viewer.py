@@ -2,13 +2,22 @@
 """
 
 import os.path
+import re
 from PySide import QtCore, QtGui
 
 
 class ImageViewer(QtGui.QMainWindow):
 
-    def __init__(self, fileNames, scaleFactor=1.0):
+    def __init__(self, images, taglist=None, date=None, filelist=None, 
+                 scaleFactor=1.0):
         super(ImageViewer, self).__init__()
+
+        self.images = images
+        self.taglist = taglist
+        self.date = date
+        self.filelist = filelist
+        self.scaleFactor = scaleFactor
+        self.selection = list(images.filtered(taglist, date, filelist))
 
         self.imageLabel = QtGui.QLabel()
         self.imageLabel.setSizePolicy(QtGui.QSizePolicy.Ignored,
@@ -20,8 +29,6 @@ class ImageViewer(QtGui.QMainWindow):
         self.scrollArea.setWidget(self.imageLabel)
         self.setCentralWidget(self.scrollArea)
 
-        self.fileNames = fileNames
-        self.scaleFactor = scaleFactor
         maxSize = 0.9 * QtGui.QApplication.desktop().screenGeometry().size()
         self.setMaximumSize(maxSize)
 
@@ -38,7 +45,7 @@ class ImageViewer(QtGui.QMainWindow):
         self.prevImageAct = QtGui.QAction("&Previous Image", self,
                 shortcut="p", enabled=False, triggered=self.prevImage)
         self.nextImageAct = QtGui.QAction("&Next Image", self,
-                shortcut="n", enabled=(len(self.fileNames)>1), 
+                shortcut="n", enabled=(len(self.selection)>1), 
                 triggered=self.nextImage)
 
         self.fileMenu = QtGui.QMenu("&File", self)
@@ -58,7 +65,9 @@ class ImageViewer(QtGui.QMainWindow):
         self.menuBar().addMenu(self.imageMenu)
 
         self.cur = 0
-        self.loadImage(self.fileNames[self.cur])
+        if not self.selection:
+            raise RuntimeError("Nothing to view.")
+        self.loadImage(self.selection[self.cur])
         self.show()
         self._extraSize = self.size() - self.scrollArea.viewport().size()
         self._setSize()
@@ -68,11 +77,18 @@ class ImageViewer(QtGui.QMainWindow):
         self.imageLabel.resize(size)
         self.resize(size + self._extraSize)
 
-    def loadImage(self, fileName):
+    def loadImage(self, item):
+        fileName = item.filename
         image = QtGui.QImage(fileName)
         if image.isNull():
             raise RuntimeError("Cannot load %s." % fileName)
-        self.imageLabel.setPixmap(QtGui.QPixmap.fromImage(image))
+        pixmap = QtGui.QPixmap.fromImage(image)
+        rm = QtGui.QMatrix()
+        if item.orientation:
+            m = re.match(r"Rotate (\d+) CW", item.orientation)
+            if m:
+                rm = rm.rotate(int(m.group(1)))
+        self.imageLabel.setPixmap(pixmap.transformed(rm))
         self.setWindowTitle(os.path.basename(fileName))
 
     def zoomIn(self):
@@ -94,18 +110,18 @@ class ImageViewer(QtGui.QMainWindow):
     def prevImage(self):
         if self.cur > 0:
             self.cur -= 1
-            self.loadImage(self.fileNames[self.cur])
+            self.loadImage(self.selection[self.cur])
             self._setSize()
             self.nextImageAct.setEnabled(True)
         self.prevImageAct.setEnabled(self.cur > 0)
 
     def nextImage(self):
-        if self.cur < len(self.fileNames)-1:
+        if self.cur < len(self.selection)-1:
             self.cur += 1
-            self.loadImage(self.fileNames[self.cur])
+            self.loadImage(self.selection[self.cur])
             self._setSize()
             self.prevImageAct.setEnabled(True)
-        self.nextImageAct.setEnabled(self.cur < len(self.fileNames)-1)
+        self.nextImageAct.setEnabled(self.cur < len(self.selection)-1)
 
     def scaleImage(self, factor):
         self.scaleFactor *= factor
