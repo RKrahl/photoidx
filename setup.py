@@ -28,7 +28,7 @@ setup(
     license = "Apache-2.0",
     requires = ["yaml", "pyexiv2"],
     packages = ["photo"],
-    scripts = ["photoidx.py"],
+    scripts = ["photoidx.py", "imageview.py"],
     classifiers = [
         "Programming Language :: Python",
         "Development Status :: 1 - Planning",
