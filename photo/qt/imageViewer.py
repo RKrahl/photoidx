@@ -1,6 +1,7 @@
 """Provide a PySide ImageViewer window.
 """
 
+from __future__ import division
 import os.path
 import re
 from PySide import QtCore, QtGui
@@ -39,6 +40,10 @@ class ImageViewer(QtGui.QMainWindow):
                 shortcut=">", triggered=self.zoomIn)
         self.zoomOutAct = QtGui.QAction("Zoom &Out", self,
                 shortcut="<", triggered=self.zoomOut)
+        self.zoomFitHeightAct = QtGui.QAction("Zoom to Fit &Height", self,
+                triggered=self.zoomFitHeight)
+        self.zoomFitWidthAct = QtGui.QAction("Zoom to Fit &Width", self,
+                triggered=self.zoomFitWidth)
         self.rotateLeftAct = QtGui.QAction("Rotate &Left", self,
                 shortcut="l", triggered=self.rotateLeft)
         self.rotateRightAct = QtGui.QAction("Rotate &Right", self,
@@ -58,6 +63,8 @@ class ImageViewer(QtGui.QMainWindow):
         self.viewMenu = QtGui.QMenu("&View", self)
         self.viewMenu.addAction(self.zoomInAct)
         self.viewMenu.addAction(self.zoomOutAct)
+        self.viewMenu.addAction(self.zoomFitHeightAct)
+        self.viewMenu.addAction(self.zoomFitWidthAct)
         self.viewMenu.addAction(self.rotateLeftAct)
         self.viewMenu.addAction(self.rotateRightAct)
         self.viewMenu.addSeparator()
@@ -101,6 +108,22 @@ class ImageViewer(QtGui.QMainWindow):
 
     def zoomOut(self):
         self.scaleImage(0.625)
+
+    def zoomFitHeight(self):
+        imgHeight = self.imageLabel.pixmap().size().height()
+        winHeight = self.scrollArea.viewport().size().height()
+        # Leave an internal padding of a few pixel
+        winHeight -= 6
+        self.scaleFactor = winHeight / imgHeight
+        self._setSize()
+
+    def zoomFitWidth(self):
+        imgWidth = self.imageLabel.pixmap().size().width()
+        winWidth = self.scrollArea.viewport().size().width()
+        # Leave an internal padding of a few pixel
+        winWidth -= 6
+        self.scaleFactor = winWidth / imgWidth
+        self._setSize()
 
     def rotateLeft(self):
         rm = QtGui.QMatrix().rotate(-90)
