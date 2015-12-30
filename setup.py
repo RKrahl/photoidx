@@ -27,7 +27,7 @@ setup(
     author_email = AUTHOR_EMAIL,
     license = "Apache-2.0",
     requires = ["yaml", "pyexiv2"],
-    packages = ["photo"],
+    packages = ["photo", "photo.qt"],
     scripts = ["photoidx.py", "imageview.py"],
     classifiers = [
         "Programming Language :: Python",

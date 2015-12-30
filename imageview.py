@@ -4,7 +4,7 @@ import sys
 import argparse
 from PySide import QtGui
 import photo.index
-from photo.viewer import ImageViewer
+from photo.qt import ImageViewer
 
 def strpdate(s):
     match = re.match(r"^(\d{1,})-(\d{1,2})-(\d{1,2})$", s)
