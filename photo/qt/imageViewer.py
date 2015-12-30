@@ -29,11 +29,11 @@ class ImageViewer(QtGui.QMainWindow):
         self.scrollArea.setWidget(self.imageLabel)
         self.setCentralWidget(self.scrollArea)
 
-        maxSize = 0.9 * QtGui.QApplication.desktop().screenGeometry().size()
+        maxSize = 0.95 * QtGui.QApplication.desktop().screenGeometry().size()
         self.setMaximumSize(maxSize)
 
-        self.closeAct = QtGui.QAction("&Close", self, shortcut="W",
-                triggered=self.close)
+        self.closeAct = QtGui.QAction("&Close", self, 
+                shortcut="q", triggered=self.close)
         self.zoomInAct = QtGui.QAction("Zoom &In", self,
                 shortcut=">", triggered=self.zoomIn)
         self.zoomOutAct = QtGui.QAction("Zoom &Out", self,
