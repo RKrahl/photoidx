@@ -27,6 +27,7 @@ class ImageViewer(QtGui.QMainWindow):
         self.scrollArea = QtGui.QScrollArea()
         self.scrollArea.setBackgroundRole(QtGui.QPalette.Dark)
         self.scrollArea.setWidget(self.imageLabel)
+        self.scrollArea.setAlignment(QtCore.Qt.AlignCenter)
         self.setCentralWidget(self.scrollArea)
 
         maxSize = 0.95 * QtGui.QApplication.desktop().screenGeometry().size()
@@ -42,6 +43,8 @@ class ImageViewer(QtGui.QMainWindow):
                 shortcut="l", triggered=self.rotateLeft)
         self.rotateRightAct = QtGui.QAction("Rotate &Right", self,
                 shortcut="r", triggered=self.rotateRight)
+        self.fullScreenAct = QtGui.QAction("Show &Full Screen", self,
+                shortcut="f", checkable=True, triggered=self.fullScreen)
         self.prevImageAct = QtGui.QAction("&Previous Image", self,
                 shortcut="p", enabled=False, triggered=self.prevImage)
         self.nextImageAct = QtGui.QAction("&Next Image", self,
@@ -57,6 +60,8 @@ class ImageViewer(QtGui.QMainWindow):
         self.viewMenu.addAction(self.zoomOutAct)
         self.viewMenu.addAction(self.rotateLeftAct)
         self.viewMenu.addAction(self.rotateRightAct)
+        self.viewMenu.addSeparator()
+        self.viewMenu.addAction(self.fullScreenAct)
         self.menuBar().addMenu(self.viewMenu)
 
         self.imageMenu = QtGui.QMenu("&Image", self)
@@ -106,6 +111,14 @@ class ImageViewer(QtGui.QMainWindow):
         rm = QtGui.QMatrix().rotate(90)
         self.imageLabel.setPixmap(self.imageLabel.pixmap().transformed(rm))
         self._setSize()
+
+    def fullScreen(self):
+        fullScreen = self.fullScreenAct.isChecked()
+        if fullScreen:
+            self.showFullScreen()
+        else:
+            self.showNormal()
+            self._setSize()
 
     def prevImage(self):
         if self.cur > 0:
