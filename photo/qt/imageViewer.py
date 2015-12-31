@@ -5,6 +5,7 @@ from __future__ import division
 import os.path
 import re
 from PySide import QtCore, QtGui
+from photo.qt.tagSelectDialog import TagSelectDialog
 
 
 class ImageViewer(QtGui.QMainWindow):
@@ -19,6 +20,11 @@ class ImageViewer(QtGui.QMainWindow):
         self.filelist = filelist
         self.scaleFactor = scaleFactor
         self.selection = list(images.filtered(taglist, date, filelist))
+
+        taglist = set()
+        for i in images:
+            taglist |= i.tags
+        self.tagSelectDialog = TagSelectDialog(taglist)
 
         self.imageLabel = QtGui.QLabel()
         self.imageLabel.setSizePolicy(QtGui.QSizePolicy.Ignored,
@@ -55,6 +61,8 @@ class ImageViewer(QtGui.QMainWindow):
         self.nextImageAct = QtGui.QAction("&Next Image", self,
                 shortcut="n", enabled=(len(self.selection)>1), 
                 triggered=self.nextImage)
+        self.tagSelectAct = QtGui.QAction("Select &Tags", self,
+                shortcut="t", triggered=self.tagSelect)
 
         self.fileMenu = QtGui.QMenu("&File", self)
         self.fileMenu.addAction(self.closeAct)
@@ -74,6 +82,8 @@ class ImageViewer(QtGui.QMainWindow):
         self.imageMenu = QtGui.QMenu("&Image", self)
         self.imageMenu.addAction(self.prevImageAct)
         self.imageMenu.addAction(self.nextImageAct)
+        self.imageMenu.addSeparator()
+        self.imageMenu.addAction(self.tagSelectAct)
         self.menuBar().addMenu(self.imageMenu)
 
         self.cur = 0
@@ -168,6 +178,10 @@ class ImageViewer(QtGui.QMainWindow):
             self._setSize()
             self.prevImageAct.setEnabled(True)
         self.nextImageAct.setEnabled(self.cur < len(self.selection)-1)
+
+    def tagSelect(self):
+        self.tagSelectDialog.setCheckedTags(self.selection[self.cur].tags)
+        self.tagSelectDialog.exec_()
 
     def scaleImage(self, factor):
         self.scaleFactor *= factor
