@@ -181,7 +181,9 @@ class ImageViewer(QtGui.QMainWindow):
 
     def tagSelect(self):
         self.tagSelectDialog.setCheckedTags(self.selection[self.cur].tags)
-        self.tagSelectDialog.exec_()
+        if self.tagSelectDialog.exec_():
+            self.selection[self.cur].tags = self.tagSelectDialog.checkedTags()
+            self.images.write()
 
     def scaleImage(self, factor):
         self.scaleFactor *= factor
