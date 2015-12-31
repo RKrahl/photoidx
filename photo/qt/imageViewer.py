@@ -87,7 +87,8 @@ class ImageViewer(QtGui.QMainWindow):
     def _setSize(self):
         size = self.scaleFactor * self.imageLabel.pixmap().size()
         self.imageLabel.resize(size)
-        self.resize(size + self._extraSize)
+        if not self.fullScreenAct.isChecked():
+            self.resize(size + self._extraSize)
 
     def loadImage(self, item):
         fileName = item.filename
@@ -136,8 +137,7 @@ class ImageViewer(QtGui.QMainWindow):
         self._setSize()
 
     def fullScreen(self):
-        fullScreen = self.fullScreenAct.isChecked()
-        if fullScreen:
+        if self.fullScreenAct.isChecked():
             self.showFullScreen()
         else:
             self.showNormal()
