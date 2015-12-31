@@ -86,9 +86,19 @@ class ImageViewer(QtGui.QMainWindow):
 
     def _setSize(self):
         size = self.scaleFactor * self.imageLabel.pixmap().size()
+        winSize = size + self._extraSize
+        maxSize = self.maximumSize()
+        if winSize.height() > maxSize.height():
+            # Take vertical scrollbar into account.
+            sbw = self.scrollArea.verticalScrollBar().size().width()
+            winSize += QtCore.QSize(sbw, 0)
+        if winSize.width() > maxSize.width():
+            # Take horizontal scrollbar into account.
+            sbh = self.scrollArea.horizontalScrollBar().size().height()
+            winSize += QtCore.QSize(0, sbh)
         self.imageLabel.resize(size)
         if not self.fullScreenAct.isChecked():
-            self.resize(size + self._extraSize)
+            self.resize(winSize)
 
     def loadImage(self, item):
         fileName = item.filename
