@@ -11,15 +11,13 @@ from photo.qt.tagSelectDialog import TagSelectDialog
 
 class ImageViewer(QtGui.QMainWindow):
 
-    def __init__(self, images, taglist=None, negtaglist=None, date=None, 
-                 filelist=None, scaleFactor=1.0):
+    def __init__(self, images, imgFilter, scaleFactor=1.0):
         super(ImageViewer, self).__init__()
 
         self.images = images
-        self.imgFilter = photo.index.IndexFilter(taglist, negtaglist, date, 
-                                                 filelist)
+        self.imgFilter = imgFilter
+        self.selection = list(filter(self.imgFilter, self.images))
         self.scaleFactor = scaleFactor
-        self.selection = list(images.filtered(self.imgFilter))
 
         taglist = set()
         for i in images:
