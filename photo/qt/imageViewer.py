@@ -87,12 +87,9 @@ class ImageViewer(QtGui.QMainWindow):
         self.menuBar().addMenu(self.imageMenu)
 
         self.cur = 0
-        if not self.selection:
-            raise RuntimeError("Nothing to view.")
-        self.loadImage(self.selection[self.cur])
         self.show()
         self._extraSize = self.size() - self.scrollArea.viewport().size()
-        self._setSize()
+        self._loadImage()
 
     def _setSize(self):
         size = self.scaleFactor * self.imageLabel.pixmap().size()
@@ -110,7 +107,13 @@ class ImageViewer(QtGui.QMainWindow):
         if not self.fullScreenAct.isChecked():
             self.resize(winSize)
 
-    def loadImage(self, item):
+    def _loadImage(self):
+        try:
+            item = self.selection[self.cur]
+        except IndexError:
+            # Nothing to view.
+            self.imageLabel.hide()
+            return
         fileName = item.filename
         image = QtGui.QImage(fileName)
         if image.isNull():
@@ -122,6 +125,8 @@ class ImageViewer(QtGui.QMainWindow):
             if m:
                 rm = rm.rotate(int(m.group(1)))
         self.imageLabel.setPixmap(pixmap.transformed(rm))
+        self.imageLabel.show()
+        self._setSize()
         self.setWindowTitle(os.path.basename(fileName))
 
     def zoomIn(self):
@@ -166,7 +171,7 @@ class ImageViewer(QtGui.QMainWindow):
     def prevImage(self):
         if self.cur > 0:
             self.cur -= 1
-            self.loadImage(self.selection[self.cur])
+            self._loadImage()
             self._setSize()
             self.nextImageAct.setEnabled(True)
         self.prevImageAct.setEnabled(self.cur > 0)
@@ -174,7 +179,7 @@ class ImageViewer(QtGui.QMainWindow):
     def nextImage(self):
         if self.cur < len(self.selection)-1:
             self.cur += 1
-            self.loadImage(self.selection[self.cur])
+            self._loadImage()
             self._setSize()
             self.prevImageAct.setEnabled(True)
         self.nextImageAct.setEnabled(self.cur < len(self.selection)-1)
@@ -184,6 +189,12 @@ class ImageViewer(QtGui.QMainWindow):
         if self.tagSelectDialog.exec_():
             self.selection[self.cur].tags = self.tagSelectDialog.checkedTags()
             self.images.write()
+            # After modifying the tags, does the current image still
+            # match the filter?
+            if not self.imgFilter(self.selection[self.cur]):
+                del self.selection[self.cur]
+                self._loadImage()
+                self.nextImageAct.setEnabled(self.cur < len(self.selection)-1)
 
     def scaleImage(self, factor):
         self.scaleFactor *= factor
