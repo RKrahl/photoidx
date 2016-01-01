@@ -26,7 +26,17 @@ args = argparser.parse_args()
 
 app = QtGui.QApplication([])
 idx = photo.index.Index(idxfile=args.directory)
-taglist = args.tags.split(",") if args.tags else []
-imageViewer = ImageViewer(idx, taglist=taglist, date=args.date, 
-                          filelist=args.files, scaleFactor=args.scale)
+if args.tags is not None:
+    taglist = []
+    negtaglist = []
+    for t in args.tags.split(","):
+        if t.startswith("!"):
+            negtaglist.append(t[1:])
+        else:
+            taglist.append(t)
+else:
+    taglist = None
+    negtaglist = None
+imageViewer = ImageViewer(idx, taglist, negtaglist, args.date, 
+                          args.files, args.scale)
 sys.exit(app.exec_())

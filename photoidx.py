@@ -18,8 +18,18 @@ def strpdate(s):
     raise argparse.ArgumentTypeError("Invalid date value '%s'" % s)
 
 def filtered(idx, args):
-    taglist = args.tags.split(",") if args.tags else []
-    f = photo.index.IndexFilter(taglist, args.date, args.files)
+    if args.tags is not None:
+        taglist = []
+        negtaglist = []
+        for t in args.tags.split(","):
+            if t.startswith("!"):
+                negtaglist.append(t[1:])
+            else:
+                taglist.append(t)
+    else:
+        taglist = None
+        negtaglist = None
+    f = photo.index.IndexFilter(taglist, negtaglist, args.date, args.files)
     return idx.filtered(f)
 
 

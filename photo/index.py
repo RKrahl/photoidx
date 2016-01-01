@@ -88,18 +88,23 @@ class IndexFilter(object):
     """A filter to be passed to Index.filtered().
     """
 
-    def __init__(self, taglist=None, date=None, filelist=None):
-        self.taglist = list(taglist) if taglist else None
+    def __init__(self, taglist=None, negtaglist=None, date=None, filelist=None):
+        self.taglist = set(taglist) if taglist is not None else None
+        self.negtaglist = set(negtaglist) if negtaglist is not None else None
         self.date = date
         self.filelist = set(filelist) if filelist else None
 
     def __call__(self, item):
         if self.filelist and not item.filename in self.filelist:
             return False
-        if self.taglist:
-            for t in self.taglist:
-                if not t in item.tags:
-                    return False
+        if self.taglist is not None:
+            if not self.taglist <= item.tags:
+                return False
+            if not self.taglist and not self.negtaglist and item.tags:
+                return False
+        if self.negtaglist is not None:
+            if self.negtaglist & item.tags:
+                return False
         if self.date and item.createdate.date() != self.date:
             return False
         return True
