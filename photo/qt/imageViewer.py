@@ -5,6 +5,7 @@ from __future__ import division
 import os.path
 import re
 from PySide import QtCore, QtGui
+import photo.index
 from photo.qt.tagSelectDialog import TagSelectDialog
 
 
@@ -15,11 +16,9 @@ class ImageViewer(QtGui.QMainWindow):
         super(ImageViewer, self).__init__()
 
         self.images = images
-        self.taglist = taglist
-        self.date = date
-        self.filelist = filelist
+        self.imgFilter = photo.index.IndexFilter(taglist, date, filelist)
         self.scaleFactor = scaleFactor
-        self.selection = list(images.filtered(taglist, date, filelist))
+        self.selection = list(images.filtered(self.imgFilter))
 
         taglist = set()
         for i in images:

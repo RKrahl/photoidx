@@ -78,26 +78,28 @@ class Index(MutableSequence):
             items = [i.as_dict() for i in self.items]
             yaml.dump(items, f, default_flow_style=False)
 
-    def filtered(self, taglist=None, date=None, filelist=None):
+    def filtered(self, f):
         """Return a filtered version of the index.
-
-        Generator function that yield the items matching the filter
-        criteria.
         """
-        if filelist:
-            filelist = set(filelist)
-        for item in self.items:
-            if filelist and not item.filename in filelist:
-                continue
-            if taglist:
-                missing = False
-                for t in taglist:
-                    if not t in item.tags:
-                        missing = True
-                        break;
-                if missing:
-                    continue
-            if date and item.createdate.date() != date:
-                continue
-            yield item
+        return filter(f, self.items)
 
+
+class IndexFilter(object):
+    """A filter to be passed to Index.filtered().
+    """
+
+    def __init__(self, taglist=None, date=None, filelist=None):
+        self.taglist = list(taglist) if taglist else None
+        self.date = date
+        self.filelist = set(filelist) if filelist else None
+
+    def __call__(self, item):
+        if self.filelist and not item.filename in self.filelist:
+            return False
+        if self.taglist:
+            for t in self.taglist:
+                if not t in item.tags:
+                    return False
+        if self.date and item.createdate.date() != self.date:
+            return False
+        return True

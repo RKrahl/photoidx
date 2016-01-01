@@ -17,6 +17,11 @@ def strpdate(s):
             pass
     raise argparse.ArgumentTypeError("Invalid date value '%s'" % s)
 
+def filtered(idx, args):
+    taglist = args.tags.split(",") if args.tags else []
+    f = photo.index.IndexFilter(taglist, args.date, args.files)
+    return idx.filtered(f)
+
 
 def create(args):
     idx = photo.index.Index(imgdir=args.directory)
@@ -24,8 +29,7 @@ def create(args):
 
 def ls(args):
     idx = photo.index.Index(idxfile=args.directory)
-    taglist = args.tags.split(",") if args.tags else []
-    for i in idx.filtered(taglist=taglist, date=args.date, filelist=args.files):
+    for i in filtered(idx, args):
         if args.md5:
             print("%s  %s" % (i.md5, i.filename))
         else:
@@ -33,24 +37,21 @@ def ls(args):
 
 def lstags(args):
     idx = photo.index.Index(idxfile=args.directory)
-    taglist = args.tags.split(",") if args.tags else []
     tags = set()
-    for i in idx.filtered(taglist=taglist, date=args.date, filelist=args.files):
+    for i in filtered(idx, args):
         tags.update(i.tags)
     for t in sorted(tags):
         print(t)
 
 def addtag(args):
     idx = photo.index.Index(idxfile=args.directory)
-    taglist = args.tags.split(",") if args.tags else []
-    for i in idx.filtered(taglist=taglist, date=args.date, filelist=args.files):
+    for i in filtered(idx, args):
         i.tags.add(args.tag)
     idx.write()
 
 def rmtag(args):
     idx = photo.index.Index(idxfile=args.directory)
-    taglist = args.tags.split(",") if args.tags else []
-    for i in idx.filtered(taglist=taglist, date=args.date, filelist=args.files):
+    for i in filtered(idx, args):
         i.tags.discard(args.tag)
     idx.write()
 
