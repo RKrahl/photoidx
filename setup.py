@@ -31,7 +31,9 @@ setup(
     scripts = ["photoidx.py", "imageview.py"],
     classifiers = [
         "Programming Language :: Python",
-        "Development Status :: 1 - Planning",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
+        "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         ],

@@ -1,14 +1,14 @@
 %define pkgname		 photo
 
 Name:		python-%{pkgname}
-Version:	0.2
+Version:	0.3
 Release:	1
-Summary:	Tools for tagging photo collections
+Summary:	Tools for managing photo collections
 License:	Apache-2.0
 Group:		Development/Languages/Python
 Source:		%{pkgname}-%{version}.tar.gz
 BuildArch:	noarch
-BuildRequires:	python-devel >= 2.6
+BuildRequires:	python-devel >= 2.7
 Requires:	python-PyYAML
 Requires:	python-pyexiv2
 %if 0%{?suse_version}
@@ -19,6 +19,15 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-build
 %description
 This package provides a Python library and a command line tool for
 maintaining tags in a collection of photos.
+
+
+%package qt
+Summary:	Tools for managing photo collections
+Requires:	python-%{pkgname} = %{version}
+Requires:	python-pyside
+
+%description qt
+This package provides an image viewer for collection of photos.
 
 
 %prep
@@ -32,6 +41,7 @@ python setup.py build
 %install
 python setup.py install --optimize=1 --prefix=%{_prefix} --root=%{buildroot}
 %__mv %{buildroot}%{_bindir}/photoidx.py %{buildroot}%{_bindir}/photoidx
+%__mv %{buildroot}%{_bindir}/imageview.py %{buildroot}%{_bindir}/imageview
 %if 0%{?suse_version}
 %fdupes %{buildroot}
 %endif
@@ -44,7 +54,13 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %{python_sitelib}/*
-%{_bindir}/*
+%exclude %{python_sitelib}/photo/qt
+%{_bindir}/photoidx
+
+%files qt
+%defattr(-,root,root)
+%{python_sitelib}/photo/qt
+%{_bindir}/imageview
 
 
 %changelog
