@@ -2,6 +2,7 @@
 """
 
 import sys
+import math
 from collections import Mapping
 
 
@@ -34,6 +35,9 @@ class lon(deg):
 
 
 class GeoPosition(object):
+
+    earthRadius = 6371.0
+    """approximate radius of the earth in km."""
 
     def __init__(self, pos):
         if isinstance(pos, Mapping):
@@ -80,3 +84,23 @@ class GeoPosition(object):
             self.lat.ref(): float(abs(self.lat)),
             self.lon.ref(): float(abs(self.lon))
         }
+
+    def __sub__(self, other):
+        """Difference between two GeoPositions.
+
+        Approximate distance of the two points on the earth surface in km, 
+        simplifying assumed the earth to be a sphere.
+        """
+        if isinstance(other, GeoPosition):
+            lat1 = math.pi * self.lat / 180.0
+            lat2 = math.pi * other.lat / 180.0
+            lon1 = math.pi * self.lon / 180.0
+            lon2 = math.pi * other.lon / 180.0
+            slat = math.sin((lat1-lat2)/2.0)
+            slon = math.sin((lon1-lon2)/2.0)
+            c1 = math.cos(lat1)
+            c2 = math.cos(lat2)
+            sigma = 2.0*math.asin(math.sqrt(slat*slat + c1*c2*slon*slon))
+            return self.earthRadius * sigma
+        else:
+            return NotImplemented
