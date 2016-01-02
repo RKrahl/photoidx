@@ -3,6 +3,7 @@
 
 import hashlib
 from photo.exif import Exif
+from photo.geo import GeoPosition
 
 
 def _md5file(fname):
@@ -33,9 +34,13 @@ class IdxItem(object):
             self.createdate = exifdata.createdate
             self.orientation = exifdata.orientation
             self.gpsPosition = exifdata.gpsPosition
+        if self.gpsPosition:
+            self.gpsPosition = GeoPosition(self.gpsPosition)
         self.tags = set(self.tags)
 
     def as_dict(self):
         d = self.__dict__.copy()
         d['tags'] = list(d['tags'])
+        if d['gpsPosition']:
+            d['gpsPosition'] = d['gpsPosition'].as_dict()
         return d
