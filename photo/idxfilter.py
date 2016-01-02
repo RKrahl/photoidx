@@ -12,11 +12,12 @@ class IdxFilter(object):
         if args.tags is not None:
             self.taglist = set()
             self.negtaglist = set()
-            for t in args.tags.split(","):
-                if t.startswith("!"):
-                    self.negtaglist.add(t[1:])
-                else:
-                    self.taglist.add(t)
+            if args.tags:
+                for t in args.tags.split(","):
+                    if t.startswith("!"):
+                        self.negtaglist.add(t[1:])
+                    else:
+                        self.taglist.add(t)
         else:
             self.taglist = None
             self.negtaglist = None
