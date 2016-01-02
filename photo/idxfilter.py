@@ -3,6 +3,7 @@
 
 import re
 import datetime
+from photo.geo import GeoPosition
 
 
 class IdxFilter(object):
@@ -20,6 +21,11 @@ class IdxFilter(object):
             self.taglist = None
             self.negtaglist = None
         self.date = args.date
+        if args.gpspos:
+            self.gpspos = GeoPosition(args.gpspos)
+            self.gpsradius = args.gpsradius
+        else:
+            self.gpspos = None
         self.filelist = set(args.files) if args.files else None
 
     def __call__(self, item):
@@ -34,6 +40,10 @@ class IdxFilter(object):
                 return False
         if self.date and item.createdate.date() != self.date:
             return False
+        if self.gpspos:
+            if (not item.gpsPosition or
+                (item.gpsPosition - self.gpspos) > self.gpsradius):
+                return False
         return True
 
 
@@ -52,6 +62,11 @@ def addFilterArguments(argparser):
                            help="select images by comma separated list of tags")
     argparser.add_argument('--date', type=_strpdate, 
                            help="select images by date")
+    argparser.add_argument('--gpspos', 
+                           help="select images by GPS position")
+    argparser.add_argument('--gpsradius', type=float, default=3.0, 
+                           help="radius around GPS position in km", 
+                           metavar='DISTANCE')
     argparser.add_argument('files', nargs='*', 
                            help="select images by file name")
     return argparser
