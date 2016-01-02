@@ -2,8 +2,17 @@
 """
 
 import sys
+import re
 import math
 from collections import Mapping
+
+
+# FIXME: for the moment, only support a very basic input format
+# "52.518611 N, 13.408333 E".  Should also support alternate formats,
+# such as "52 deg 31' 7.0" N, 13 deg 24' 30.0" E".
+_geopos_pattern = (r"^\s*(?P<lat>\d+(?:\.\d*))\s*(?P<latref>N|S),\s*"
+                   r"(?P<lon>\d+(?:\.\d*))\s*(?P<lonref>E|W)\s*$")
+_geopos_re = re.compile(_geopos_pattern)
 
 
 class deg(float):
@@ -57,7 +66,15 @@ class GeoPosition(object):
                 raise ValueError("invalid Geo position %s: "
                                  "must have either 'E' or 'W' in keys." 
                                  % str(pos))
-            # FIXME: add conversion from str
+        elif isinstance(pos, basestring):
+            m = _geopos_re.match(pos)
+            if m:
+                latsign = 1.0 if m.group('latref') == 'N' else -1.0
+                self.lat = lat(latsign*float(m.group('lat')))
+                lonsign = 1.0 if m.group('lonref') == 'E' else -1.0
+                self.lon = lon(lonsign*float(m.group('lon')))
+            else:
+                raise ValueError("invalid Geo position '%s'." % pos)
         else:
             raise TypeError("invalid type '%s'" % type(pos))
 
