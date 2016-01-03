@@ -53,6 +53,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
+%doc README.rst
 %{python_sitelib}/*
 %exclude %{python_sitelib}/photo/qt
 %{_bindir}/photoidx
