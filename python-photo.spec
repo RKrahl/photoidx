@@ -10,7 +10,7 @@ Source:		%{pkgname}-%{version}.tar.gz
 BuildArch:	noarch
 BuildRequires:	python-devel >= 2.7
 Requires:	python-PyYAML
-Requires:	python-pyexiv2
+Requires:	python-gexiv2
 %if 0%{?suse_version}
 BuildRequires:	fdupes
 %endif

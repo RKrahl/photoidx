@@ -22,7 +22,7 @@ Required Library packages:
 
  + `PyYAML`_
 
- + `pyexiv2`_
+ + `gexiv2`_
 
  + `PySide`_
 
@@ -69,6 +69,6 @@ permissions and limitations under the License.
 
 
 .. _PyYAML: http://pyyaml.org/wiki/PyYAML
-.. _pyexiv2: http://tilloy.net/dev/pyexiv2/
+.. _gexiv2: https://wiki.gnome.org/Projects/gexiv2
 .. _PySide: http://qt-project.org/wiki/PySide
 .. _Installing Python Modules: https://docs.python.org/2.7/install/

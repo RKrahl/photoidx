@@ -1,7 +1,7 @@
 """Wrapper around the exif library to extract and convert some information.
 """
 
-import pyexiv2
+from gi.repository import GExiv2
 
 
 class Exif(object):
@@ -18,19 +18,17 @@ class Exif(object):
     }
 
     def __init__(self, filename):
-        self._exif = pyexiv2.ImageMetadata(filename)
-        self._exif.read()
-        self.createdate = self._exif['Exif.Photo.DateTimeDigitized'].value
-        orientation = self._exif['Exif.Image.Orientation'].value
-        self.orientation = self.OrientationXlate[orientation]
-        if ('Exif.GPSInfo.GPSLatitude' in self._exif.exif_keys and
-            'Exif.GPSInfo.GPSLongitude' in self._exif.exif_keys):
-            lat = self._exif['Exif.GPSInfo.GPSLatitude'].value
-            latref = self._exif['Exif.GPSInfo.GPSLatitudeRef'].value
-            lon = self._exif['Exif.GPSInfo.GPSLongitude'].value
-            lonref = self._exif['Exif.GPSInfo.GPSLongitudeRef'].value
-            self.gpsPosition = {latref:float(lat[0] + lat[1]/60 + lat[2]/3600),
-                                lonref:float(lon[0] + lon[1]/60 + lon[2]/3600)}
+        self._exif = GExiv2.Metadata(filename)
+        self.createdate = self._exif.get_date_time()
+        orientation = self._exif.get_orientation()
+        self.orientation = self.OrientationXlate[int(orientation)]
+        if ('Exif.GPSInfo.GPSLatitude' in self._exif and
+            'Exif.GPSInfo.GPSLongitude' in self._exif):
+            lat = self._exif.get_gps_latitude()
+            lon = self._exif.get_gps_longitude()
+            latref = 'N' if lat >= 0.0 else 'S'
+            lonref = 'E' if lon >= 0.0 else 'W'
+            self.gpsPosition = { latref:abs(lat), lonref:abs(lon) }
         else:
             self.gpsPosition = None
 
