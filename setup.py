@@ -6,6 +6,10 @@ try:
 except ImportError:
     # Python 2.x
     from distutils.command.build_py import build_py
+try:
+    import distutils_pytest
+except ImportError:
+    pass
 import photo
 import re
 
