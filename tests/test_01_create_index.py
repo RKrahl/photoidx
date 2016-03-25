@@ -6,12 +6,8 @@ import shutil
 import filecmp
 import pytest
 import photo.index
-from conftest import tmpdir, gettestdata
+from conftest import tmpdir, gettestdata, testimgs
 
-testimgs = [ 
-    "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", 
-    "dsc_5126.jpg", "dsc_5167.jpg" 
-]
 refindex = gettestdata("index-create.yaml")
 
 @pytest.fixture(scope="module")

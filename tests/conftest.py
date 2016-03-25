@@ -9,6 +9,11 @@ import pytest
 
 testdir = os.path.dirname(__file__)
 
+testimgs = [ 
+    "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", 
+    "dsc_5126.jpg", "dsc_5167.jpg" 
+]
+
 def gettestdata(fname):
     fname = os.path.join(testdir, "data", fname)
     assert os.path.isfile(fname)
