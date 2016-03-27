@@ -93,7 +93,10 @@ def test_by_mult_tags(imgdir):
     assert fnames == ["dsc_4664.jpg"]
 
 def test_by_neg_tags(imgdir):
-    """Select by tags.
+    """Select by negating tags.
+
+    Prepending a tag by an exclamation mark selects the images having
+    the tag not set.
     """
     idx = photo.index.Index(idxfile=imgdir)
     args = NameSpace(tags="Tokyo,!Shinto_shrine")
@@ -102,10 +105,9 @@ def test_by_neg_tags(imgdir):
     assert fnames == ["dsc_4623.jpg"]
 
 def test_by_empty_tag(imgdir):
-    """Select by negating tags.
+    """Select by empty tags.
 
-    Prepending a tag by an exclamation mark selects the images having
-    the tag not set.
+    The empty string as tag selects images having no tag.
     """
     idx = photo.index.Index(idxfile=imgdir)
     args = NameSpace(tags="")
