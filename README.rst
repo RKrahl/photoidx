@@ -18,13 +18,19 @@ Python:
  + Python 2.7.  The package itself should also work with Python 3,
    but some prerequisites only support Python 2.
 
-Required Library packages:
+Required library packages:
 
  + `PyYAML`_
 
  + `gexiv2`_
 
  + `PySide`_
+
+Optional library packages, only needed to run the test suite:
+
+ + `pytest`_
+
+ + `distutils-pytest`_
 
 
 Installation
@@ -41,7 +47,11 @@ Modules`_ for details or to customize the install process.
 
        $ python setup.py build
 
-  3. Install::
+  3. Test (optional)::
+
+       $ python setup.py test
+
+  4. Install::
 
        $ python setup.py install
 
@@ -71,4 +81,6 @@ permissions and limitations under the License.
 .. _PyYAML: http://pyyaml.org/wiki/PyYAML
 .. _gexiv2: https://wiki.gnome.org/Projects/gexiv2
 .. _PySide: http://qt-project.org/wiki/PySide
+.. _pytest: http://pytest.org/
+.. _distutils-pytest: https://github.com/RKrahl/distutils-pytest
 .. _Installing Python Modules: https://docs.python.org/2.7/install/

@@ -1,10 +1,13 @@
 PYTHON   = python
 
 
-build: 
+build:
 	$(PYTHON) setup.py build
 
-sdist: 
+test:
+	$(PYTHON) setup.py test
+
+sdist:
 	$(PYTHON) setup.py sdist
 
 clean:
@@ -18,4 +21,4 @@ distclean: clean
 	rm -rf dist
 
 
-.PHONY: build sdist clean distclean
+.PHONY: build test sdist clean distclean

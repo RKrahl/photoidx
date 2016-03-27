@@ -47,6 +47,10 @@ python setup.py install --optimize=1 --prefix=%{_prefix} --root=%{buildroot}
 %endif
 
 
+%check
+python setup.py test
+
+
 %clean
 rm -rf %{buildroot}
 
