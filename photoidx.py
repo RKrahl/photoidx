@@ -7,7 +7,8 @@ import photo.idxfilter
 
 
 def create(args):
-    idx = photo.index.Index(imgdir=args.directory)
+    idxfile = args.directory if args.update else None
+    idx = photo.index.Index(idxfile=idxfile, imgdir=args.directory)
     idx.write()
 
 def ls(args):
@@ -47,7 +48,10 @@ argparser = argparse.ArgumentParser()
 argparser.add_argument('-d', '--directory', 
                        help="image directory", default=".")
 subparsers = argparser.add_subparsers(title='subcommands')
+
 create_parser = subparsers.add_parser('create', help="create the index")
+create_parser.add_argument('--update', action='store_true', 
+                           help="add images to an existing index")
 create_parser.set_defaults(func=create)
 
 ls_parser = subparsers.add_parser('ls', help="list image files")

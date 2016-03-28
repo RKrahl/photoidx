@@ -21,7 +21,7 @@ class Index(MutableSequence):
         self.items = []
         if idxfile:
             self.read(idxfile)
-        elif imgdir:
+        if imgdir:
             self.readdir(imgdir)
 
     def __len__(self):
@@ -54,13 +54,17 @@ class Index(MutableSequence):
             return os.path.abspath(os.path.join(d, self.defIdxFilename))
 
     def readdir(self, imgdir):
-        """Create a new index of all image files in a directory.
+        """Add all image files in a directory to the index.
         """
-        self.directory = os.path.abspath(imgdir)
-        self.items = []
+        imgdir = os.path.abspath(imgdir)
+        if not self.directory:
+            self.directory = imgdir
+        known = { i.filename for i in self.items }
         with tmpchdir(self.directory):
-            for f in sorted(os.listdir(self.directory)):
-                if (os.path.isfile(f) and fnmatch.fnmatch(f, '*.jpg')):
+            for f in sorted(os.listdir(imgdir)):
+                f = os.path.relpath(os.path.join(imgdir, f))
+                if (os.path.isfile(f) and fnmatch.fnmatch(f, '*.jpg') and
+                    f not in known):
                     self.items.append(IdxItem(filename=f))
 
     def read(self, idxfile=None):
