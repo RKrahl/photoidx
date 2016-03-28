@@ -41,6 +41,7 @@ class IdxItem(object):
     def as_dict(self):
         d = self.__dict__.copy()
         d['tags'] = list(d['tags'])
+        d['tags'].sort()
         if d['gpsPosition']:
             d['gpsPosition'] = d['gpsPosition'].as_dict()
         return d

@@ -4,7 +4,8 @@ The tags are internally represented as a set, so they are not ordered.
 This is correct, as it reflect the nature of tags.  In the index file,
 they are represented as a list.  It would be desirable not to have
 spurious differences in index files, e.g. two index files should be
-equal unless there is a significant difference in the content.
+equal unless there is a significant difference in the content.  That
+is why the tags should have a well defined order in the index file.
 """
 
 import os.path
@@ -33,7 +34,7 @@ class NameSpace(object):
 # the order in which the tags are added differs between tests and some
 # test also adds spurious tags and removes them later.  The list order
 # of elements in a set depends on the history of insertions and
-# deletions.  The resulting index file should not be affected of this
+# deletions.  The resulting index file should not be affected by this
 # and should always have the same order.  Before fixing Issue #9, the
 # arbitrary list order of the set was also in the index file.
 
@@ -63,7 +64,6 @@ def test_tag_ref(imgdir):
     idx.write()
     shutil.copy(idxfname, reffname)
 
-@pytest.mark.xfail(reason="Issue #9")
 def test_tag_shuffle(imgdir):
     """Same as test_tag_ref(), only the order of setting the tags differ.
     """
@@ -81,7 +81,6 @@ def test_tag_shuffle(imgdir):
     idx.write()
     assert filecmp.cmp(idxfname, reffname), "index file differs from reference"
 
-@pytest.mark.xfail(reason="Issue #9")
 def test_tag_remove(imgdir):
     """First set all tags on all images, then remove the wrong ones.
     """
@@ -101,7 +100,6 @@ def test_tag_remove(imgdir):
     idx.write()
     assert filecmp.cmp(idxfname, reffname), "index file differs from reference"
 
-@pytest.mark.xfail(reason="Issue #9")
 def test_tag_extra(imgdir):
     """Add a spurious extra tag first and remove it later.
     """
