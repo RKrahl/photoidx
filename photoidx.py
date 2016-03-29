@@ -8,19 +8,21 @@ import photo.idxfilter
 
 def create(args):
     idxfile = args.directory if args.update else None
-    idx = photo.index.Index(idxfile=idxfile, imgdir=args.directory)
+    hashalg = args.checksums.split(',') if args.checksums else []
+    idx = photo.index.Index(idxfile=idxfile, imgdir=args.directory, 
+                            hashalg=hashalg)
     idx.write()
 
 def ls(args):
     idx = photo.index.Index(idxfile=args.directory)
     idxfilter = photo.idxfilter.IdxFilter(args)
     for i in filter(idxfilter, idx):
-        if args.md5:
+        if args.checksum:
             try:
-                md5 = i.checksum['md5']
+                checksum = i.checksum[args.checksum]
             except KeyError:
                 continue
-            print("%s  %s" % (md5, i.filename))
+            print("%s  %s" % (checksum, i.filename))
         else:
             print(i.filename)
 
@@ -54,12 +56,15 @@ argparser.add_argument('-d', '--directory',
 subparsers = argparser.add_subparsers(title='subcommands')
 
 create_parser = subparsers.add_parser('create', help="create the index")
+create_parser.add_argument('--checksums', default="md5", 
+                           help=("comma separated list of "
+                                 "hash algorithms to calculate checksums"))
 create_parser.add_argument('--update', action='store_true', 
                            help="add images to an existing index")
 create_parser.set_defaults(func=create)
 
 ls_parser = subparsers.add_parser('ls', help="list image files")
-ls_parser.add_argument('--md5', action='store_true', help="print md5 checksums")
+ls_parser.add_argument('--checksum', help="hash algorithm to print checksums")
 photo.idxfilter.addFilterArguments(ls_parser)
 ls_parser.set_defaults(func=ls)
 

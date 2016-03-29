@@ -43,7 +43,7 @@ def test_ls_all(imgdir):
     assert out == testimgs
 
 def test_ls_md5(imgdir, monkeypatch):
-    """List with --md5 option.
+    """List with --checksum=md5 option.
     """
     md5sum = "/usr/bin/md5sum"
     if not os.path.isfile(md5sum):
@@ -51,7 +51,7 @@ def test_ls_md5(imgdir, monkeypatch):
     monkeypatch.chdir(imgdir)
     fname = os.path.join(imgdir, "md5")
     with open(fname, "wt") as f:
-        callscript("photoidx.py", ["ls", "--md5"], stdout=f)
+        callscript("photoidx.py", ["ls", "--checksum=md5"], stdout=f)
     with open(fname, "rt") as f:
         cmd = [md5sum, "-c"]
         print(">", *cmd)
