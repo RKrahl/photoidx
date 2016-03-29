@@ -6,7 +6,7 @@ from photo.exif import Exif
 from photo.geo import GeoPosition
 
 
-def _md5file(fname):
+def _checksum(fname):
     """Calculate the md5 hash for a file.
     """
     m = hashlib.md5()
@@ -17,7 +17,7 @@ def _md5file(fname):
             if not chunk:
                 break
             m.update(chunk)
-    return m.hexdigest()
+    return {'md5': m.hexdigest()}
 
 
 class IdxItem(object):
@@ -26,10 +26,13 @@ class IdxItem(object):
         self.filename = None
         self.tags = []
         if data is not None:
+            if 'md5' in data:
+                data['checksum'] = {'md5': data['md5']}
+                del data['md5']
             self.__dict__.update(data)
         elif filename is not None:
             self.filename = filename
-            self.md5 = _md5file(filename)
+            self.checksum = _checksum(filename)
             exifdata = Exif(filename)
             self.createdate = exifdata.createdate
             self.orientation = exifdata.orientation

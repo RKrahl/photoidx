@@ -16,7 +16,11 @@ def ls(args):
     idxfilter = photo.idxfilter.IdxFilter(args)
     for i in filter(idxfilter, idx):
         if args.md5:
-            print("%s  %s" % (i.md5, i.filename))
+            try:
+                md5 = i.checksum['md5']
+            except KeyError:
+                continue
+            print("%s  %s" % (md5, i.filename))
         else:
             print(i.filename)
 
