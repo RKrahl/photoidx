@@ -14,7 +14,7 @@ class Index(MutableSequence):
 
     defIdxFilename = ".index.yaml"
 
-    def __init__(self, idxfile=None, imgdir=None):
+    def __init__(self, idxfile=None, imgdir=None, hashalg=['md5']):
         super(Index, self).__init__()
         self.directory = None
         self.idxfilename = None
@@ -22,7 +22,7 @@ class Index(MutableSequence):
         if idxfile:
             self.read(idxfile)
         if imgdir:
-            self.readdir(imgdir)
+            self.readdir(imgdir, hashalg)
 
     def __len__(self):
         return len(self.items)
@@ -53,7 +53,7 @@ class Index(MutableSequence):
             d = self.directory if self.directory is not None else os.getcwd()
             return os.path.abspath(os.path.join(d, self.defIdxFilename))
 
-    def readdir(self, imgdir):
+    def readdir(self, imgdir, hashalg=['md5']):
         """Add all image files in a directory to the index.
         """
         imgdir = os.path.abspath(imgdir)
@@ -65,7 +65,7 @@ class Index(MutableSequence):
                 f = os.path.relpath(os.path.join(imgdir, f))
                 if (os.path.isfile(f) and fnmatch.fnmatch(f, '*.jpg') and
                     f not in known):
-                    self.items.append(IdxItem(filename=f))
+                    self.items.append(IdxItem(filename=f, hashalg=hashalg))
 
     def read(self, idxfile=None):
         """Read the index from a file.
