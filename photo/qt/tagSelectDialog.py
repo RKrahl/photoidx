@@ -30,7 +30,7 @@ class TagSelectDialog(QtGui.QDialog):
 
         mainLayout = QtGui.QVBoxLayout()
         mainLayout.addLayout(self.checkLayout)
-        mainLayout.addWidget(buttonBox)
+        mainLayout.addWidget(buttonBox, alignment=QtCore.Qt.AlignHCenter)
         self.setLayout(mainLayout)
         self.setWindowTitle("Select tags")
 
