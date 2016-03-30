@@ -11,7 +11,7 @@ from photo.qt.tagSelectDialog import TagSelectDialog
 
 class ImageViewer(QtGui.QMainWindow):
 
-    def __init__(self, images, imgFilter, scaleFactor=1.0):
+    def __init__(self, images, imgFilter, scaleFactor=1.0, tagSelect=True):
         super(ImageViewer, self).__init__()
 
         self.images = images
@@ -22,7 +22,8 @@ class ImageViewer(QtGui.QMainWindow):
         taglist = set()
         for i in images:
             taglist |= i.tags
-        self.tagSelectDialog = TagSelectDialog(taglist)
+        if tagSelect:
+            self.tagSelectDialog = TagSelectDialog(taglist)
 
         self.imageLabel = QtGui.QLabel()
         self.imageLabel.setSizePolicy(QtGui.QSizePolicy.Ignored,
@@ -60,7 +61,7 @@ class ImageViewer(QtGui.QMainWindow):
                 shortcut="n", enabled=(len(self.selection)>1), 
                 triggered=self.nextImage)
         self.tagSelectAct = QtGui.QAction("Select &Tags", self,
-                shortcut="t", triggered=self.tagSelect)
+                shortcut="t", enabled=tagSelect, triggered=self.tagSelect)
 
         self.fileMenu = QtGui.QMenu("&File", self)
         self.fileMenu.addAction(self.closeAct)

@@ -15,7 +15,12 @@ photo.idxfilter.addFilterArguments(argparser)
 args = argparser.parse_args()
 
 app = QtGui.QApplication([])
-idx = photo.index.Index(idxfile=args.directory)
+try:
+    idx = photo.index.Index(idxfile=args.directory)
+    tagSelect=True
+except IOError:
+    idx = photo.index.Index(imgdir=args.directory)
+    tagSelect=False
 idxfilter = photo.idxfilter.IdxFilter(args)
-imageViewer = ImageViewer(idx, idxfilter, args.scale)
+imageViewer = ImageViewer(idx, idxfilter, args.scale, tagSelect)
 sys.exit(app.exec_())
