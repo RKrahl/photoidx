@@ -7,9 +7,6 @@ import math
 from collections import Mapping
 
 
-# FIXME: for the moment, only support a very basic input format
-# "52.518611 N, 13.408333 E".  Should also support alternate formats,
-# such as "52 deg 31' 7.0" N, 13 deg 24' 30.0" E".
 _geopos_pattern = (r"^\s*(?P<lat>\d+(?:\.\d*))\s*(?P<latref>N|S),\s*"
                    r"(?P<lon>\d+(?:\.\d*))\s*(?P<lonref>E|W)\s*$")
 _geopos_re = re.compile(_geopos_pattern)
