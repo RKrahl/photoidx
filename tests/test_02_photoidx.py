@@ -7,14 +7,20 @@ import shutil
 import filecmp
 import subprocess
 import pytest
-from conftest import tmpdir, gettestdata, testimgs, callscript
+from conftest import tmpdir, gettestdata, callscript
+
+testimgs = [ 
+    "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", 
+    "dsc_5126.jpg", "dsc_5167.jpg" 
+]
+testimgfiles = [ gettestdata(i) for i in testimgs ]
 
 refindex = gettestdata("index-create.yaml")
 
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
-    for fname in testimgs:
-        shutil.copy(gettestdata(fname), tmpdir)
+    for fname in testimgfiles:
+        shutil.copy(fname, tmpdir)
     return tmpdir
 
 
