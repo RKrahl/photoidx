@@ -19,9 +19,15 @@ class Exif(object):
 
     def __init__(self, filename):
         self._exif = GExiv2.Metadata(filename)
-        self.createdate = self._exif.get_date_time()
-        orientation = self._exif.get_orientation()
-        self.orientation = self.OrientationXlate[int(orientation)]
+        try:
+            self.createdate = self._exif.get_date_time()
+        except KeyError:
+            self.createdate = None
+        try:
+            orientation = self._exif.get_orientation()
+            self.orientation = self.OrientationXlate[int(orientation)]
+        except KeyError:
+            self.orientation = None
         if ('Exif.GPSInfo.GPSLatitude' in self._exif and
             'Exif.GPSInfo.GPSLongitude' in self._exif):
             lat = self._exif.get_gps_latitude()

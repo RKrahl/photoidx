@@ -23,7 +23,6 @@ def imgdir(tmpdir):
         shutil.copy(fname, tmpdir)
     return tmpdir
 
-@pytest.mark.xfail(raises=KeyError, reason="Issue #15")
 def test_create(imgdir):
     idx = photo.index.Index(imgdir=imgdir)
     idx.write()
