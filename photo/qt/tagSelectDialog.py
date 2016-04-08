@@ -67,7 +67,6 @@ class TagSelectDialog(QtGui.QDialog):
             self.taglist.add(t)
             self.settags(self.taglist)
         self.tagCheck[t].setCheckState(QtCore.Qt.Checked)
-        self.updateGeometry()
         self.adjustSize()
         self.entry.setText("")
 
