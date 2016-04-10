@@ -29,15 +29,19 @@ class IdxItem(object):
         self.filename = None
         self.tags = []
         if data is not None:
+            # Compatibility with legacy index file formats.
             if 'md5' in data:
                 data['checksum'] = {'md5': data['md5']}
                 del data['md5']
+            if 'createdate' in data:
+                data['createDate'] = data['createdate']
+                del data['createdate']
             self.__dict__.update(data)
         elif filename is not None:
             self.filename = filename
             self.checksum = _checksum(filename, hashalg)
             exifdata = Exif(filename)
-            self.createdate = exifdata.createdate
+            self.createDate = exifdata.createDate
             self.orientation = exifdata.orientation
             self.gpsPosition = exifdata.gpsPosition
         if self.gpsPosition:

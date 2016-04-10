@@ -19,7 +19,7 @@ class Exif(object):
 
     def __init__(self, filename):
         self._exif = GExiv2.Metadata(filename)
-        self.createdate = self._get_date_time()
+        self.createDate = self._get_date_time()
         self.orientation = self._get_orientation()
         self.gpsPosition = self._get_gpsPosition()
 

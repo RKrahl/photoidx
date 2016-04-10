@@ -39,7 +39,7 @@ class IdxFilter(object):
                 return False
             if not self.taglist and not self.negtaglist and item.tags:
                 return False
-        if self.date and item.createdate.date() != self.date:
+        if self.date and item.createDate.date() != self.date:
             return False
         if self.gpspos:
             if (not item.gpsPosition or
