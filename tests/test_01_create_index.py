@@ -17,8 +17,10 @@ testimgfiles = [ gettestdata(i) for i in testimgs ]
 
 if hasattr(datetime, "timezone"):
     refindex = gettestdata("index-create-tz.yaml")
+    have_timezone = True
 else:
     refindex = gettestdata("index-create.yaml")
+    have_timezone = False
 
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
@@ -34,6 +36,8 @@ def test_create(imgdir):
     idxfile = os.path.join(imgdir, ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
+@pytest.mark.xfail("have_timezone", 
+                   reason="PyYAML fails to read datetime values with time zone")
 def test_read(imgdir):
     """Read the index file and write it out again.
     """
