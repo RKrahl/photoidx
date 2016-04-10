@@ -27,7 +27,17 @@ def imgdir(tmpdir):
     return tmpdir
 
 def test_create(imgdir):
+    """Create a new index adding all images in the imgdir.
+    """
     idx = photo.index.Index(imgdir=imgdir)
+    idx.write()
+    idxfile = os.path.join(imgdir, ".index.yaml")
+    assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
+
+def test_read(imgdir):
+    """Read the index file and write it out again.
+    """
+    idx = photo.index.Index(idxfile=imgdir)
     idx.write()
     idxfile = os.path.join(imgdir, ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
