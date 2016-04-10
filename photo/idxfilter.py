@@ -39,7 +39,8 @@ class IdxFilter(object):
                 return False
             if not self.taglist and not self.negtaglist and item.tags:
                 return False
-        if self.date and item.createDate.date() != self.date:
+        if self.date and (item.createDate < self.date[0] or 
+                          item.createDate >= self.date[1]):
             return False
         if self.gpspos:
             if (not item.gpsPosition or
@@ -53,7 +54,8 @@ def _strpdate(s):
     if match:
         y, m, d = match.group(1, 2, 3)
         try:
-            return datetime.date(int(y), int(m), int(d))
+            return (datetime.datetime(int(y), int(m), int(d)), 
+                    datetime.datetime(int(y), int(m), int(d)+1))
         except ValueError:
             pass
     raise argparse.ArgumentTypeError("Invalid date value '%s'" % s)
