@@ -58,8 +58,9 @@ def _strpdate(s):
     if match:
         y, m, d = match.group('y0', 'm0', 'd0')
         try:
-            return (datetime.datetime(int(y), int(m), int(d)), 
-                    datetime.datetime(int(y), int(m), int(d)+1))
+            startdate = datetime.datetime(int(y), int(m), int(d))
+            enddate = startdate + datetime.timedelta(days=1)
+            return (startdate, enddate)
         except ValueError:
             pass
     raise argparse.ArgumentTypeError("Invalid date value '%s'" % s)
