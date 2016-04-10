@@ -49,10 +49,14 @@ class IdxFilter(object):
         return True
 
 
+_datere = re.compile(r'''^
+    (?P<y0>\d{1,})-(?P<m0>\d{1,2})-(?P<d0>\d{1,2})
+    $''', re.X)
+
 def _strpdate(s):
-    match = re.match(r"^(\d{1,})-(\d{1,2})-(\d{1,2})$", s)
+    match = re.match(_datere, s)
     if match:
-        y, m, d = match.group(1, 2, 3)
+        y, m, d = match.group('y0', 'm0', 'd0')
         try:
             return (datetime.datetime(int(y), int(m), int(d)), 
                     datetime.datetime(int(y), int(m), int(d)+1))
