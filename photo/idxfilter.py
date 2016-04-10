@@ -50,20 +50,41 @@ class IdxFilter(object):
 
 
 _datere = re.compile(r'''^
-    (?P<y0>\d{1,})-(?P<m0>\d{1,2})-(?P<d0>\d{1,2})
-    $''', re.X)
+    (?P<y0>\d{4})-(?P<m0>\d{2})-(?P<d0>\d{2})              # start date
+    (?:[T ](?P<h0>\d{2}):(?P<min0>\d{2}):(?P<s0>\d{2}))?   # optional start time
+    (?:\s*(?:--|/)\s*                                      # delimeter
+      (?P<y1>\d{4})-(?P<m1>\d{2})-(?P<d1>\d{2})            # end date
+      (?:[T ](?P<h1>\d{2}):(?P<min1>\d{2}):(?P<s1>\d{2}))? # optional end time
+    )?$''', re.X)
 
 def _strpdate(s):
+    def _dt(args):
+        year, month, day, hour, minute, second = args
+        if hour is None:
+            return datetime.datetime(int(year), int(month), int(day))
+        else:
+            return datetime.datetime(int(year), int(month), int(day), 
+                                     int(hour), int(minute), int(second))
     match = re.match(_datere, s)
     if match:
-        y, m, d = match.group('y0', 'm0', 'd0')
         try:
-            startdate = datetime.datetime(int(y), int(m), int(d))
-            enddate = startdate + datetime.timedelta(days=1)
+            startdate = _dt(match.group('y0', 'm0', 'd0', 'h0', 'min0', 's0'))
+            if match.group('d1') is None:
+                if match.group('h0') is None:
+                    enddate = startdate + datetime.timedelta(days=1)
+                else:
+                    enddate = startdate + datetime.timedelta(seconds=1)
+            else:
+                enddate = _dt(match.group('y1', 'm1', 'd1', 'h1', 'min1', 's1'))
+                if match.group('h1') is None:
+                    enddate += datetime.timedelta(days=1)
+                else:
+                    enddate += datetime.timedelta(seconds=1)
             return (startdate, enddate)
         except ValueError:
             pass
     raise argparse.ArgumentTypeError("Invalid date value '%s'" % s)
+
 
 def addFilterArguments(argparser):
     argparser.add_argument('--tags', 
