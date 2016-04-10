@@ -3,6 +3,7 @@
 
 from __future__ import print_function
 import os.path
+import datetime
 import shutil
 import filecmp
 import subprocess
@@ -15,7 +16,10 @@ testimgs = [
 ]
 testimgfiles = [ gettestdata(i) for i in testimgs ]
 
-refindex = gettestdata("index-create.yaml")
+if hasattr(datetime, "timezone"):
+    refindex = gettestdata("index-create-tz.yaml")
+else:
+    refindex = gettestdata("index-create.yaml")
 
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):

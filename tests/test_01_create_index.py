@@ -2,6 +2,7 @@
 """
 
 import os.path
+import datetime
 import shutil
 import filecmp
 import pytest
@@ -14,7 +15,10 @@ testimgs = [
 ]
 testimgfiles = [ gettestdata(i) for i in testimgs ]
 
-refindex = gettestdata("index-create.yaml")
+if hasattr(datetime, "timezone"):
+    refindex = gettestdata("index-create-tz.yaml")
+else:
+    refindex = gettestdata("index-create.yaml")
 
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
