@@ -1,7 +1,7 @@
 %define pkgname		 photo
 
 Name:		python-%{pkgname}
-Version:	0.3
+Version:	0.4
 Release:	1
 Summary:	Tools for managing photo collections
 License:	Apache-2.0
@@ -47,17 +47,13 @@ python setup.py install --optimize=1 --prefix=%{_prefix} --root=%{buildroot}
 %endif
 
 
-%check
-python setup.py test
-
-
 %clean
 rm -rf %{buildroot}
 
 
 %files
 %defattr(-,root,root)
-%doc README.rst
+%doc README.rst CHANGES
 %{python_sitelib}/*
 %exclude %{python_sitelib}/photo/qt
 %{_bindir}/photoidx

@@ -15,8 +15,8 @@ System requirements
 
 Python:
 
- + Python 2.7.  The package itself should also work with Python 3,
-   but some prerequisites only support Python 2.
+ + Python 2.7.  Python 3 might work as well, but has not yet been
+   completely tested.
 
 Required library packages:
 
@@ -36,9 +36,10 @@ Optional library packages, only needed to run the test suite:
 Installation
 ------------
 
-photo-tools follows the standard Python conventions of packaging
-source distributions.  See the documentation on `Installing Python
-Modules`_ for details or to customize the install process.
+This package uses the distutils Python standard library package and
+follows its conventions of packaging source distributions.  See the
+documentation on `Installing Python Modules`_ for details or to
+customize the install process.
 
   1. Download the sources, unpack, and change into the source
      directory.

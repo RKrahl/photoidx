@@ -1,0 +1,70 @@
+		  History of changes to photo-tools
+		  =================================
+
+* Version 0.4 (2016-04-12)
+
+** New features
+
+ + Issue #4: Add option to photoidx to add missing images to an
+   index.
+
+ + Issue #10: Allow setting of new tags from imageview.
+
+ + Issue #11: imageview should be able to work without an index.
+
+ + Issue #5: Allow a date interval as argument to --date.
+
+ + Issue #12: Allow configuration of the type of checksum to be
+   calculated.
+
+** Incompatible changes
+
+ + The index file format has changed.  photoidx.py and imageview.py
+   are able to read the old format and convert the file silently to
+   the new format when writing it back.  But the tools from earlier
+   versions will not fully work with the new format files.
+
+** Internal changes
+
+ + Issue #1: Add a test suite.
+
+ + Issue #3: Move from pyexiv2 to GExiv2.
+
+** Bug fixes and minor changes
+
+ + Issue #6: imageview crashes with ZeroDivisionError if no tags are
+   set in the index.
+
+ + Issue #13: imageview fails with RuntimeError if --directory option
+   is used.
+
+ + Issue #15: photoidx.py create raises KeyError if exiftags are not
+   present in an image.
+
+ + Issue #9: Sort the tags when writing the index to a file.
+
+* Version 0.3 (2016-01-02)
+
+ + Add image viewer.
+
+ + Add --date command line argument to select images.
+
+ + Add command line arguments --gpspos and --gpsradius to select
+   images by GPS position.
+
+ + Improve semantics in the --tags command line argument: Add
+   exclamation mark to negate tags and allow specifying an empty tag
+   list selecting only untagged images.
+
+* Version 0.2 (2015-10-21)
+
+ + Add lstags sub command.
+
+* Version 0.1 (2015-09-19)
+
+ + Initial version
+
+
+# Local Variables:
+# mode: org
+# End:
