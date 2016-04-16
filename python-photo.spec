@@ -6,9 +6,13 @@ Release:	1
 Summary:	Tools for managing photo collections
 License:	Apache-2.0
 Group:		Development/Languages/Python
+Url:		https://github.com/RKrahl/photo-tools
 Source:		%{pkgname}-%{version}.tar.gz
 BuildArch:	noarch
 BuildRequires:	python-devel >= 2.7
+BuildRequires:	python-PyYAML
+BuildRequires:	python-gexiv2
+BuildRequires:	python-distutils-pytest
 Requires:	python-PyYAML
 Requires:	python-gexiv2
 %if 0%{?suse_version}
@@ -45,6 +49,10 @@ python setup.py install --optimize=1 --prefix=%{_prefix} --root=%{buildroot}
 %if 0%{?suse_version}
 %fdupes %{buildroot}
 %endif
+
+
+%check
+python setup.py test
 
 
 %clean
