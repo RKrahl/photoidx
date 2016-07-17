@@ -1,7 +1,8 @@
 """Provide a PySide ImageViewer window.
 """
 
-from __future__ import division
+from __future__ import division, print_function
+import sys
 import os.path
 import re
 from PySide import QtCore, QtGui
@@ -116,7 +117,11 @@ class ImageViewer(QtGui.QMainWindow):
         fileName = item.filename
         image = QtGui.QImage(fileName)
         if image.isNull():
-            raise RuntimeError("Cannot load %s." % fileName)
+            print("Cannot load %s." % fileName, file=sys.stderr)
+            del self.selection[self.cur]
+            self._loadImage()
+            self.nextImageAct.setEnabled(self.cur < len(self.selection)-1)
+            return
         pixmap = QtGui.QPixmap.fromImage(image)
         rm = QtGui.QMatrix()
         if item.orientation:
