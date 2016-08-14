@@ -8,7 +8,7 @@ from photo.geo import GeoPosition
 
 
 def _checksum(fname, hashalg):
-    """Calculate the md5 hash for a file.
+    """Calculate hashes for a file.
     """
     if not hashalg:
         return {}
