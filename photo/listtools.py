@@ -94,6 +94,12 @@ class LazyList(MutableSequence):
         self.iterable = iter(iterable)
         self.elements = []
 
+    def _access_next(self):
+        """Take out the next element from the iterable.
+        Raise StopIteration if the iterable is exhausted.
+        """
+        self.elements.append(next(self.iterable))
+
     def _access(self, index):
         """Try to take out the elements covered by index from the iterable.
         The argument may be an int or a slice.  Do not raise an error,
@@ -109,7 +115,7 @@ class LazyList(MutableSequence):
                 m = index.stop if index.stop >= 0 else -1
         while len(self.elements) < m or m < 0:
             try:
-                self.elements.append(next(self.iterable))
+                self._access_next()
             except StopIteration:
                 break
 
