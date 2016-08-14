@@ -1,7 +1,6 @@
 #! /usr/bin/python
 
 import sys
-import os
 import argparse
 from PySide import QtGui
 import photo.index
@@ -23,6 +22,5 @@ except IOError:
     idx = photo.index.Index(imgdir=args.directory)
     tagSelect=False
 idxfilter = photo.idxfilter.IdxFilter(args)
-os.chdir(idx.directory)
 imageViewer = ImageViewer(idx, idxfilter, args.scale, tagSelect)
 sys.exit(app.exec_())

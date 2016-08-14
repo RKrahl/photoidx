@@ -22,6 +22,15 @@ def imgdir(tmpdir):
         shutil.copy(fname, tmpdir)
     return tmpdir
 
+def test_create_curdir(imgdir, monkeypatch):
+    """Create a new index in the current directory adding all images.
+    """
+    monkeypatch.chdir(imgdir)
+    idx = photo.index.Index(imgdir=".")
+    idx.write()
+    idxfile = ".index.yaml"
+    assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
+
 def test_create(imgdir):
     """Create a new index adding all images in the imgdir.
     """

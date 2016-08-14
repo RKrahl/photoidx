@@ -114,7 +114,7 @@ class ImageViewer(QtGui.QMainWindow):
             # Nothing to view.
             self.imageLabel.hide()
             return
-        fileName = item.filename
+        fileName = os.path.join(self.images.directory, item.filename)
         image = QtGui.QImage(fileName)
         if image.isNull():
             print("Cannot load %s." % fileName, file=sys.stderr)
