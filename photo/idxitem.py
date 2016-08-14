@@ -1,6 +1,7 @@
 """Provide the class IdxItem which represents an item in the index.
 """
 
+import os.path
 import hashlib
 from photo.exif import Exif
 from photo.geo import GeoPosition
@@ -25,7 +26,7 @@ def _checksum(fname, hashalg):
 
 class IdxItem(object):
 
-    def __init__(self, filename=None, data=None, hashalg=['md5']):
+    def __init__(self, data=None, filename=None, basedir=None, hashalg=['md5']):
         self.filename = None
         self.tags = []
         if data is not None:
@@ -39,6 +40,8 @@ class IdxItem(object):
             self.__dict__.update(data)
         elif filename is not None:
             self.filename = filename
+            if basedir is not None:
+                filename = os.path.join(basedir, filename)
             self.checksum = _checksum(filename, hashalg)
             exifdata = Exif(filename)
             self.createDate = exifdata.createDate
