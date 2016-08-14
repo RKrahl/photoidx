@@ -7,6 +7,16 @@ import fnmatch
 from collections import MutableSequence
 import yaml
 from photo.idxitem import IdxItem
+from photo.listtools import LazyList
+
+
+def _readdir(imgdir, basedir, hashalg, known=set()):
+    for f in sorted(os.listdir(imgdir)):
+        absfile = os.path.join(imgdir, f)
+        f = os.path.relpath(absfile, basedir)
+        if (os.path.isfile(absfile) and fnmatch.fnmatch(f, '*.jpg')
+            and f not in known):
+            yield IdxItem(filename=f, basedir=basedir, hashalg=hashalg)
 
 
 class Index(MutableSequence):
@@ -21,7 +31,16 @@ class Index(MutableSequence):
         if idxfile:
             self.read(idxfile)
         if imgdir:
-            self.readdir(imgdir, hashalg)
+            imgdir = os.path.abspath(imgdir)
+            if not self.directory:
+                self.directory = imgdir
+            if idxfile:
+                known = { i.filename for i in self.items }
+                newitems = _readdir(imgdir, self.directory, hashalg, known)
+                self.items.extend(newitems)
+            else:
+                newitems = _readdir(imgdir, self.directory, hashalg)
+                self.items = LazyList(newitems)
 
     def __len__(self):
         return len(self.items)
@@ -51,21 +70,6 @@ class Index(MutableSequence):
         else:
             d = self.directory if self.directory is not None else os.getcwd()
             return os.path.abspath(os.path.join(d, self.defIdxFilename))
-
-    def readdir(self, imgdir, hashalg=['md5']):
-        """Add all image files in a directory to the index.
-        """
-        imgdir = os.path.abspath(imgdir)
-        if not self.directory:
-            self.directory = imgdir
-        known = { i.filename for i in self.items }
-        for f in sorted(os.listdir(imgdir)):
-            absfile = os.path.join(imgdir, f)
-            f = os.path.relpath(absfile, self.directory)
-            if (os.path.isfile(absfile) and fnmatch.fnmatch(f, '*.jpg') and
-                f not in known):
-                self.items.append(IdxItem(filename=f, basedir=self.directory, 
-                                          hashalg=hashalg))
 
     def read(self, idxfile=None):
         """Read the index from a file.
