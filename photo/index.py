@@ -7,6 +7,7 @@ import fnmatch
 from collections import MutableSequence
 import yaml
 from photo.idxitem import IdxItem
+from photo.listtools import LazyList
 
 
 def _readdir(imgdir, basedir, hashalg, known=set()):
@@ -39,7 +40,7 @@ class Index(MutableSequence):
                 self.items.extend(newitems)
             else:
                 newitems = _readdir(imgdir, self.directory, hashalg)
-                self.items = list(newitems)
+                self.items = LazyList(newitems)
 
     def __len__(self):
         return len(self.items)
