@@ -33,11 +33,12 @@ class ImageViewer(QtGui.QMainWindow):
         self.imgFilter = imgFilter
         self.selection = LazyList(ifilter(self.imgFilter, self.images))
         self.scaleFactor = scaleFactor
+        self.cur = 0
 
-        taglist = set()
-        for i in images:
-            taglist |= i.tags
         if tagSelect:
+            taglist = set()
+            for i in images:
+                taglist |= i.tags
             self.tagSelectDialog = TagSelectDialog(taglist)
 
         self.imageLabel = QtGui.QLabel()
@@ -73,7 +74,7 @@ class ImageViewer(QtGui.QMainWindow):
         self.prevImageAct = QtGui.QAction("&Previous Image", self,
                 shortcut="p", enabled=False, triggered=self.prevImage)
         self.nextImageAct = QtGui.QAction("&Next Image", self,
-                shortcut="n", enabled=(len(self.selection)>1), 
+                shortcut="n", enabled=(self._haveNext()), 
                 triggered=self.nextImage)
         self.tagSelectAct = QtGui.QAction("Select &Tags", self,
                 shortcut="t", enabled=tagSelect, triggered=self.tagSelect)
@@ -100,10 +101,20 @@ class ImageViewer(QtGui.QMainWindow):
         self.imageMenu.addAction(self.tagSelectAct)
         self.menuBar().addMenu(self.imageMenu)
 
-        self.cur = 0
         self.show()
         self._extraSize = self.size() - self.scrollArea.viewport().size()
         self._loadImage()
+
+    def _haveNext(self):
+        """Check whether there is a next image.
+        This should be equivalent to self.cur < len(self.selection)-1,
+        but without calling len(self.selection).
+        """
+        try:
+            self.selection[self.cur+1]
+            return True
+        except IndexError:
+            return False
 
     def _setSize(self):
         size = self.scaleFactor * self.imageLabel.pixmap().size()
@@ -134,7 +145,7 @@ class ImageViewer(QtGui.QMainWindow):
             print("Cannot load %s." % fileName, file=sys.stderr)
             del self.selection[self.cur]
             self._loadImage()
-            self.nextImageAct.setEnabled(self.cur < len(self.selection)-1)
+            self.nextImageAct.setEnabled(self._haveNext())
             return
         pixmap = QtGui.QPixmap.fromImage(image)
         rm = QtGui.QMatrix()
@@ -195,12 +206,12 @@ class ImageViewer(QtGui.QMainWindow):
         self.prevImageAct.setEnabled(self.cur > 0)
 
     def nextImage(self):
-        if self.cur < len(self.selection)-1:
+        if self._haveNext():
             self.cur += 1
             self._loadImage()
             self._setSize()
             self.prevImageAct.setEnabled(True)
-        self.nextImageAct.setEnabled(self.cur < len(self.selection)-1)
+        self.nextImageAct.setEnabled(self._haveNext())
 
     def tagSelect(self):
         self.tagSelectDialog.setCheckedTags(self.selection[self.cur].tags)
@@ -212,7 +223,7 @@ class ImageViewer(QtGui.QMainWindow):
             if not self.imgFilter(self.selection[self.cur]):
                 del self.selection[self.cur]
                 self._loadImage()
-                self.nextImageAct.setEnabled(self.cur < len(self.selection)-1)
+                self.nextImageAct.setEnabled(self._haveNext())
 
     def scaleImage(self, factor):
         self.scaleFactor *= factor
