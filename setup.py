@@ -3,6 +3,11 @@
 from distutils.core import setup
 try:
     from distutils.command.build_py import build_py_2to3 as build_py
+    # Must disable the filter fixer.
+    import lib2to3.refactor
+    fixer_names = lib2to3.refactor.get_fixers_from_package('lib2to3.fixes')
+    fixer_names.remove('lib2to3.fixes.fix_filter')
+    build_py.fixer_names = fixer_names
 except ImportError:
     # Python 2.x
     from distutils.command.build_py import build_py
