@@ -16,7 +16,7 @@ def create(args):
 def ls(args):
     idx = photo.index.Index(idxfile=args.directory)
     idxfilter = photo.idxfilter.IdxFilter(args)
-    for i in filter(idxfilter, idx):
+    for i in idxfilter.filter(idx):
         if args.checksum:
             try:
                 checksum = i.checksum[args.checksum]
@@ -30,7 +30,7 @@ def lstags(args):
     idx = photo.index.Index(idxfile=args.directory)
     idxfilter = photo.idxfilter.IdxFilter(args)
     tags = set()
-    for i in filter(idxfilter, idx):
+    for i in idxfilter.filter(idx):
         tags.update(i.tags)
     for t in sorted(tags):
         print(t)
@@ -38,14 +38,14 @@ def lstags(args):
 def addtag(args):
     idx = photo.index.Index(idxfile=args.directory)
     idxfilter = photo.idxfilter.IdxFilter(args)
-    for i in filter(idxfilter, idx):
+    for i in idxfilter.filter(idx):
         i.tags.add(args.tag)
     idx.write()
 
 def rmtag(args):
     idx = photo.index.Index(idxfile=args.directory)
     idxfilter = photo.idxfilter.IdxFilter(args)
-    for i in filter(idxfilter, idx):
+    for i in idxfilter.filter(idx):
         i.tags.discard(args.tag)
     idx.write()
 

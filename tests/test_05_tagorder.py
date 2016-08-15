@@ -64,7 +64,7 @@ def test_tag_ref(imgdir):
     for t in taglist:
         args = NameSpace(files=tags[t])
         idxfilter = photo.idxfilter.IdxFilter(args)
-        for i in filter(idxfilter, idx):
+        for i in idxfilter.filter(idx):
             i.tags.add(t)
     idx.write()
     shutil.copy(idxfname, reffname)
@@ -81,7 +81,7 @@ def test_tag_shuffle(imgdir):
     for t in taglist:
         args = NameSpace(files=tags[t])
         idxfilter = photo.idxfilter.IdxFilter(args)
-        for i in filter(idxfilter, idx):
+        for i in idxfilter.filter(idx):
             i.tags.add(t)
     idx.write()
     assert filecmp.cmp(idxfname, reffname), "index file differs from reference"
@@ -119,7 +119,7 @@ def test_tag_extra(imgdir):
     for t in taglist:
         args = NameSpace(files=tags[t])
         idxfilter = photo.idxfilter.IdxFilter(args)
-        for i in filter(idxfilter, idx):
+        for i in idxfilter.filter(idx):
             i.tags.add(t)
     for i in idx:
         i.tags.remove("extra")

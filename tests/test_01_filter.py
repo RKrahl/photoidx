@@ -44,7 +44,7 @@ def test_by_date(imgdir, argparser):
     args = argparser.parse_args(["--date=2016-03-05"])
     idxfilter = photo.idxfilter.IdxFilter(args)
     fnames = []
-    for i in filter(idxfilter, idx):
+    for i in idxfilter.filter(idx):
         fnames.append(i.filename)
         i.tags.add("Hakone")
     assert fnames == ["dsc_4831.jpg"]
@@ -58,7 +58,7 @@ def test_by_gpspos(imgdir, argparser):
                                  "--gpsradius=20.0"])
     idxfilter = photo.idxfilter.IdxFilter(args)
     fnames = []
-    for i in filter(idxfilter, idx):
+    for i in idxfilter.filter(idx):
         fnames.append(i.filename)
         i.tags.add("Tokyo")
     assert fnames == ["dsc_4623.jpg", "dsc_4664.jpg"]
@@ -71,7 +71,7 @@ def test_by_files(imgdir, argparser):
     args = argparser.parse_args(["dsc_4664.jpg", "dsc_4831.jpg"])
     idxfilter = photo.idxfilter.IdxFilter(args)
     fnames = []
-    for i in filter(idxfilter, idx):
+    for i in idxfilter.filter(idx):
         fnames.append(i.filename)
         i.tags.add("Shinto_shrine")
     assert fnames == ["dsc_4664.jpg", "dsc_4831.jpg"]
@@ -83,7 +83,7 @@ def test_by_single_tag(imgdir, argparser):
     idx = photo.index.Index(idxfile=imgdir)
     args = argparser.parse_args(["--tags=Shinto_shrine"])
     idxfilter = photo.idxfilter.IdxFilter(args)
-    fnames = [ i.filename for i in filter(idxfilter, idx) ]
+    fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4664.jpg", "dsc_4831.jpg"]
 
 def test_by_mult_tags(imgdir, argparser):
@@ -95,7 +95,7 @@ def test_by_mult_tags(imgdir, argparser):
     idx = photo.index.Index(idxfile=imgdir)
     args = argparser.parse_args(["--tags=Tokyo,Shinto_shrine"])
     idxfilter = photo.idxfilter.IdxFilter(args)
-    fnames = [ i.filename for i in filter(idxfilter, idx) ]
+    fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4664.jpg"]
 
 def test_by_neg_tags(imgdir, argparser):
@@ -107,7 +107,7 @@ def test_by_neg_tags(imgdir, argparser):
     idx = photo.index.Index(idxfile=imgdir)
     args = argparser.parse_args(["--tags=Tokyo,!Shinto_shrine"])
     idxfilter = photo.idxfilter.IdxFilter(args)
-    fnames = [ i.filename for i in filter(idxfilter, idx) ]
+    fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4623.jpg"]
 
 def test_by_empty_tag(imgdir, argparser):
@@ -118,7 +118,7 @@ def test_by_empty_tag(imgdir, argparser):
     idx = photo.index.Index(idxfile=imgdir)
     args = argparser.parse_args(["--tags="])
     idxfilter = photo.idxfilter.IdxFilter(args)
-    fnames = [ i.filename for i in filter(idxfilter, idx) ]
+    fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_5126.jpg", "dsc_5167.jpg"]
 
 def test_by_date_and_tag(imgdir, argparser):
@@ -130,6 +130,6 @@ def test_by_date_and_tag(imgdir, argparser):
     idx = photo.index.Index(idxfile=imgdir)
     args = argparser.parse_args(["--tags=Tokyo", "--date=2016-02-28"])
     idxfilter = photo.idxfilter.IdxFilter(args)
-    fnames = [ i.filename for i in filter(idxfilter, idx) ]
+    fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4623.jpg"]
 

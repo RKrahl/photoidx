@@ -5,23 +5,10 @@ from __future__ import division, print_function
 import sys
 import os.path
 import re
-import collections
 from PySide import QtCore, QtGui
 import photo.index
 from photo.listtools import LazyList
 from photo.qt.tagSelectDialog import TagSelectDialog
-
-# Which filter function returns an iterable?
-# For Python 2, the builtin filter() returns a list, so it is not
-# suitable.  But we can use itertools.ifilter instead.  For Python 3,
-# the builtin filter() is suitable.
-if isinstance(filter(lambda i: True, []), collections.Iterator):
-    # Python 3
-    ifilter = filter
-else:
-    # Python 2
-    import itertools
-    ifilter = itertools.ifilter
 
 
 class ImageViewer(QtGui.QMainWindow):
@@ -31,7 +18,7 @@ class ImageViewer(QtGui.QMainWindow):
 
         self.images = images
         self.imgFilter = imgFilter
-        self.selection = LazyList(ifilter(self.imgFilter, self.images))
+        self.selection = LazyList(self.imgFilter.filter(self.images))
         self.scaleFactor = scaleFactor
         self.cur = 0
 

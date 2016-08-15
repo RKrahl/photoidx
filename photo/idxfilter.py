@@ -4,7 +4,20 @@
 import re
 import datetime
 import argparse
+import collections
 from photo.geo import GeoPosition
+
+# Need a filter function that returns an iterator.
+# With Python 3, the builtin filter() is what we want.  With Python 2,
+# filter() returns a list, this is not suitable.  But we can use
+# itertools.ifilter in Python 2 instead.
+if isinstance(filter(lambda i: True, []), collections.Iterator):
+    # Python 3
+    ifilter = filter
+else:
+    # Python 2
+    import itertools
+    ifilter = itertools.ifilter
 
 
 class IdxFilter(object):
@@ -48,6 +61,9 @@ class IdxFilter(object):
                 (item.gpsPosition - self.gpspos) > self.gpsradius):
                 return False
         return True
+
+    def filter(self, idx):
+        return ifilter(self, idx)
 
 
 _datere = re.compile(r'''^
