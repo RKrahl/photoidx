@@ -1,20 +1,27 @@
-Welcome to photo-tools's documentation!
-=======================================
+photo-tools --- Tools for managing photo collections
+====================================================
 
-Note that there this is no comprehensive documentation by now.  This is
+Note that there is no comprehensive documentation by now.  This is
 just a stub of what should eventually become a documentation.
 
-Contents:
+Module reference
+~~~~~~~~~~~~~~~~
 
 .. toctree::
    :maxdepth: 2
 
+   photo.exif
+   photo.geo
+   photo.idxfilter
+   photo.idxitem
+   photo.index
+   photo.listtools
+   photo.qt
 
 
 Indices and tables
-==================
+~~~~~~~~~~~~~~~~~~
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
