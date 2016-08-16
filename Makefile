@@ -7,8 +7,11 @@ build:
 test:
 	$(PYTHON) setup.py test
 
-sdist:
+sdist: doc-html
 	$(PYTHON) setup.py sdist
+
+doc-html:
+	$(MAKE) -C doc html
 
 clean:
 	rm -f *~ photo/*~ photo/qt/*~ tests/*~
@@ -19,6 +22,7 @@ distclean: clean
 	rm -f photo/*.pyc photo/qt/*.pyc tests/*.pyc
 	rm -rf photo/__pycache__ photo/qt/__pycache__ tests/__pycache__
 	rm -rf dist
+	$(MAKE) -C doc distclean
 
 
-.PHONY: build test sdist clean distclean
+.PHONY: build test sdist doc-html clean distclean
