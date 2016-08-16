@@ -1,11 +1,12 @@
-"""Some useful list classes.
+"""Useful list classes.
 
-**Note**: This module might be useful independently of photo-tools.
-It is included here because photo-tools uses it internally, but it is
-not considered to be part of the API.  Changes in this module are not
-considered API changes of photo-tools.  It may even be removed from
-future versions of the photo-tools distribution without further
-notice.
+.. note::
+   This module might be useful independently of photo-tools.  It is
+   included here because photo-tools uses it internally, but it is not
+   considered to be part of the API.  Changes in this module are not
+   considered API changes of photo-tools.  It may even be removed from
+   future versions of the photo-tools distribution without further
+   notice.
 """
 
 from collections import MutableSequence
@@ -46,21 +47,29 @@ class LazyList(MutableSequence):
     >>> l
     [0, 2, 3, 4]
     >>> l = LazyList((0, 1, 2, 3, 4))
+    >>> l
+    []
     >>> l[-2]
     3
     >>> l
     [0, 1, 2, 3, 4]
     >>> l = LazyList((0, 1, 2, 3, 4))
+    >>> l
+    []
     >>> list(l) == [0, 1, 2, 3, 4]
     True
     >>> l
     [0, 1, 2, 3, 4]
     >>> l = LazyList((0, 1, 2, 3, 4))
+    >>> l
+    []
     >>> len(l)
     5
     >>> l
     [0, 1, 2, 3, 4]
     >>> l = LazyList((0, 1, 2, 3, 4))
+    >>> l
+    []
     >>> l.append(5)
     >>> l
     [0, 1, 2, 3, 4, 5]
@@ -71,6 +80,8 @@ class LazyList(MutableSequence):
     ...         n += 1
     ... 
     >>> l = LazyList(naturals())
+    >>> l
+    []
     >>> l[1]
     1
     >>> l
