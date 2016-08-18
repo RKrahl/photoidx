@@ -37,7 +37,7 @@ class IdxFilter(object):
             self.negtaglist = None
         self.date = args.date
         if args.gpspos:
-            self.gpspos = GeoPosition(args.gpspos)
+            self.gpspos = args.gpspos
             self.gpsradius = args.gpsradius
         else:
             self.gpspos = None
@@ -109,7 +109,8 @@ def addFilterArguments(argparser):
     argparser.add_argument('--date', type=_strpdate, 
                            help="select images by date")
     argparser.add_argument('--gpspos', 
-                           help="select images by GPS position")
+                           help="select images by GPS position", 
+                           type=GeoPosition)
     argparser.add_argument('--gpsradius', type=float, default=3.0, 
                            help="radius around GPS position in km", 
                            metavar='DISTANCE')
