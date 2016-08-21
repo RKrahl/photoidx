@@ -43,6 +43,7 @@ class IdxItem(object):
             self.gpsPosition = data.get('gpsPosition')
             tags = data.get('tags', [])
             self.tags = set(filter(lambda t: not t.startswith('pidx:'), tags))
+            self.selected = 'pidx:selected' in tags
         elif filename is not None:
             self.filename = filename
             if basedir is not None:
@@ -53,17 +54,21 @@ class IdxItem(object):
             self.orientation = exifdata.orientation
             self.gpsPosition = exifdata.gpsPosition
             self.tags = set()
+            self.selected = False
         if self.gpsPosition:
             self.gpsPosition = GeoPosition(self.gpsPosition)
 
     def as_dict(self):
+        tags = self.tags.copy()
+        if self.selected:
+             tags.add('pidx:selected')
         d = {
             'filename': self.filename,
             'checksum': self.checksum,
             'createDate': self.createDate,
             'orientation': self.orientation,
             'gpsPosition': self.gpsPosition,
-            'tags': sorted(self.tags),
+            'tags': sorted(tags),
         }
         if d['gpsPosition']:
             d['gpsPosition'] = d['gpsPosition'].as_dict()

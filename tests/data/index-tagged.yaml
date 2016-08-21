@@ -19,6 +19,7 @@
   orientation: Horizontal (normal)
   tags:
   - Tokyo
+  - pidx:selected
 - checksum:
     md5: 8753a712e0f426a7ac8b9c47368b7528
   createDate: 2016-03-05 14:53:42
