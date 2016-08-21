@@ -27,17 +27,21 @@ def _checksum(fname, hashalg):
 class IdxItem(object):
 
     def __init__(self, data=None, filename=None, basedir=None, hashalg=['md5']):
-        self.filename = None
-        self.tags = []
         if data is not None:
-            # Compatibility with legacy index file formats.
-            if 'md5' in data:
-                data['checksum'] = {'md5': data['md5']}
-                del data['md5']
-            if 'createdate' in data:
-                data['createDate'] = data['createdate']
-                del data['createdate']
-            self.__dict__.update(data)
+            self.filename = data.get('filename')
+            self.checksum = data.get('checksum', {})
+            if not self.checksum and 'md5' in data:
+                # legacy: old index file format used to have a 'md5'
+                # attribute, rather then 'checksum'.
+                self.checksum['md5'] = data['md5']
+            self.createDate = data.get('createDate')
+            if self.createDate is None and 'createdate' in data:
+                # legacy: 'createDate' used to be 'createdate' in old
+                # index file format.
+                self.createDate = data['createdate']
+            self.orientation = data.get('orientation')
+            self.gpsPosition = data.get('gpsPosition')
+            self.tags = set(data.get('tags', []))
         elif filename is not None:
             self.filename = filename
             if basedir is not None:
@@ -47,14 +51,19 @@ class IdxItem(object):
             self.createDate = exifdata.createDate
             self.orientation = exifdata.orientation
             self.gpsPosition = exifdata.gpsPosition
+            self.tags = set()
         if self.gpsPosition:
             self.gpsPosition = GeoPosition(self.gpsPosition)
-        self.tags = set(self.tags)
 
     def as_dict(self):
-        d = self.__dict__.copy()
-        d['tags'] = list(d['tags'])
-        d['tags'].sort()
+        d = {
+            'filename': self.filename,
+            'checksum': self.checksum,
+            'createDate': self.createDate,
+            'orientation': self.orientation,
+            'gpsPosition': self.gpsPosition,
+            'tags': sorted(self.tags),
+        }
         if d['gpsPosition']:
             d['gpsPosition'] = d['gpsPosition'].as_dict()
         return d
