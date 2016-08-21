@@ -41,7 +41,8 @@ class IdxItem(object):
                 self.createDate = data['createdate']
             self.orientation = data.get('orientation')
             self.gpsPosition = data.get('gpsPosition')
-            self.tags = set(data.get('tags', []))
+            tags = data.get('tags', [])
+            self.tags = set(filter(lambda t: not t.startswith('pidx:'), tags))
         elif filename is not None:
             self.filename = filename
             if basedir is not None:
