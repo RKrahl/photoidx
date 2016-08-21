@@ -4,6 +4,14 @@ photo-tools --- Tools for managing photo collections
 Note that there is no comprehensive documentation by now.  This is
 just a stub of what should eventually become a documentation.
 
+Misc
+~~~~
+
+.. toctree::
+   :maxdepth: 2
+
+   cli.selectopts
+
 Module reference
 ~~~~~~~~~~~~~~~~
 
