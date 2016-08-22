@@ -35,6 +35,7 @@ class IdxFilter(object):
         else:
             self.taglist = None
             self.negtaglist = None
+        self.select = args.select
         self.date = args.date
         if args.gpspos:
             self.gpspos = args.gpspos
@@ -53,6 +54,8 @@ class IdxFilter(object):
                 return False
             if not self.taglist and not self.negtaglist and item.tags:
                 return False
+        if self.select is not None and item.selected != self.select:
+            return False
         if self.date and (item.createDate < self.date[0] or 
                           item.createDate >= self.date[1]):
             return False
@@ -106,6 +109,12 @@ def _strpdate(s):
 def addFilterArguments(argparser):
     argparser.add_argument('--tags', 
                            help="select images by comma separated list of tags")
+    argparser.add_argument('--selected', 
+                           help='select images in the selection', 
+                           dest='select', action='store_const', const=True)
+    argparser.add_argument('--not-selected', 
+                           help='select images not in the selection', 
+                           dest='select', action='store_const', const=False)
     argparser.add_argument('--date', type=_strpdate, 
                            help="select images by date")
     argparser.add_argument('--gpspos', 

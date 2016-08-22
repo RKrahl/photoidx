@@ -49,6 +49,20 @@ def rmtag(args):
         i.tags.discard(args.tag)
     idx.write()
 
+def select(args):
+    idx = photo.index.Index(idxfile=args.directory)
+    idxfilter = photo.idxfilter.IdxFilter(args)
+    for i in idxfilter.filter(idx):
+        i.selected = True
+    idx.write()
+
+def deselect(args):
+    idx = photo.index.Index(idxfile=args.directory)
+    idxfilter = photo.idxfilter.IdxFilter(args)
+    for i in idxfilter.filter(idx):
+        i.selected = False
+    idx.write()
+
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('-d', '--directory', 
@@ -81,6 +95,16 @@ rmtag_parser = subparsers.add_parser('rmtag', help="remove tag from images")
 rmtag_parser.add_argument('tag')
 photo.idxfilter.addFilterArguments(rmtag_parser)
 rmtag_parser.set_defaults(func=rmtag)
+
+select_parser = subparsers.add_parser('select', 
+                                      help="add images to the selection")
+photo.idxfilter.addFilterArguments(select_parser)
+select_parser.set_defaults(func=select)
+
+deselect_parser = subparsers.add_parser('deselect', 
+                                        help="remove images from the selection")
+photo.idxfilter.addFilterArguments(deselect_parser)
+deselect_parser.set_defaults(func=deselect)
 
 args = argparser.parse_args()
 args.func(args)

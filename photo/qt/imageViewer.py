@@ -63,7 +63,11 @@ class ImageViewer(QtGui.QMainWindow):
         self.nextImageAct = QtGui.QAction("&Next Image", self,
                 shortcut="n", enabled=(self._haveNext()), 
                 triggered=self.nextImage)
-        self.tagSelectAct = QtGui.QAction("Select &Tags", self,
+        self.selectImageAct = QtGui.QAction("&Select Image", self,
+                shortcut="s", triggered=self.selectImage)
+        self.deselectImageAct = QtGui.QAction("&Deselect Image", self,
+                shortcut="d", triggered=self.deselectImage)
+        self.tagSelectAct = QtGui.QAction("&Tags", self,
                 shortcut="t", enabled=tagSelect, triggered=self.tagSelect)
 
         self.fileMenu = QtGui.QMenu("&File", self)
@@ -84,6 +88,8 @@ class ImageViewer(QtGui.QMainWindow):
         self.imageMenu = QtGui.QMenu("&Image", self)
         self.imageMenu.addAction(self.prevImageAct)
         self.imageMenu.addAction(self.nextImageAct)
+        self.imageMenu.addAction(self.selectImageAct)
+        self.imageMenu.addAction(self.deselectImageAct)
         self.imageMenu.addSeparator()
         self.imageMenu.addAction(self.tagSelectAct)
         self.menuBar().addMenu(self.imageMenu)
@@ -125,6 +131,8 @@ class ImageViewer(QtGui.QMainWindow):
         except IndexError:
             # Nothing to view.
             self.imageLabel.hide()
+            self.selectImageAct.setEnabled(False)
+            self.deselectImageAct.setEnabled(False)
             return
         fileName = os.path.join(self.images.directory, item.filename)
         image = QtGui.QImage(fileName)
@@ -144,6 +152,17 @@ class ImageViewer(QtGui.QMainWindow):
         self.imageLabel.show()
         self._setSize()
         self.setWindowTitle(os.path.basename(fileName))
+        self.selectImageAct.setEnabled(not item.selected)
+        self.deselectImageAct.setEnabled(item.selected)
+
+    def _reevalFilter(self):
+        """Re-evaluate the filter on the current image.
+        This is needed if relevant attributes have changed.
+        """
+        if not self.imgFilter(self.selection[self.cur]):
+            del self.selection[self.cur]
+            self._loadImage()
+            self.nextImageAct.setEnabled(self._haveNext())
 
     def zoomIn(self):
         self.scaleImage(1.6)
@@ -200,17 +219,36 @@ class ImageViewer(QtGui.QMainWindow):
             self.prevImageAct.setEnabled(True)
         self.nextImageAct.setEnabled(self._haveNext())
 
+    def selectImage(self):
+        try:
+            self.selection[self.cur].selected = True
+        except IndexError:
+            # No current image.
+            pass
+        else:
+            self.images.write()
+            self.selectImageAct.setEnabled(False)
+            self.deselectImageAct.setEnabled(True)
+            self._reevalFilter()
+
+    def deselectImage(self):
+        try:
+            self.selection[self.cur].selected = False
+        except IndexError:
+            # No current image.
+            pass
+        else:
+            self.images.write()
+            self.selectImageAct.setEnabled(True)
+            self.deselectImageAct.setEnabled(False)
+            self._reevalFilter()
+
     def tagSelect(self):
         self.tagSelectDialog.setCheckedTags(self.selection[self.cur].tags)
         if self.tagSelectDialog.exec_():
             self.selection[self.cur].tags = self.tagSelectDialog.checkedTags()
             self.images.write()
-            # After modifying the tags, does the current image still
-            # match the filter?
-            if not self.imgFilter(self.selection[self.cur]):
-                del self.selection[self.cur]
-                self._loadImage()
-                self.nextImageAct.setEnabled(self._haveNext())
+            self._reevalFilter()
 
     def scaleImage(self, factor):
         self.scaleFactor *= factor
