@@ -27,6 +27,8 @@ class ImageViewer(QtGui.QMainWindow):
             for i in images:
                 taglist |= i.tags
             self.tagSelectDialog = TagSelectDialog(taglist)
+        else:
+            self.tagSelectDialog = None
 
         self.imageLabel = QtGui.QLabel()
         self.imageLabel.setSizePolicy(QtGui.QSizePolicy.Ignored,
@@ -166,7 +168,7 @@ class ImageViewer(QtGui.QMainWindow):
         else:
             self.selectImageAct.setEnabled(not item.selected)
             self.deselectImageAct.setEnabled(item.selected)
-            self.tagSelectAct.setEnabled(True)
+            self.tagSelectAct.setEnabled(self.tagSelectDialog is not None)
 
     def _reevalFilter(self):
         """Re-evaluate the filter on the current image.
