@@ -7,7 +7,6 @@
     N: 35.671189999999996
   orientation: Rotate 90 CW
   tags:
-  - Ginza
   - Tokyo
 - checksum:
     md5: bc8605c7394fbf818dbc694776db6534
@@ -18,6 +17,7 @@
     N: 35.675639999999994
   orientation: Horizontal (normal)
   tags:
+  - Shinto_shrine
   - Tokyo
   - pidx:selected
 - checksum:
@@ -28,7 +28,9 @@
     E: 139.02553666666668
     N: 35.20459666666667
   orientation: Horizontal (normal)
-  tags: []
+  tags:
+  - Hakone
+  - Shinto_shrine
 - checksum:
     md5: 761bd27c888b4a8a8fbb616daceee443
   createDate: 2016-03-08 15:44:32
@@ -36,8 +38,7 @@
   gpsPosition: null
   orientation: Horizontal (normal)
   tags:
-  - Gion
-  - Kyoto
+  - pidx:selected
 - checksum:
     md5: 0f6f58cdb353b837fb340d107a1f5fb0
   createDate: 2016-03-09 10:07:48
@@ -46,5 +47,4 @@
     E: 135.718705
     N: 35.033955
   orientation: Horizontal (normal)
-  tags:
-  - Kyoto
+  tags: []

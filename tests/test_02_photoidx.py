@@ -237,3 +237,45 @@ def test_lstags_by_tags(imgdir, monkeypatch):
     with open(fname, "rt") as f:
         out = f.read().split()
     assert out == ["Shinto_shrine", "Tokyo"]
+
+def test_select_by_files(imgdir, monkeypatch):
+    """Select by file names.
+    """
+    monkeypatch.chdir(imgdir)
+    args = ["select", "dsc_5126.jpg"]
+    callscript("photoidx.py", args)
+    fname = os.path.join(imgdir, "out")
+    with open(fname, "wt") as f:
+        args = ["ls", "--selected"]
+        callscript("photoidx.py", args, stdout=f)
+    with open(fname, "rt") as f:
+        out = f.read().split()
+    assert out == ["dsc_5126.jpg"]
+
+def test_select_by_tag(imgdir, monkeypatch):
+    """Select by tag.
+    """
+    monkeypatch.chdir(imgdir)
+    args = ["select", "--tags", "Shinto_shrine"]
+    callscript("photoidx.py", args)
+    fname = os.path.join(imgdir, "out")
+    with open(fname, "wt") as f:
+        args = ["ls", "--selected"]
+        callscript("photoidx.py", args, stdout=f)
+    with open(fname, "rt") as f:
+        out = f.read().split()
+    assert out == ["dsc_4664.jpg", "dsc_4831.jpg", "dsc_5126.jpg"]
+
+def test_deselect_by_files(imgdir, monkeypatch):
+    """Deselect by file names.
+    """
+    monkeypatch.chdir(imgdir)
+    args = ["deselect", "dsc_4831.jpg"]
+    callscript("photoidx.py", args)
+    fname = os.path.join(imgdir, "out")
+    with open(fname, "wt") as f:
+        args = ["ls", "--selected"]
+        callscript("photoidx.py", args, stdout=f)
+    with open(fname, "rt") as f:
+        out = f.read().split()
+    assert out == ["dsc_4664.jpg", "dsc_5126.jpg"]
