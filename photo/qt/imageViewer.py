@@ -9,6 +9,7 @@ from PySide import QtCore, QtGui
 import photo.index
 from photo.listtools import LazyList
 from photo.qt.tagSelectDialog import TagSelectDialog
+from photo.qt.imageInfoDialog import ImageInfoDialog
 
 
 class ImageViewer(QtGui.QMainWindow):
@@ -21,6 +22,8 @@ class ImageViewer(QtGui.QMainWindow):
         self.selection = LazyList(self.imgFilter.filter(self.images))
         self.scaleFactor = scaleFactor
         self.cur = 0
+
+        self.imageInfoDialog = ImageInfoDialog()
 
         if tagSelect:
             taglist = set()
@@ -60,6 +63,8 @@ class ImageViewer(QtGui.QMainWindow):
                 shortcut="r", triggered=self.rotateRight)
         self.fullScreenAct = QtGui.QAction("Show &Full Screen", self,
                 shortcut="f", checkable=True, triggered=self.fullScreen)
+        self.imageInfoAct = QtGui.QAction("Image &Info", self,
+                shortcut="i", triggered=self.imageInfo)
         self.prevImageAct = QtGui.QAction("&Previous Image", self,
                 shortcut="p", enabled=False, triggered=self.prevImage)
         self.nextImageAct = QtGui.QAction("&Next Image", self,
@@ -85,6 +90,8 @@ class ImageViewer(QtGui.QMainWindow):
         self.viewMenu.addAction(self.rotateRightAct)
         self.viewMenu.addSeparator()
         self.viewMenu.addAction(self.fullScreenAct)
+        self.viewMenu.addSeparator()
+        self.viewMenu.addAction(self.imageInfoAct)
         self.menuBar().addMenu(self.viewMenu)
 
         self.imageMenu = QtGui.QMenu("&Image", self)
@@ -162,10 +169,12 @@ class ImageViewer(QtGui.QMainWindow):
             item = self.selection[self.cur]
         except IndexError:
             # No current image.
+            self.imageInfoAct.setEnabled(False)
             self.selectImageAct.setEnabled(False)
             self.deselectImageAct.setEnabled(False)
             self.tagSelectAct.setEnabled(False)
         else:
+            self.imageInfoAct.setEnabled(True)
             self.selectImageAct.setEnabled(not item.selected)
             self.deselectImageAct.setEnabled(item.selected)
             self.tagSelectAct.setEnabled(self.tagSelectDialog is not None)
@@ -255,6 +264,10 @@ class ImageViewer(QtGui.QMainWindow):
             self.selectImageAct.setEnabled(True)
             self.deselectImageAct.setEnabled(False)
             self._reevalFilter()
+
+    def imageInfo(self):
+        self.imageInfoDialog.setinfo(self.selection[self.cur])
+        self.imageInfoDialog.exec_()
 
     def tagSelect(self):
         self.tagSelectDialog.setCheckedTags(self.selection[self.cur].tags)
