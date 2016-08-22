@@ -97,6 +97,7 @@ class ImageViewer(QtGui.QMainWindow):
         self.show()
         self._extraSize = self.size() - self.scrollArea.viewport().size()
         self._loadImage()
+        self._checkActions()
 
     def _haveNext(self):
         """Check whether there is a next image.
@@ -131,8 +132,6 @@ class ImageViewer(QtGui.QMainWindow):
         except IndexError:
             # Nothing to view.
             self.imageLabel.hide()
-            self.selectImageAct.setEnabled(False)
-            self.deselectImageAct.setEnabled(False)
             return
         fileName = os.path.join(self.images.directory, item.filename)
         image = QtGui.QImage(fileName)
@@ -140,7 +139,6 @@ class ImageViewer(QtGui.QMainWindow):
             print("Cannot load %s." % fileName, file=sys.stderr)
             del self.selection[self.cur]
             self._loadImage()
-            self.nextImageAct.setEnabled(self._haveNext())
             return
         pixmap = QtGui.QPixmap.fromImage(image)
         rm = QtGui.QMatrix()
@@ -152,8 +150,23 @@ class ImageViewer(QtGui.QMainWindow):
         self.imageLabel.show()
         self._setSize()
         self.setWindowTitle(os.path.basename(fileName))
-        self.selectImageAct.setEnabled(not item.selected)
-        self.deselectImageAct.setEnabled(item.selected)
+
+    def _checkActions(self):
+        """Enable and disable actions as appropriate.
+        """
+        self.prevImageAct.setEnabled(self.cur > 0)
+        self.nextImageAct.setEnabled(self._haveNext())
+        try:
+            item = self.selection[self.cur]
+        except IndexError:
+            # No current image.
+            self.selectImageAct.setEnabled(False)
+            self.deselectImageAct.setEnabled(False)
+            self.tagSelectAct.setEnabled(False)
+        else:
+            self.selectImageAct.setEnabled(not item.selected)
+            self.deselectImageAct.setEnabled(item.selected)
+            self.tagSelectAct.setEnabled(True)
 
     def _reevalFilter(self):
         """Re-evaluate the filter on the current image.
@@ -162,7 +175,7 @@ class ImageViewer(QtGui.QMainWindow):
         if not self.imgFilter(self.selection[self.cur]):
             del self.selection[self.cur]
             self._loadImage()
-            self.nextImageAct.setEnabled(self._haveNext())
+            self._checkActions()
 
     def zoomIn(self):
         self.scaleImage(1.6)
@@ -208,16 +221,14 @@ class ImageViewer(QtGui.QMainWindow):
             self.cur -= 1
             self._loadImage()
             self._setSize()
-            self.nextImageAct.setEnabled(True)
-        self.prevImageAct.setEnabled(self.cur > 0)
+            self._checkActions()
 
     def nextImage(self):
         if self._haveNext():
             self.cur += 1
             self._loadImage()
             self._setSize()
-            self.prevImageAct.setEnabled(True)
-        self.nextImageAct.setEnabled(self._haveNext())
+            self._checkActions()
 
     def selectImage(self):
         try:
