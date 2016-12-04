@@ -143,6 +143,7 @@ class ImageViewer(QtGui.QMainWindow):
             self.imageLabel.hide()
             return
         fileName = os.path.join(self.images.directory, item.filename)
+        title = item.name or os.path.basename(fileName)
         image = QtGui.QImage(fileName)
         if image.isNull():
             print("Cannot load %s." % fileName, file=sys.stderr)
@@ -158,7 +159,7 @@ class ImageViewer(QtGui.QMainWindow):
         self.imageLabel.setPixmap(pixmap.transformed(rm))
         self.imageLabel.show()
         self._setSize()
-        self.setWindowTitle(os.path.basename(fileName))
+        self.setWindowTitle(title)
 
     def _checkActions(self):
         """Enable and disable actions as appropriate.
