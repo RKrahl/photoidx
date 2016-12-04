@@ -29,6 +29,7 @@ class IdxItem(object):
     def __init__(self, data=None, filename=None, basedir=None, hashalg=['md5']):
         if data is not None:
             self.filename = data.get('filename')
+            self.name = data.get('name', None)
             self.checksum = data.get('checksum', {})
             if not self.checksum and 'md5' in data:
                 # legacy: old index file format used to have a 'md5'
@@ -46,6 +47,7 @@ class IdxItem(object):
             self.selected = 'pidx:selected' in tags
         elif filename is not None:
             self.filename = filename
+            self.name = None
             if basedir is not None:
                 filename = os.path.join(basedir, filename)
             self.checksum = _checksum(filename, hashalg)
@@ -72,4 +74,6 @@ class IdxItem(object):
         }
         if d['gpsPosition']:
             d['gpsPosition'] = d['gpsPosition'].as_dict()
+        if self.name is not None:
+            d['name'] = self.name
         return d
