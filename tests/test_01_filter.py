@@ -21,7 +21,7 @@ testimgfiles = [ gettestdata(i) for i in testimgs ]
 def imgdir(tmpdir):
     for fname in testimgfiles:
         shutil.copy(fname, tmpdir)
-    shutil.copy(gettestdata("index-create.yaml"), 
+    shutil.copy(gettestdata("index-tagged.yaml"), 
                 os.path.join(tmpdir, ".index.yaml"))
     return tmpdir
 
@@ -43,10 +43,7 @@ def test_by_date(imgdir, argparser):
     idx = photo.index.Index(idxfile=imgdir)
     args = argparser.parse_args(["--date=2016-03-05"])
     idxfilter = photo.idxfilter.IdxFilter(args)
-    fnames = []
-    for i in idxfilter.filter(idx):
-        fnames.append(i.filename)
-        i.tags.add("Hakone")
+    fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4831.jpg"]
     idx.write()
 
@@ -57,10 +54,7 @@ def test_by_gpspos(imgdir, argparser):
     args = argparser.parse_args(["--gpspos=35.6883 N, 139.7544 E", 
                                  "--gpsradius=20.0"])
     idxfilter = photo.idxfilter.IdxFilter(args)
-    fnames = []
-    for i in idxfilter.filter(idx):
-        fnames.append(i.filename)
-        i.tags.add("Tokyo")
+    fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4623.jpg", "dsc_4664.jpg"]
     idx.write()
 
@@ -70,10 +64,7 @@ def test_by_files(imgdir, argparser):
     idx = photo.index.Index(idxfile=imgdir)
     args = argparser.parse_args(["dsc_4664.jpg", "dsc_4831.jpg"])
     idxfilter = photo.idxfilter.IdxFilter(args)
-    fnames = []
-    for i in idxfilter.filter(idx):
-        fnames.append(i.filename)
-        i.tags.add("Shinto_shrine")
+    fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4664.jpg", "dsc_4831.jpg"]
     idx.write()
 
@@ -132,4 +123,31 @@ def test_by_date_and_tag(imgdir, argparser):
     idxfilter = photo.idxfilter.IdxFilter(args)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4623.jpg"]
+
+def test_by_selected(imgdir, argparser):
+    """Select by selected flag.
+    """
+    idx = photo.index.Index(idxfile=imgdir)
+    args = argparser.parse_args(["--selected"])
+    idxfilter = photo.idxfilter.IdxFilter(args)
+    fnames = [ i.filename for i in idxfilter.filter(idx) ]
+    assert fnames == ["dsc_4664.jpg", "dsc_5126.jpg"]
+
+def test_by_selected_and_tag(imgdir, argparser):
+    """Select by selected flag and tag.
+    """
+    idx = photo.index.Index(idxfile=imgdir)
+    args = argparser.parse_args(["--selected", "--tags=Tokyo"])
+    idxfilter = photo.idxfilter.IdxFilter(args)
+    fnames = [ i.filename for i in idxfilter.filter(idx) ]
+    assert fnames == ["dsc_4664.jpg"]
+
+def test_by_not_selected(imgdir, argparser):
+    """Select by not-selected flag.
+    """
+    idx = photo.index.Index(idxfile=imgdir)
+    args = argparser.parse_args(["--not-selected"])
+    idxfilter = photo.idxfilter.IdxFilter(args)
+    fnames = [ i.filename for i in idxfilter.filter(idx) ]
+    assert fnames == ["dsc_4623.jpg", "dsc_4831.jpg", "dsc_5167.jpg"]
 

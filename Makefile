@@ -20,6 +20,7 @@ clean:
 distclean: clean
 	rm -f MANIFEST
 	rm -f photo/*.pyc photo/qt/*.pyc tests/*.pyc
+	rm -rf .cache
 	rm -rf photo/__pycache__ photo/qt/__pycache__ tests/__pycache__
 	rm -rf dist
 	$(MAKE) -C doc distclean

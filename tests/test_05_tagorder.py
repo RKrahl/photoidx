@@ -9,6 +9,7 @@ is why the tags should have a well defined order in the index file.
 """
 
 import os.path
+import argparse
 import shutil
 import filecmp
 import pytest
@@ -28,12 +29,11 @@ def imgdir(tmpdir):
         shutil.copy(fname, tmpdir)
     return tmpdir
 
-class NameSpace(object):
-    def __init__(self, **kwargs):
-        for k in ["tags", "date", "gpspos", "gpsradius", "files"]:
-            setattr(self, k, None)
-        for k in kwargs:
-            setattr(self, k, kwargs[k])
+@pytest.fixture(scope="module")
+def argparser():
+    parser = argparse.ArgumentParser()
+    photo.idxfilter.addFilterArguments(parser)
+    return parser
 
 # Each test ends up adding the same set of tags to each image.  But
 # the order in which the tags are added differs between tests and some
@@ -54,7 +54,7 @@ tags = {
     "Ryoan-ji": ["dsc_5167.jpg"],
 }
 
-def test_tag_ref(imgdir):
+def test_tag_ref(imgdir, argparser):
     idxfname = os.path.join(imgdir, ".index.yaml")
     reffname = os.path.join(imgdir, "index-ref.yaml")
     shutil.copy(gettestdata("index-create.yaml"), idxfname)
@@ -62,14 +62,14 @@ def test_tag_ref(imgdir):
     taglist = [ "Japan", "Tokyo", "Hakone", "Kyoto", 
                 "Ginza", "Shinto_shrine", "Geisha", "Ryoan-ji" ]
     for t in taglist:
-        args = NameSpace(files=tags[t])
+        args = argparser.parse_args(tags[t])
         idxfilter = photo.idxfilter.IdxFilter(args)
         for i in idxfilter.filter(idx):
             i.tags.add(t)
     idx.write()
     shutil.copy(idxfname, reffname)
 
-def test_tag_shuffle(imgdir):
+def test_tag_shuffle(imgdir, argparser):
     """Same as test_tag_ref(), only the order of setting the tags differ.
     """
     idxfname = os.path.join(imgdir, ".index.yaml")
@@ -79,7 +79,7 @@ def test_tag_shuffle(imgdir):
     taglist = [ "Ginza", "Hakone", "Japan", "Geisha", 
                 "Shinto_shrine", "Tokyo", "Kyoto", "Ryoan-ji" ]
     for t in taglist:
-        args = NameSpace(files=tags[t])
+        args = argparser.parse_args(tags[t])
         idxfilter = photo.idxfilter.IdxFilter(args)
         for i in idxfilter.filter(idx):
             i.tags.add(t)
@@ -105,7 +105,7 @@ def test_tag_remove(imgdir):
     idx.write()
     assert filecmp.cmp(idxfname, reffname), "index file differs from reference"
 
-def test_tag_extra(imgdir):
+def test_tag_extra(imgdir, argparser):
     """Add a spurious extra tag first and remove it later.
     """
     idxfname = os.path.join(imgdir, ".index.yaml")
@@ -117,7 +117,7 @@ def test_tag_extra(imgdir):
     for i in idx:
         i.tags.add("extra")
     for t in taglist:
-        args = NameSpace(files=tags[t])
+        args = argparser.parse_args(tags[t])
         idxfilter = photo.idxfilter.IdxFilter(args)
         for i in idxfilter.filter(idx):
             i.tags.add(t)

@@ -1,6 +1,24 @@
 		  History of changes to photo-tools
 		  =================================
 
+* Version 0.5 (2016-08-22)
+
+** New features
+
+ + Issue #19: Manage a persistent selection
+
+ + Issue #17: Speed up start of imageview when building in memory
+   index for many files.
+
+ + Issue #18: Add an image info window in imageview.
+
+ + Do not throw an error in imageview if an image cannot be read,
+   proceed to the next one instead.
+
+** Internal changes
+
+ + Do not change directory when reading the image directory.
+
 * Version 0.4 (2016-04-12)
 
 ** New features
