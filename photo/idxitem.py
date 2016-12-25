@@ -80,3 +80,15 @@ class IdxItem(object):
         if self.name is not None:
             d['name'] = self.name
         return d
+
+    def __lt__(self, other):
+        if isinstance(other, IdxItem):
+            return self.sortkey < other.sortkey
+        else:
+            return NotImplemented
+
+    def __gt__(self, other):
+        if isinstance(other, IdxItem):
+            return self.sortkey > other.sortkey
+        else:
+            return NotImplemented

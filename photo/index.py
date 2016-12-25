@@ -57,6 +57,9 @@ class Index(MutableSequence):
     def insert(self, index, value):
         self.items.insert(index, value)
 
+    def sort(self, key=None, reverse=None):
+        self.items.sort(key, reverse)
+
     def _idxfilename(self, idxfile):
         """Determine the index file name for reading and writing.
         """
