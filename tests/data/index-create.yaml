@@ -6,6 +6,7 @@
     E: 139.76603333333333
     N: 35.671189999999996
   orientation: Rotate 90 CW
+  sortkey: []
   tags: []
 - checksum:
     md5: bc8605c7394fbf818dbc694776db6534
@@ -15,6 +16,7 @@
     E: 139.70024333333333
     N: 35.675639999999994
   orientation: Horizontal (normal)
+  sortkey: []
   tags: []
 - checksum:
     md5: 8753a712e0f426a7ac8b9c47368b7528
@@ -24,6 +26,7 @@
     E: 139.02553666666668
     N: 35.20459666666667
   orientation: Horizontal (normal)
+  sortkey: []
   tags: []
 - checksum:
     md5: 761bd27c888b4a8a8fbb616daceee443
@@ -31,6 +34,7 @@
   filename: dsc_5126.jpg
   gpsPosition: null
   orientation: Horizontal (normal)
+  sortkey: []
   tags: []
 - checksum:
     md5: 0f6f58cdb353b837fb340d107a1f5fb0
@@ -40,4 +44,5 @@
     E: 135.718705
     N: 35.033955
   orientation: Horizontal (normal)
+  sortkey: []
   tags: []

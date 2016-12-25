@@ -45,6 +45,7 @@ class IdxItem(object):
             tags = data.get('tags', [])
             self.tags = set(filter(lambda t: not t.startswith('pidx:'), tags))
             self.selected = 'pidx:selected' in tags
+            self.sortkey = data.get('sortkey', [])
         elif filename is not None:
             self.filename = filename
             self.name = None
@@ -57,6 +58,7 @@ class IdxItem(object):
             self.gpsPosition = exifdata.gpsPosition
             self.tags = set()
             self.selected = False
+            self.sortkey = []
         if self.gpsPosition:
             self.gpsPosition = GeoPosition(self.gpsPosition)
 
@@ -71,6 +73,7 @@ class IdxItem(object):
             'orientation': self.orientation,
             'gpsPosition': self.gpsPosition,
             'tags': sorted(tags),
+            'sortkey': self.sortkey,
         }
         if d['gpsPosition']:
             d['gpsPosition'] = d['gpsPosition'].as_dict()
