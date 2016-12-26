@@ -86,5 +86,5 @@ class Index(MutableSequence):
         """Write the index to a file.
         """
         with open(self._idxfilename(idxfile), 'wt') as f:
-            items = [i.as_dict() for i in self.items]
+            items = [i.as_dict() for i in sorted(self.items)]
             yaml.dump(items, f, default_flow_style=False)

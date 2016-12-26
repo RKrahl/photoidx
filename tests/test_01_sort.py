@@ -46,3 +46,17 @@ def test_sort_change(imgdir):
         "dsc_5126.jpg", "dsc_4664.jpg"
     ]
     assert [ i.filename for i in idx ] == expected
+
+def test_sort_on_write(imgdir):
+    """The index should get written sorted.
+    """
+    idx = photo.index.Index(idxfile=imgdir)
+    idx[1].sortkey = [ "xx" ]
+    idx[3].sortkey = [ "xa" ]
+    idx.write()
+    idx = photo.index.Index(idxfile=imgdir)
+    expected = [ 
+        "dsc_4623.jpg", "dsc_4831.jpg", "dsc_5167.jpg",
+        "dsc_5126.jpg", "dsc_4664.jpg"
+    ]
+    assert [ i.filename for i in idx ] == expected
