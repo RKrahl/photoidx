@@ -6,7 +6,8 @@
     E: 139.76603333333333
     N: 35.671189999999996
   orientation: Rotate 90 CW
-  sortkey: []
+  sortkey:
+  - '2016-02-28T17:26:39'
   tags:
   - Tokyo
 - checksum:
@@ -17,7 +18,8 @@
     E: 139.70024333333333
     N: 35.675639999999994
   orientation: Horizontal (normal)
-  sortkey: []
+  sortkey:
+  - '2016-02-29T11:37:51'
   tags:
   - Shinto_shrine
   - Tokyo
@@ -31,7 +33,8 @@
     E: 139.02553666666668
     N: 35.20459666666667
   orientation: Horizontal (normal)
-  sortkey: []
+  sortkey:
+  - '2016-03-05T14:53:42'
   tags:
   - Hakone
   - Shinto_shrine
@@ -42,7 +45,8 @@
   filename: dsc_5126.jpg
   gpsPosition: null
   orientation: Horizontal (normal)
-  sortkey: []
+  sortkey:
+  - '2016-03-08T15:44:32'
   tags:
   - pidx:selected
 - checksum:
@@ -53,6 +57,7 @@
     E: 135.718705
     N: 35.033955
   orientation: Horizontal (normal)
-  sortkey: []
+  sortkey:
+  - '2016-03-09T10:07:48'
   tags:
   - pidx:bogus
