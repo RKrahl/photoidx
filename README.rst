@@ -15,22 +15,22 @@ System requirements
 
 Python:
 
- + Python 2.7.  Python 3 might work as well, but has not yet been
-   completely tested.
++ Python 2.7.  Python 3 might work as well, but has not yet been
+  completely tested.
 
 Required library packages:
 
- + `PyYAML`_
++ `PyYAML`_
 
- + `gexiv2`_
++ `gexiv2`_
 
- + `PySide`_
++ `PySide`_
 
 Optional library packages, only needed to run the test suite:
 
- + `pytest`_
++ `pytest`_
 
- + `distutils-pytest`_
++ `distutils-pytest`_
 
 
 Installation
@@ -41,20 +41,19 @@ follows its conventions of packaging source distributions.  See the
 documentation on `Installing Python Modules`_ for details or to
 customize the install process.
 
-  1. Download the sources, unpack, and change into the source
-     directory.
+1. Download the sources, unpack, and change into the source directory.
 
-  2. Build::
+2. Build::
 
-       $ python setup.py build
+     $ python setup.py build
 
-  3. Test (optional)::
+3. Test (optional)::
 
-       $ python setup.py test
+     $ python setup.py test
 
-  4. Install::
+4. Install::
 
-       $ python setup.py install
+     $ python setup.py install
 
 The last step might require admin privileges in order to write into
 the site-packages directory of your Python installation.
