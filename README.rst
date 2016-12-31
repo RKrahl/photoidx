@@ -1,3 +1,10 @@
+.. note:: This is the ``sortkey`` branch of the code.
+          It was an attempt to implement Issue `#20`__, but has been
+          abandoned in the meanwhile.
+
+.. __: https://github.com/RKrahl/photo-tools/issues/20
+
+
 photo-tools - Tools for photo collections
 =========================================
 
