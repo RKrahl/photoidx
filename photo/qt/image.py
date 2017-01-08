@@ -22,11 +22,16 @@ class Image(object):
         if image.isNull():
             raise ImageNotFoundError("Cannot load %s." % self.fileName)
         pixmap = QtGui.QPixmap.fromImage(image)
-        if self.item.orientation:
-            rm = QtGui.QMatrix()
-            m = re.match(r"Rotate (\d+) CW", self.item.orientation)
-            if m:
-                rm = rm.rotate(int(m.group(1)))
+        rm = None
+        try:
+            rm = self.item.rotmatrix
+        except AttributeError:
+            if self.item.orientation:
+                m = re.match(r"Rotate (\d+) CW", self.item.orientation)
+                if m:
+                    rm = QtGui.QMatrix().rotate(int(m.group(1)))
+                    self.item.rotmatrix = rm
+        if rm:
             return pixmap.transformed(rm)
         else:
             return pixmap
