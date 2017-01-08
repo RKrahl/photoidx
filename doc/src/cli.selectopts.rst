@@ -19,9 +19,9 @@ The following options may be used to select the images.
 
       The first example selects all images that are tagged with
       ``Tokyo``, ``Imperial_Palace``, and with ``Cherry_blossoms``.
-      The second example selects images that tagged with ``Tokyo``,
-      but not with ``Ginza``.  The last example selects images that
-      have no tags at all.
+      The second example selects images tagged with ``Tokyo``, but not
+      with ``Ginza``.  The last example selects images that have no
+      tags at all.
 
    ``--date DATE``
       Select images by creation date.  *DATE* may either be a single
