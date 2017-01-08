@@ -172,11 +172,23 @@ class ImageViewer(QtGui.QMainWindow):
             self.selectImageAct.setEnabled(False)
             self.deselectImageAct.setEnabled(False)
             self.tagSelectAct.setEnabled(False)
+            self.zoomInAct.setEnabled(False)
+            self.zoomOutAct.setEnabled(False)
+            self.zoomFitHeightAct.setEnabled(False)
+            self.zoomFitWidthAct.setEnabled(False)
+            self.rotateLeftAct.setEnabled(False)
+            self.rotateRightAct.setEnabled(False)
         else:
             self.imageInfoAct.setEnabled(True)
             self.selectImageAct.setEnabled(not item.selected)
             self.deselectImageAct.setEnabled(item.selected)
             self.tagSelectAct.setEnabled(self.tagSelectDialog is not None)
+            self.zoomInAct.setEnabled(True)
+            self.zoomOutAct.setEnabled(True)
+            self.zoomFitHeightAct.setEnabled(True)
+            self.zoomFitWidthAct.setEnabled(True)
+            self.rotateLeftAct.setEnabled(True)
+            self.rotateRightAct.setEnabled(True)
 
     def _reevalFilter(self):
         """Re-evaluate the filter on the current image.
