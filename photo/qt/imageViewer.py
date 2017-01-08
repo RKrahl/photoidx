@@ -4,10 +4,10 @@
 from __future__ import division, print_function
 import sys
 import os.path
-import re
 from PySide import QtCore, QtGui
 import photo.index
 from photo.listtools import LazyList
+from photo.qt.image import Image
 from photo.qt.tagSelectDialog import TagSelectDialog
 from photo.qt.imageInfoDialog import ImageInfoDialog
 
@@ -19,7 +19,7 @@ class ImageViewer(QtGui.QMainWindow):
 
         self.images = images
         self.imgFilter = imgFilter
-        self.selection = LazyList(self.imgFilter.filter(self.images))
+        self.selection = LazyList(self._filteredImages())
         self.scaleFactor = scaleFactor
         self.cur = 0
 
@@ -108,6 +108,11 @@ class ImageViewer(QtGui.QMainWindow):
         self._loadImage()
         self._checkActions()
 
+    def _filteredImages(self):
+        for item in self.images:
+            if self.imgFilter(item):
+                yield Image(self.images.directory, item)
+
     def _haveNext(self):
         """Check whether there is a next image.
         This should be equivalent to self.cur < len(self.selection)-1,
@@ -137,29 +142,22 @@ class ImageViewer(QtGui.QMainWindow):
 
     def _loadImage(self):
         try:
-            item = self.selection[self.cur]
+            image = self.selection[self.cur]
         except IndexError:
             # Nothing to view.
             self.imageLabel.hide()
             return
-        fileName = os.path.join(self.images.directory, item.filename)
-        title = item.name or os.path.basename(fileName)
-        image = QtGui.QImage(fileName)
-        if image.isNull():
-            print("Cannot load %s." % fileName, file=sys.stderr)
+        try:
+            pixmap = image.getPixmap()
+        except Exception as e:
+            print(str(e), file=sys.stderr)
             del self.selection[self.cur]
             self._loadImage()
             return
-        pixmap = QtGui.QPixmap.fromImage(image)
-        rm = QtGui.QMatrix()
-        if item.orientation:
-            m = re.match(r"Rotate (\d+) CW", item.orientation)
-            if m:
-                rm = rm.rotate(int(m.group(1)))
-        self.imageLabel.setPixmap(pixmap.transformed(rm))
+        self.imageLabel.setPixmap(pixmap)
         self.imageLabel.show()
         self._setSize()
-        self.setWindowTitle(title)
+        self.setWindowTitle(image.name)
 
     def _checkActions(self):
         """Enable and disable actions as appropriate.
@@ -167,7 +165,7 @@ class ImageViewer(QtGui.QMainWindow):
         self.prevImageAct.setEnabled(self.cur > 0)
         self.nextImageAct.setEnabled(self._haveNext())
         try:
-            item = self.selection[self.cur]
+            item = self.selection[self.cur].item
         except IndexError:
             # No current image.
             self.imageInfoAct.setEnabled(False)
@@ -196,7 +194,7 @@ class ImageViewer(QtGui.QMainWindow):
         """Re-evaluate the filter on the current image.
         This is needed if relevant attributes have changed.
         """
-        if not self.imgFilter(self.selection[self.cur]):
+        if not self.imgFilter(self.selection[self.cur].item):
             del self.selection[self.cur]
             self._loadImage()
             self._checkActions()
@@ -224,11 +222,13 @@ class ImageViewer(QtGui.QMainWindow):
         self._setSize()
 
     def rotateLeft(self):
+        self.selection[self.cur].transform.rotate(-90)
         rm = QtGui.QMatrix().rotate(-90)
         self.imageLabel.setPixmap(self.imageLabel.pixmap().transformed(rm))
         self._setSize()
 
     def rotateRight(self):
+        self.selection[self.cur].transform.rotate(90)
         rm = QtGui.QMatrix().rotate(90)
         self.imageLabel.setPixmap(self.imageLabel.pixmap().transformed(rm))
         self._setSize()
@@ -256,7 +256,7 @@ class ImageViewer(QtGui.QMainWindow):
 
     def selectImage(self):
         try:
-            self.selection[self.cur].selected = True
+            self.selection[self.cur].item.selected = True
         except IndexError:
             # No current image.
             pass
@@ -268,7 +268,7 @@ class ImageViewer(QtGui.QMainWindow):
 
     def deselectImage(self):
         try:
-            self.selection[self.cur].selected = False
+            self.selection[self.cur].item.selected = False
         except IndexError:
             # No current image.
             pass
@@ -279,13 +279,14 @@ class ImageViewer(QtGui.QMainWindow):
             self._reevalFilter()
 
     def imageInfo(self):
-        self.imageInfoDialog.setinfo(self.selection[self.cur])
+        self.imageInfoDialog.setinfo(self.selection[self.cur].item)
         self.imageInfoDialog.exec_()
 
     def tagSelect(self):
-        self.tagSelectDialog.setCheckedTags(self.selection[self.cur].tags)
+        item = self.selection[self.cur].item
+        self.tagSelectDialog.setCheckedTags(item.tags)
         if self.tagSelectDialog.exec_():
-            self.selection[self.cur].tags = self.tagSelectDialog.checkedTags()
+            item.tags = self.tagSelectDialog.checkedTags()
             self.images.write()
             self._reevalFilter()
 
