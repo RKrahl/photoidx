@@ -1,3 +1,9 @@
+.. note:: This is the ``overview-window`` branch of the code.
+          It is an attempt to implement Issue `#24`__.
+
+.. __: https://github.com/RKrahl/photo-tools/issues/24
+
+
 photo-tools - Tools for photo collections
 =========================================
 
