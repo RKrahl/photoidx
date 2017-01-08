@@ -4,10 +4,10 @@
 from __future__ import division, print_function
 import sys
 import os.path
-import re
 from PySide import QtCore, QtGui
 import photo.index
 from photo.listtools import LazyList
+from photo.qt.image import Image
 from photo.qt.tagSelectDialog import TagSelectDialog
 from photo.qt.imageInfoDialog import ImageInfoDialog
 
@@ -142,24 +142,18 @@ class ImageViewer(QtGui.QMainWindow):
             # Nothing to view.
             self.imageLabel.hide()
             return
-        fileName = os.path.join(self.images.directory, item.filename)
-        title = item.name or os.path.basename(fileName)
-        image = QtGui.QImage(fileName)
-        if image.isNull():
-            print("Cannot load %s." % fileName, file=sys.stderr)
+        image = Image(self.images.directory, item)
+        try:
+            pixmap = image.getPixmap()
+        except Exception as e:
+            print(str(e), file=sys.stderr)
             del self.selection[self.cur]
             self._loadImage()
             return
-        pixmap = QtGui.QPixmap.fromImage(image)
-        rm = QtGui.QMatrix()
-        if item.orientation:
-            m = re.match(r"Rotate (\d+) CW", item.orientation)
-            if m:
-                rm = rm.rotate(int(m.group(1)))
-        self.imageLabel.setPixmap(pixmap.transformed(rm))
+        self.imageLabel.setPixmap(pixmap)
         self.imageLabel.show()
         self._setSize()
-        self.setWindowTitle(title)
+        self.setWindowTitle(image.name)
 
     def _checkActions(self):
         """Enable and disable actions as appropriate.
