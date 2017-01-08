@@ -16,22 +16,14 @@ class Image(object):
         self.item = item
         self.fileName = os.path.join(basedir, item.filename)
         self.name = item.name or os.path.basename(self.fileName)
+        self.transform = QtGui.QMatrix()
+        if self.item.orientation:
+            m = re.match(r"Rotate (\d+) CW", self.item.orientation)
+            if m:
+                self.transform.rotate(int(m.group(1)))
 
     def getPixmap(self):
         image = QtGui.QImage(self.fileName)
         if image.isNull():
             raise ImageNotFoundError("Cannot load %s." % self.fileName)
-        pixmap = QtGui.QPixmap.fromImage(image)
-        rm = None
-        try:
-            rm = self.item.rotmatrix
-        except AttributeError:
-            if self.item.orientation:
-                m = re.match(r"Rotate (\d+) CW", self.item.orientation)
-                if m:
-                    rm = QtGui.QMatrix().rotate(int(m.group(1)))
-                    self.item.rotmatrix = rm
-        if rm:
-            return pixmap.transformed(rm)
-        else:
-            return pixmap
+        return QtGui.QPixmap.fromImage(image).transformed(self.transform)
