@@ -20,10 +20,13 @@ class Image(object):
         if self.item.orientation:
             m = re.match(r"Rotate (\d+) CW", self.item.orientation)
             if m:
-                self.transform.rotate(int(m.group(1)))
+                self.rotate(int(m.group(1)))
 
     def getPixmap(self):
         image = QtGui.QImage(self.fileName)
         if image.isNull():
             raise ImageNotFoundError("Cannot load %s." % self.fileName)
         return QtGui.QPixmap.fromImage(image).transformed(self.transform)
+
+    def rotate(self, a):
+        self.transform.rotate(a)
