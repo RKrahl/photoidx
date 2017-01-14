@@ -1,7 +1,8 @@
 """An overview window showing thumbnails of the image set.
 """
 
-from __future__ import division
+from __future__ import division, print_function
+import sys
 import math
 from PySide import QtCore, QtGui
 
@@ -46,7 +47,11 @@ class OverviewWindow(QtGui.QMainWindow):
         ncol = self.numcolumns
         c = 0
         for i in images:
-            thumb = ThumbnailWidget(i)
-            self.mainLayout.addWidget(thumb, c // ncol, c % ncol,
-                                      QtCore.Qt.AlignCenter)
-            c += 1
+            try:
+                thumb = ThumbnailWidget(i)
+            except Exception as e:
+                print(str(e), file=sys.stderr)
+            else:
+                self.mainLayout.addWidget(thumb, c // ncol, c % ncol,
+                                          QtCore.Qt.AlignCenter)
+                c += 1
