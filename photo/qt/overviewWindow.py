@@ -47,5 +47,6 @@ class OverviewWindow(QtGui.QMainWindow):
         c = 0
         for i in images:
             thumb = ThumbnailWidget(i)
-            self.mainLayout.addWidget(thumb, c // ncol, c % ncol)
+            self.mainLayout.addWidget(thumb, c // ncol, c % ncol,
+                                      QtCore.Qt.AlignCenter)
             c += 1
