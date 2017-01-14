@@ -6,6 +6,16 @@ import math
 from PySide import QtCore, QtGui
 
 
+class ThumbnailWidget(QtGui.QLabel):
+
+    def __init__(self, image, scale):
+        super(ThumbnailWidget, self).__init__()
+        pixmap = image.getPixmap()
+        size = scale * pixmap.size()
+        pixmap = pixmap.scaled(size)
+        self.setPixmap(pixmap)
+
+
 class OverviewWindow(QtGui.QMainWindow):
 
     def __init__(self, imageViewer):
@@ -36,10 +46,6 @@ class OverviewWindow(QtGui.QMainWindow):
         ncol = self.numcolumns
         c = 0
         for i in images:
-            pixmap = i.getPixmap()
-            size = self.scaleFactor * pixmap.size()
-            pixmap = pixmap.scaled(size)
-            thumb = QtGui.QLabel()
-            thumb.setPixmap(pixmap)
+            thumb = ThumbnailWidget(i, self.scaleFactor)
             self.mainLayout.addWidget(thumb, c // ncol, c % ncol)
             c += 1
