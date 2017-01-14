@@ -10,6 +10,7 @@ from photo.listtools import LazyList
 from photo.qt.image import Image
 from photo.qt.tagSelectDialog import TagSelectDialog
 from photo.qt.imageInfoDialog import ImageInfoDialog
+from photo.qt.overviewWindow import OverviewWindow
 
 
 class ImageViewer(QtGui.QMainWindow):
@@ -24,6 +25,7 @@ class ImageViewer(QtGui.QMainWindow):
         self.cur = 0
 
         self.imageInfoDialog = ImageInfoDialog()
+        self.overviewwindow = None
 
         if tagSelect:
             taglist = set()
@@ -65,6 +67,8 @@ class ImageViewer(QtGui.QMainWindow):
                 shortcut="f", checkable=True, triggered=self.fullScreen)
         self.imageInfoAct = QtGui.QAction("Image &Info", self,
                 shortcut="i", triggered=self.imageInfo)
+        self.overviewAct = QtGui.QAction("&Overview Window", self,
+                shortcut="o", triggered=self.overview)
         self.prevImageAct = QtGui.QAction("&Previous Image", self,
                 shortcut="p", enabled=False, triggered=self.prevImage)
         self.nextImageAct = QtGui.QAction("&Next Image", self,
@@ -92,6 +96,7 @@ class ImageViewer(QtGui.QMainWindow):
         self.viewMenu.addAction(self.fullScreenAct)
         self.viewMenu.addSeparator()
         self.viewMenu.addAction(self.imageInfoAct)
+        self.viewMenu.addAction(self.overviewAct)
         self.menuBar().addMenu(self.viewMenu)
 
         self.imageMenu = QtGui.QMenu("&Image", self)
@@ -107,6 +112,11 @@ class ImageViewer(QtGui.QMainWindow):
         self._extraSize = self.size() - self.scrollArea.viewport().size()
         self._loadImage()
         self._checkActions()
+
+    def close(self):
+        if self.overviewwindow:
+            self.overviewwindow.close()
+        super(ImageViewer, self).close()
 
     def _filteredImages(self):
         for item in self.images:
@@ -281,6 +291,11 @@ class ImageViewer(QtGui.QMainWindow):
     def imageInfo(self):
         self.imageInfoDialog.setinfo(self.selection[self.cur].item)
         self.imageInfoDialog.exec_()
+
+    def overview(self):
+        if not self.overviewwindow:
+            self.overviewwindow = OverviewWindow(self)
+        self.overviewwindow.show()
 
     def tagSelect(self):
         item = self.selection[self.cur].item
