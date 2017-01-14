@@ -8,11 +8,12 @@ from PySide import QtCore, QtGui
 
 class ThumbnailWidget(QtGui.QLabel):
 
-    def __init__(self, image, scale):
+    ThumbnailSize = QtCore.QSize(128, 128)
+
+    def __init__(self, image):
         super(ThumbnailWidget, self).__init__()
         pixmap = image.getPixmap()
-        size = scale * pixmap.size()
-        pixmap = pixmap.scaled(size)
+        pixmap = pixmap.scaled(self.ThumbnailSize, QtCore.Qt.KeepAspectRatio)
         self.setPixmap(pixmap)
 
 
@@ -23,7 +24,6 @@ class OverviewWindow(QtGui.QMainWindow):
 
         self.imageViewer = imageViewer
         self.numcolumns = 4
-        self.scaleFactor = self.imageViewer.scaleFactor / 5.0
 
         self.setWindowTitle("Overview")
         self.mainLayout = QtGui.QGridLayout()
@@ -46,6 +46,6 @@ class OverviewWindow(QtGui.QMainWindow):
         ncol = self.numcolumns
         c = 0
         for i in images:
-            thumb = ThumbnailWidget(i, self.scaleFactor)
+            thumb = ThumbnailWidget(i)
             self.mainLayout.addWidget(thumb, c // ncol, c % ncol)
             c += 1
