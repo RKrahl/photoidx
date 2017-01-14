@@ -59,3 +59,11 @@ class OverviewWindow(QtGui.QMainWindow):
                 self.mainLayout.addWidget(thumb, c // ncol, c % ncol,
                                           QtCore.Qt.AlignCenter)
                 c += 1
+
+    def getThumbnailWidget(self, image):
+        for i in range(self.mainLayout.count()):
+            w = self.mainLayout.itemAt(i).widget()
+            if w.image is image:
+                return w
+        else:
+            return None

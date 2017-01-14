@@ -236,12 +236,20 @@ class ImageViewer(QtGui.QMainWindow):
         image.rotate(-90)
         self.imageLabel.setPixmap(image.getPixmap())
         self._setSize()
+        if self.overviewwindow:
+            w = self.overviewwindow.getThumbnailWidget(image)
+            if w:
+                w.setImagePixmap()
 
     def rotateRight(self):
         image = self.selection[self.cur]
         image.rotate(90)
         self.imageLabel.setPixmap(image.getPixmap())
         self._setSize()
+        if self.overviewwindow:
+            w = self.overviewwindow.getThumbnailWidget(image)
+            if w:
+                w.setImagePixmap()
 
     def fullScreen(self):
         if self.fullScreenAct.isChecked():
