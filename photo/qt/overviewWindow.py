@@ -13,7 +13,11 @@ class ThumbnailWidget(QtGui.QLabel):
 
     def __init__(self, image):
         super(ThumbnailWidget, self).__init__()
-        pixmap = image.getPixmap()
+        self.image = image
+        self.setImagePixmap()
+
+    def setImagePixmap(self):
+        pixmap = self.image.getPixmap()
         pixmap = pixmap.scaled(self.ThumbnailSize, QtCore.Qt.KeepAspectRatio)
         self.setPixmap(pixmap)
 
