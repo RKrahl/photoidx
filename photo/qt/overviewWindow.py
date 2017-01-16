@@ -13,6 +13,14 @@ class ThumbnailWidget(QtGui.QLabel):
 
     def __init__(self, image):
         super(ThumbnailWidget, self).__init__()
+
+        self.setFrameStyle(self.Box | self.Plain)
+        self.setLineWidth(4)
+        palette = self.palette()
+        frameColor = palette.color(self.backgroundRole())
+        palette.setColor(self.foregroundRole(), frameColor)
+        self.setPalette(palette)
+
         self.image = image
         self.setImagePixmap()
 
@@ -20,6 +28,15 @@ class ThumbnailWidget(QtGui.QLabel):
         pixmap = self.image.getPixmap()
         pixmap = pixmap.scaled(self.ThumbnailSize, QtCore.Qt.KeepAspectRatio)
         self.setPixmap(pixmap)
+
+    def markActive(self, isActive):
+        palette = self.palette()
+        if isActive:
+            frameColor = QtCore.Qt.blue
+        else:
+            frameColor = palette.color(self.backgroundRole())
+        palette.setColor(self.foregroundRole(), frameColor)
+        self.setPalette(palette)
 
 
 class OverviewWindow(QtGui.QMainWindow):
@@ -47,6 +64,9 @@ class OverviewWindow(QtGui.QMainWindow):
         self.fileMenu = QtGui.QMenu("&File", self)
         self.fileMenu.addAction(self.closeAct)
         self.menuBar().addMenu(self.fileMenu)
+
+        self.activeWidget = None
+        self.markActive(self.imageViewer.selection[self.imageViewer.cur])
 
     def _populate(self):
         """Populate the mainLayout with thumbnail images.
@@ -92,3 +112,10 @@ class OverviewWindow(QtGui.QMainWindow):
                 return w
         else:
             return None
+
+    def markActive(self, image):
+        if self.activeWidget:
+            self.activeWidget.markActive(False)
+        self.activeWidget = self.getThumbnailWidget(image)
+        if self.activeWidget:
+            self.activeWidget.markActive(True)

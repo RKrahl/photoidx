@@ -156,20 +156,24 @@ class ImageViewer(QtGui.QMainWindow):
         except IndexError:
             # Nothing to view.
             self.imageLabel.hide()
+            if self.overviewwindow:
+                self.overviewwindow.markActive(None)
             return
         try:
             pixmap = image.getPixmap()
         except Exception as e:
             print(str(e), file=sys.stderr)
             del self.selection[self.cur]
-            self._loadImage()
             if self.overviewwindow:
                 self.overviewwindow.updateThumbs()
+            self._loadImage()
             return
         self.imageLabel.setPixmap(pixmap)
         self.imageLabel.show()
         self._setSize()
         self.setWindowTitle(image.name)
+        if self.overviewwindow:
+            self.overviewwindow.markActive(image)
 
     def _checkActions(self):
         """Enable and disable actions as appropriate.
@@ -208,9 +212,9 @@ class ImageViewer(QtGui.QMainWindow):
         """
         if not self.imgFilter(self.selection[self.cur].item):
             del self.selection[self.cur]
-            self._loadImage()
             if self.overviewwindow:
                 self.overviewwindow.updateThumbs()
+            self._loadImage()
             self._checkActions()
 
     def zoomIn(self):
