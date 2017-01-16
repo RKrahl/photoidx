@@ -41,6 +41,13 @@ class OverviewWindow(QtGui.QMainWindow):
         scrollArea.setAlignment(QtCore.Qt.AlignCenter)
         self.setCentralWidget(scrollArea)
 
+        self.closeAct = QtGui.QAction("&Close", self, 
+                triggered=self.close)
+
+        self.fileMenu = QtGui.QMenu("&File", self)
+        self.fileMenu.addAction(self.closeAct)
+        self.menuBar().addMenu(self.fileMenu)
+
     def _populate(self):
         """Populate the mainLayout with thumbnail images.
         """
