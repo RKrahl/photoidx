@@ -51,9 +51,6 @@ class OverviewWindow(QtGui.QMainWindow):
     def _populate(self):
         """Populate the mainLayout with thumbnail images.
         """
-        # FIXME: by now, implement only the initial setup of the image
-        # list.  Must also support updating the list after changes in
-        # imageViewer.selection.
         images = self.imageViewer.selection
         ncol = self.numcolumns
         c = 0
@@ -66,6 +63,27 @@ class OverviewWindow(QtGui.QMainWindow):
                 self.mainLayout.addWidget(thumb, c // ncol, c % ncol,
                                           QtCore.Qt.AlignCenter)
                 c += 1
+
+    def updateThumbs(self):
+        """Update the mainLayout with thumbnail images.
+        """
+        # Note: this code is based on the assumption that no image
+        # will ever be added to self.imageViewer.selection and thus we
+        # only need to consider removing ThumbnailWidgets, but not to
+        # add any.  Furthermore, we assume the order given by
+        # self.mainLayout.itemAt() is the the order that the widgets
+        # have been added to self.mainLayout and thus the same as
+        # self.imageViewer.selection.
+        numImages = len(self.imageViewer.selection)
+        for i in range(numImages):
+            widget = self.mainLayout.itemAt(i).widget()
+            image = self.imageViewer.selection[i]
+            if widget.image is not image:
+                widget.image = image
+                widget.setImagePixmap()
+        while self.mainLayout.count() > numImages:
+            item = self.mainLayout.takeAt(numImages)
+            item.widget().deleteLater()
 
     def getThumbnailWidget(self, image):
         for i in range(self.mainLayout.count()):

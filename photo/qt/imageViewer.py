@@ -163,6 +163,8 @@ class ImageViewer(QtGui.QMainWindow):
             print(str(e), file=sys.stderr)
             del self.selection[self.cur]
             self._loadImage()
+            if self.overviewwindow:
+                self.overviewwindow.updateThumbs()
             return
         self.imageLabel.setPixmap(pixmap)
         self.imageLabel.show()
@@ -207,6 +209,8 @@ class ImageViewer(QtGui.QMainWindow):
         if not self.imgFilter(self.selection[self.cur].item):
             del self.selection[self.cur]
             self._loadImage()
+            if self.overviewwindow:
+                self.overviewwindow.updateThumbs()
             self._checkActions()
 
     def zoomIn(self):
