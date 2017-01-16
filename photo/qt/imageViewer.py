@@ -266,19 +266,21 @@ class ImageViewer(QtGui.QMainWindow):
             self.showNormal()
             self._setSize()
 
+    def moveCurrentTo(self, newcur):
+        if isinstance(newcur, Image):
+            newcur = self.selection.index(newcur)
+        self.cur = newcur
+        self._loadImage()
+        self._setSize()
+        self._checkActions()
+
     def prevImage(self):
         if self.cur > 0:
-            self.cur -= 1
-            self._loadImage()
-            self._setSize()
-            self._checkActions()
+            self.moveCurrentTo(self.cur - 1)
 
     def nextImage(self):
         if self._haveNext():
-            self.cur += 1
-            self._loadImage()
-            self._setSize()
-            self._checkActions()
+            self.moveCurrentTo(self.cur + 1)
 
     def selectImage(self):
         try:

@@ -24,10 +24,21 @@ class ThumbnailWidget(QtGui.QLabel):
         self.image = image
         self.setImagePixmap()
 
+    def _getOverviewWindow(self):
+        w = self
+        while not isinstance(w, OverviewWindow):
+            w = w.parent()
+        return w
+
     def setImagePixmap(self):
         pixmap = self.image.getPixmap()
         pixmap = pixmap.scaled(self.ThumbnailSize, QtCore.Qt.KeepAspectRatio)
         self.setPixmap(pixmap)
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            ovwin = self._getOverviewWindow()
+            ovwin.imageViewer.moveCurrentTo(self.image)
 
     def markActive(self, isActive):
         palette = self.palette()
