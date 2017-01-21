@@ -9,8 +9,6 @@ from PySide import QtCore, QtGui
 
 class ThumbnailWidget(QtGui.QLabel):
 
-    ThumbnailSize = QtCore.QSize(128, 128)
-
     def __init__(self, image):
         super(ThumbnailWidget, self).__init__()
 
@@ -31,9 +29,7 @@ class ThumbnailWidget(QtGui.QLabel):
         return w
 
     def setImagePixmap(self):
-        pixmap = self.image.getPixmap()
-        pixmap = pixmap.scaled(self.ThumbnailSize, QtCore.Qt.KeepAspectRatio)
-        self.setPixmap(pixmap)
+        self.setPixmap(self.image.getThumbPixmap())
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:

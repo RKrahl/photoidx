@@ -3,7 +3,7 @@
 
 import os.path
 import re
-from PySide import QtGui
+from PySide import QtCore, QtGui
 
 
 class ImageNotFoundError(Exception):
@@ -11,6 +11,8 @@ class ImageNotFoundError(Exception):
 
 
 class Image(object):
+
+    ThumbnailSize = QtCore.QSize(128, 128)
 
     def __init__(self, basedir, item):
         self.item = item
@@ -27,6 +29,15 @@ class Image(object):
         if image.isNull():
             raise ImageNotFoundError("Cannot load %s." % self.fileName)
         return QtGui.QPixmap.fromImage(image).transformed(self.transform)
+
+    def getThumbPixmap(self):
+        image = QtGui.QImage(self.fileName)
+        if image.isNull():
+            raise ImageNotFoundError("Cannot load %s." % self.fileName)
+        pixmap = QtGui.QPixmap.fromImage(image)
+        pixmap = pixmap.scaled(self.ThumbnailSize, QtCore.Qt.KeepAspectRatio)
+        pixmap = pixmap.transformed(self.transform)
+        return pixmap
 
     def rotate(self, a):
         self.transform.rotate(a)
