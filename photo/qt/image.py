@@ -4,6 +4,10 @@
 import os.path
 import re
 from PySide import QtCore, QtGui
+try:
+    import vignette
+except ImportError:
+    vignette = None
 
 
 class ImageNotFoundError(Exception):
@@ -31,11 +35,19 @@ class Image(object):
         return QtGui.QPixmap.fromImage(image).transformed(self.transform)
 
     def getThumbPixmap(self):
-        image = QtGui.QImage(self.fileName)
-        if image.isNull():
-            raise ImageNotFoundError("Cannot load %s." % self.fileName)
-        pixmap = QtGui.QPixmap.fromImage(image)
-        pixmap = pixmap.scaled(self.ThumbnailSize, QtCore.Qt.KeepAspectRatio)
+        if vignette:
+            thumbpath = vignette.get_thumbnail(self.fileName, 'normal')
+            image = QtGui.QImage(thumbpath)
+            if image.isNull():
+                raise ImageNotFoundError("Cannot load %s." % self.fileName)
+            pixmap = QtGui.QPixmap.fromImage(image)
+        else:
+            image = QtGui.QImage(self.fileName)
+            if image.isNull():
+                raise ImageNotFoundError("Cannot load %s." % self.fileName)
+            pixmap = QtGui.QPixmap.fromImage(image)
+            pixmap = pixmap.scaled(self.ThumbnailSize, 
+                                   QtCore.Qt.KeepAspectRatio)
         pixmap = pixmap.transformed(self.transform)
         return pixmap
 
