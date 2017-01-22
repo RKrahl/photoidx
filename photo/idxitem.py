@@ -64,13 +64,20 @@ class IdxItem(object):
         tags = self.tags.copy()
         if self.selected:
              tags.add('pidx:selected')
+        taglist = []
+        for t in sorted(tags):
+            try:
+                t = str(t)
+            except UnicodeError:
+                t = unicode(t)
+            taglist.append(t)
         d = {
             'filename': self.filename,
             'checksum': self.checksum,
             'createDate': self.createDate,
             'orientation': self.orientation,
             'gpsPosition': self.gpsPosition,
-            'tags': sorted(tags),
+            'tags': taglist,
         }
         if d['gpsPosition']:
             d['gpsPosition'] = d['gpsPosition'].as_dict()
