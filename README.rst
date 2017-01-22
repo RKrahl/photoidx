@@ -32,11 +32,21 @@ Required library packages:
 
 + `PySide`_
 
-Optional library packages, only needed to run the test suite:
+Optional library packages:
+
++ `vignette`_
+
+  Needed to cache thumbnail images for the overview window.  If
+  vignette is not available, everything will still work, but
+  displaying the overview window may be significantly slower.
 
 + `pytest`_
 
+  Only needed to run the test suite.
+
 + `distutils-pytest`_
+
+  Only needed to run the test suite.
 
 
 Installation
@@ -87,6 +97,7 @@ permissions and limitations under the License.
 .. _PyYAML: http://pyyaml.org/wiki/PyYAML
 .. _gexiv2: https://wiki.gnome.org/Projects/gexiv2
 .. _PySide: http://qt-project.org/wiki/PySide
+.. _vignette: https://github.com/hydrargyrum/vignette
 .. _pytest: http://pytest.org/
 .. _distutils-pytest: https://github.com/RKrahl/distutils-pytest
 .. _Installing Python Modules: https://docs.python.org/2.7/install/
