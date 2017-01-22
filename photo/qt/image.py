@@ -9,6 +9,16 @@ try:
 except ImportError:
     vignette = None
 
+# Disable vignette tumbnailer backends that are not useful in the
+# context of photo-tools.
+if vignette:
+    for backcls in (vignette.OooCliBackend, 
+                    vignette.PopplerCliBackend, 
+                    vignette.FFMpegCliBackend):
+        for i in reversed(range(len(vignette.THUMBNAILER_BACKENDS))):
+            if isinstance(vignette.THUMBNAILER_BACKENDS[i], backcls):
+                del vignette.THUMBNAILER_BACKENDS[i]
+
 
 class ImageNotFoundError(Exception):
     pass
