@@ -72,6 +72,14 @@ class OverviewWindow(QtGui.QMainWindow):
         self.fileMenu.addAction(self.closeAct)
         self.menuBar().addMenu(self.fileMenu)
 
+        # Set the width of the window such that the scrollArea just
+        # fits.  We need to add 24 to the central widget, 20 for the
+        # vertical scroll bar and 4 for the border.
+        width = centralWidget.size().width() + 24
+        size = self.size()
+        size.setWidth(width)
+        self.resize(size)
+
         self.activeWidget = None
         self.markActive(self.imageViewer.selection[self.imageViewer.cur])
 
