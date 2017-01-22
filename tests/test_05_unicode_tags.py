@@ -4,7 +4,6 @@ When tags are set as unicode while the content is pure ASCII, PyYAML
 marks them as `!!python/unicode 'tag'`.
 """
 
-import sys
 import os.path
 import shutil
 import filecmp
@@ -37,8 +36,6 @@ def imgdir(tmpdir):
     return tmpdir
 
 def test_tag_unicode(imgdir):
-    if sys.version_info < (3,0):
-        pytest.xfail("Issue #22")
     idx = photo.index.Index(imgdir=imgdir)
     for item in idx:
         for t in tags[item.filename]:
