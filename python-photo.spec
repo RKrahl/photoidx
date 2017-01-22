@@ -29,6 +29,7 @@ maintaining tags in a collection of photos.
 Summary:	Tools for managing photo collections
 Requires:	python-%{pkgname} = %{version}
 Requires:	python-pyside
+Recommends:	python-vignette
 
 %description qt
 This package provides an image viewer for collection of photos.
