@@ -57,7 +57,8 @@ class Image(object):
                 raise ImageNotFoundError("Cannot load %s." % self.fileName)
             pixmap = QtGui.QPixmap.fromImage(image)
             pixmap = pixmap.scaled(self.ThumbnailSize, 
-                                   QtCore.Qt.KeepAspectRatio)
+                                   QtCore.Qt.KeepAspectRatio, 
+                                   QtCore.Qt.SmoothTransformation)
         pixmap = pixmap.transformed(self.transform)
         return pixmap
 
