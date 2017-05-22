@@ -1,6 +1,6 @@
 %define pkgname		 photo
 
-Name:		python-%{pkgname}
+Name:		python3-%{pkgname}
 Version:	0.6
 Release:	1
 Summary:	Tools for managing photo collections
@@ -9,12 +9,12 @@ Group:		Development/Languages/Python
 Url:		https://github.com/RKrahl/photo-tools
 Source:		%{pkgname}-%{version}.tar.gz
 BuildArch:	noarch
-BuildRequires:	python-devel >= 2.7
-BuildRequires:	python-PyYAML
-BuildRequires:	python-gexiv2
-BuildRequires:	python-distutils-pytest
-Requires:	python-PyYAML
-Requires:	python-gexiv2
+BuildRequires:	python3-devel
+BuildRequires:	python3-PyYAML
+BuildRequires:	python3-gexiv2
+BuildRequires:	python3-distutils-pytest
+Requires:	python3-PyYAML
+Requires:	python3-gexiv2
 %if 0%{?suse_version}
 BuildRequires:	fdupes
 %endif
@@ -27,9 +27,9 @@ maintaining tags in a collection of photos.
 
 %package qt
 Summary:	Tools for managing photo collections
-Requires:	python-%{pkgname} = %{version}
-Requires:	python-pyside
-Recommends:	python-vignette
+Requires:	python3-%{pkgname} = %{version}
+Requires:	python3-pyside
+Recommends:	python3-vignette
 
 %description qt
 This package provides an image viewer for collection of photos.
@@ -40,11 +40,11 @@ This package provides an image viewer for collection of photos.
 
 
 %build
-python setup.py build
+python3 setup.py build
 
 
 %install
-python setup.py install --optimize=1 --prefix=%{_prefix} --root=%{buildroot}
+python3 setup.py install --optimize=1 --prefix=%{_prefix} --root=%{buildroot}
 %__mv %{buildroot}%{_bindir}/photoidx.py %{buildroot}%{_bindir}/photoidx
 %__mv %{buildroot}%{_bindir}/imageview.py %{buildroot}%{_bindir}/imageview
 %if 0%{?suse_version}
@@ -53,7 +53,7 @@ python setup.py install --optimize=1 --prefix=%{_prefix} --root=%{buildroot}
 
 
 %check
-python setup.py test
+python3 setup.py test
 
 
 %clean
@@ -63,14 +63,14 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %doc README.rst CHANGES
-%{python_sitelib}/*
-%exclude %{python_sitelib}/photo/qt
-%exclude %{_bindir}
+%{python3_sitelib}/*
+%exclude %{python3_sitelib}/photo/qt
+%{_bindir}/photoidx
 
 %files qt
 %defattr(-,root,root)
-%{python_sitelib}/photo/qt
-%exclude %{_bindir}
+%{python3_sitelib}/photo/qt
+%{_bindir}/imageview
 
 
 %changelog
