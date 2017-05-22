@@ -2,10 +2,9 @@
 """
 
 import warnings
-import gi
 with warnings.catch_warnings():
     # Issue #26
-    warnings.simplefilter("ignore", category=gi.PyGIWarning)
+    warnings.simplefilter("ignore")
     from gi.repository import GExiv2
 
 
