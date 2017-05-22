@@ -1,7 +1,7 @@
 %define pkgname		 photo
 
 Name:		python-%{pkgname}
-Version:	0.5
+Version:	0.6
 Release:	1
 Summary:	Tools for managing photo collections
 License:	Apache-2.0

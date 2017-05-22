@@ -15,8 +15,7 @@ System requirements
 
 Python:
 
-+ Python 2.7.  Python 3 might work as well, but has not yet been
-  completely tested.
++ Python 2.7 or newer.
 
 Required library packages:
 
@@ -72,7 +71,7 @@ the site-packages directory of your Python installation.
 Copyright and License
 ---------------------
 
-Copyright 2015, 2016 Rolf Krahl
+Copyright 2015-2017 Rolf Krahl
 
 Licensed under the Apache License, Version 2.0 (the "License"); you
 may not use this file except in compliance with the License.  You may
