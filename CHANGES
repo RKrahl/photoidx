@@ -1,6 +1,23 @@
 		  History of changes to photo-tools
 		  =================================
 
+* Version 0.6 (2017-05-22)
+
+** New features
+
+ + Issue #24: Add an overview window.
+
+** Bug fixes and minor changes
+
+ + Issue #25: imageview should remember rotation.
+
+ + Issue #22: Unwanted unicode marker for tags in the index.
+
+ + Issue #26: Get rid of PyGIWarning.
+
+ + Add an optional attribute `name` to the items in the index.  Use
+   it as the title of the imageview window if set.
+
 * Version 0.5 (2016-08-22)
 
 ** New features
