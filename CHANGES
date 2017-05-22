@@ -11,7 +11,9 @@
 
  + Issue #25: imageview should remember rotation.
 
- + Issue #22: Unwanted unicode marker for tags in the index
+ + Issue #22: Unwanted unicode marker for tags in the index.
+
+ + Issue #26: Get rid of PyGIWarning.
 
  + Add an optional attribute `name` to the items in the index.  Use
    it as the title of the imageview window if set.

@@ -1,7 +1,12 @@
 """Wrapper around the exif library to extract and convert some information.
 """
 
-from gi.repository import GExiv2
+import warnings
+import gi
+with warnings.catch_warnings():
+    # Issue #26
+    warnings.simplefilter("ignore", category=gi.PyGIWarning)
+    from gi.repository import GExiv2
 
 
 class Exif(object):
