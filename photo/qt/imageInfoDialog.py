@@ -27,7 +27,8 @@ class ImageInfoDialog(QtGui.QDialog):
         infoLayout.addWidget(self.orientation, 2, 1)
         gpsPositionLabel = QtGui.QLabel("GPS position:")
         self.gpsPosition = QtGui.QLabel()
-        self.gpsPosition.setTextFormat(QtCore.Qt.PlainText)
+        self.gpsPosition.setTextFormat(QtCore.Qt.RichText)
+        self.gpsPosition.setOpenExternalLinks(True)
         infoLayout.addWidget(gpsPositionLabel, 3, 0)
         infoLayout.addWidget(self.gpsPosition, 3, 1)
 
@@ -50,7 +51,9 @@ class ImageInfoDialog(QtGui.QDialog):
             self.orientation.setText(item.orientation)
         else:
             self.orientation.setText(None)
-        if item.gpsPosition:
-            self.gpsPosition.setText(unicode(item.gpsPosition))
+        pos = item.gpsPosition
+        if pos:
+            link = "<a href='%s'>%s</a>" % (pos.as_osmurl(), unicode(pos))
+            self.gpsPosition.setText(link)
         else:
             self.gpsPosition.setText(None)
