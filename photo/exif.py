@@ -54,3 +54,26 @@ class Exif(object):
         else:
             return None
 
+    @property
+    def exposureTime(self):
+        """Exposure time."""
+        try:
+            return self._exif.get_exposure_time()
+        except KeyError:
+            return None
+
+    @property
+    def aperture(self):
+        """Aperture."""
+        try:
+            return self._exif.get_fnumber()
+        except KeyError:
+            return None
+
+    @property
+    def focalLength(self):
+        """Lens focal length."""
+        try:
+            return self._exif.get_focal_length()
+        except KeyError:
+            return None
