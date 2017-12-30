@@ -10,7 +10,7 @@ from photo.qt import ImageViewer
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('-d', '--directory', help="image directory", default=".")
-argparser.add_argument('--scale', help="scale factor", default=(625.0/4096.0))
+argparser.add_argument('--scale', help="scale factor")
 photo.idxfilter.addFilterArguments(argparser)
 args = argparser.parse_args()
 
