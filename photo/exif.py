@@ -83,6 +83,14 @@ class Exif(object):
             return None
 
     @property
+    def cameraModel(self):
+        """Camera Model."""
+        try:
+            return self._exif['Exif.Image.Model']
+        except KeyError:
+            return None
+
+    @property
     def exposureTime(self):
         """Exposure time."""
         try:
@@ -95,6 +103,14 @@ class Exif(object):
         """Aperture."""
         try:
             return Aperture(self._exif.get_fnumber())
+        except KeyError:
+            return None
+
+    @property
+    def iso(self):
+        """ISO speed rating."""
+        try:
+            return self._exif['Exif.Photo.ISOSpeedRatings']
         except KeyError:
             return None
 
