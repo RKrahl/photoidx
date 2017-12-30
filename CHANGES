@@ -7,6 +7,9 @@
 
  + Issue #21: Add more information to the info window.
 
+ + Issue #27: Set default scale of imageview such that the first image
+   just fits the maximum window size.
+
 * Version 0.6 (2017-05-22)
 
 ** New features

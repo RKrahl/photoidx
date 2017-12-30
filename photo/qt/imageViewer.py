@@ -135,9 +135,15 @@ class ImageViewer(QtGui.QMainWindow):
             return False
 
     def _setSize(self):
-        size = self.scaleFactor * self.imageLabel.pixmap().size()
-        winSize = size + self._extraSize
         maxSize = self.maximumSize()
+        imgSize = self.imageLabel.pixmap().size()
+        if self.scaleFactor is None:
+            size = maxSize - self._extraSize
+            hscale = size.width() / imgSize.width()
+            vscale = size.height() / imgSize.height()
+            self.scaleFactor = min(hscale, vscale)
+        size = self.scaleFactor * imgSize
+        winSize = size + self._extraSize
         if winSize.height() > maxSize.height():
             # Take vertical scrollbar into account.
             sbw = self.scrollArea.verticalScrollBar().size().width()
