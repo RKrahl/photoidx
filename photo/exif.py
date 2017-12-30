@@ -1,11 +1,39 @@
 """Wrapper around the exif library to extract and convert some information.
 """
 
+import fractions
 import warnings
 with warnings.catch_warnings():
     # Issue #26
     warnings.simplefilter("ignore")
     from gi.repository import GExiv2
+
+
+# Some helper classes for exif attributes, having customized string
+# representations.
+
+class ExposureTime(fractions.Fraction):
+    def __str__(self):
+        if self.denominator == 1:
+            return "%s sec" % (self.numerator)
+        else:
+            return "%s/%s sec" % (self.numerator, self.denominator)
+
+class Aperture(float):
+    def __str__(self):
+        # In fact, we display the reciprocal of the aperture, the
+        # f-number, in the string representation.
+        if self == int(self):
+            return "f/%d" % (int(self))
+        else:
+            return "f/%.1f" % (float(self))
+
+class FocalLength(float):
+    def __str__(self):
+        if self == int(self):
+            return "%d mm" % (int(self))
+        else:
+            return "%.1f mm" % (float(self))
 
 
 class Exif(object):
@@ -23,25 +51,27 @@ class Exif(object):
 
     def __init__(self, filename):
         self._exif = GExiv2.Metadata(filename)
-        self.createDate = self._get_date_time()
-        self.orientation = self._get_orientation()
-        self.gpsPosition = self._get_gpsPosition()
 
-    def _get_date_time(self):
+    @property
+    def createDate(self):
+        """Time and date the image was taken."""
         try:
-            dt = self._exif.get_date_time()
+            return self._exif.get_date_time()
         except KeyError:
             return None
-        return dt
 
-    def _get_orientation(self):
+    @property
+    def orientation(self):
+        """Orientation of the camera relative to the scene."""
         try:
             orientation = self._exif.get_orientation()
             return self.OrientationXlate[int(orientation)]
         except KeyError:
             return None
 
-    def _get_gpsPosition(self):
+    @property
+    def gpsPosition(self):
+        """GPS coordinates."""
         if ('Exif.GPSInfo.GPSLatitude' in self._exif and
             'Exif.GPSInfo.GPSLongitude' in self._exif):
             lat = self._exif.get_gps_latitude()
@@ -52,3 +82,42 @@ class Exif(object):
         else:
             return None
 
+    @property
+    def cameraModel(self):
+        """Camera Model."""
+        try:
+            return self._exif['Exif.Image.Model']
+        except KeyError:
+            return None
+
+    @property
+    def exposureTime(self):
+        """Exposure time."""
+        try:
+            return ExposureTime(self._exif.get_exposure_time())
+        except KeyError:
+            return None
+
+    @property
+    def aperture(self):
+        """Aperture."""
+        try:
+            return Aperture(self._exif.get_fnumber())
+        except KeyError:
+            return None
+
+    @property
+    def iso(self):
+        """ISO speed rating."""
+        try:
+            return self._exif['Exif.Photo.ISOSpeedRatings']
+        except KeyError:
+            return None
+
+    @property
+    def focalLength(self):
+        """Lens focal length."""
+        try:
+            return FocalLength(self._exif.get_focal_length())
+        except KeyError:
+            return None
