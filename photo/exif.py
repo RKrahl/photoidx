@@ -1,11 +1,39 @@
 """Wrapper around the exif library to extract and convert some information.
 """
 
+import fractions
 import warnings
 with warnings.catch_warnings():
     # Issue #26
     warnings.simplefilter("ignore")
     from gi.repository import GExiv2
+
+
+# Some helper classes for exif attributes, having customized string
+# representations.
+
+class ExposureTime(fractions.Fraction):
+    def __str__(self):
+        if self.denominator == 1:
+            return "%s sec" % (self.numerator)
+        else:
+            return "%s/%s sec" % (self.numerator, self.denominator)
+
+class Aperture(float):
+    def __str__(self):
+        # In fact, we display the reciprocal of the aperture, the
+        # f-number, in the string representation.
+        if self == int(self):
+            return "f/%d" % (int(self))
+        else:
+            return "f/%.1f" % (float(self))
+
+class FocalLength(float):
+    def __str__(self):
+        if self == int(self):
+            return "%d mm" % (int(self))
+        else:
+            return "%.1f mm" % (float(self))
 
 
 class Exif(object):
@@ -58,7 +86,7 @@ class Exif(object):
     def exposureTime(self):
         """Exposure time."""
         try:
-            return self._exif.get_exposure_time()
+            return ExposureTime(self._exif.get_exposure_time())
         except KeyError:
             return None
 
@@ -66,7 +94,7 @@ class Exif(object):
     def aperture(self):
         """Aperture."""
         try:
-            return self._exif.get_fnumber()
+            return Aperture(self._exif.get_fnumber())
         except KeyError:
             return None
 
@@ -74,6 +102,6 @@ class Exif(object):
     def focalLength(self):
         """Lens focal length."""
         try:
-            return self._exif.get_focal_length()
+            return FocalLength(self._exif.get_focal_length())
         except KeyError:
             return None
