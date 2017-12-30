@@ -1,14 +1,16 @@
 """A dialog window to show some informations on the current image.
 """
 
+import os.path
 from PySide import QtCore, QtGui
 from photo.exif import Exif
 
 
 class ImageInfoDialog(QtGui.QDialog):
 
-    def __init__(self):
+    def __init__(self, basedir):
         super(ImageInfoDialog, self).__init__()
+        self.basedir = basedir
 
         infoLayout = QtGui.QGridLayout()
         cameraModelLabel = QtGui.QLabel("Camera model:")
@@ -68,7 +70,7 @@ class ImageInfoDialog(QtGui.QDialog):
         self.setWindowTitle("Image Info")
 
     def setinfo(self, item):
-        exifdata = Exif(item.filename)
+        exifdata = Exif(os.path.join(self.basedir, item.filename))
         self.cameraModel.setText(str(exifdata.cameraModel))
         self.filename.setText(item.filename)
         if item.createDate:

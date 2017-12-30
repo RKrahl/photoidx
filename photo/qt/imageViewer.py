@@ -24,7 +24,7 @@ class ImageViewer(QtGui.QMainWindow):
         self.scaleFactor = scaleFactor
         self.cur = 0
 
-        self.imageInfoDialog = ImageInfoDialog()
+        self.imageInfoDialog = ImageInfoDialog(self.images.directory)
         self.overviewwindow = None
 
         if tagSelect:
