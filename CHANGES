@@ -10,6 +10,11 @@
  + Issue #27: Set default scale of imageview such that the first image
    just fits the maximum window size.
 
+** Bug fixes and minor changes
+
+ + Issue #28: use pytest-dependency to mark dependencies in the test
+   suite.
+
 * Version 0.6 (2017-05-22)
 
 ** New features
