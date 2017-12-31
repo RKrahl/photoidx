@@ -12,6 +12,10 @@ BuildArch:	noarch
 BuildRequires:	python-devel >= 2.7
 BuildRequires:	python-PyYAML
 BuildRequires:	python-gexiv2
+BuildRequires:	python-pytest
+%if 0%{?sle_version} >= 150000 || 0%{?sle_version} >= 120200
+BuildRequires:	python-pytest-dependency
+%endif
 BuildRequires:	python-distutils-pytest
 Requires:	python-PyYAML
 Requires:	python-gexiv2

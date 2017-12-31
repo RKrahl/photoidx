@@ -54,6 +54,7 @@ tags = {
     "Ryoan-ji": ["dsc_5167.jpg"],
 }
 
+@pytest.mark.dependency()
 def test_tag_ref(imgdir, argparser):
     idxfname = os.path.join(imgdir, ".index.yaml")
     reffname = os.path.join(imgdir, "index-ref.yaml")
@@ -69,6 +70,7 @@ def test_tag_ref(imgdir, argparser):
     idx.write()
     shutil.copy(idxfname, reffname)
 
+@pytest.mark.dependency(depends=["test_tag_ref"])
 def test_tag_shuffle(imgdir, argparser):
     """Same as test_tag_ref(), only the order of setting the tags differ.
     """
@@ -86,6 +88,7 @@ def test_tag_shuffle(imgdir, argparser):
     idx.write()
     assert filecmp.cmp(idxfname, reffname), "index file differs from reference"
 
+@pytest.mark.dependency(depends=["test_tag_ref"])
 def test_tag_remove(imgdir):
     """First set all tags on all images, then remove the wrong ones.
     """
@@ -105,6 +108,7 @@ def test_tag_remove(imgdir):
     idx.write()
     assert filecmp.cmp(idxfname, reffname), "index file differs from reference"
 
+@pytest.mark.dependency(depends=["test_tag_ref"])
 def test_tag_extra(imgdir, argparser):
     """Add a spurious extra tag first and remove it later.
     """

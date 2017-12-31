@@ -37,6 +37,12 @@ Optional library packages:
 
   Only needed to run the test suite.
 
++ `pytest-dependency`_
+
+  Only needed to run the test suite.  (Actually, you can run the test
+  suite even without it, but dependencies between tests will be
+  ignored then.)
+
 + `distutils-pytest`_
 
   Only needed to run the test suite.
@@ -92,5 +98,6 @@ permissions and limitations under the License.
 .. _PySide: http://qt-project.org/wiki/PySide
 .. _vignette: https://github.com/hydrargyrum/vignette
 .. _pytest: http://pytest.org/
+.. _pytest-dependency: https://github.com/RKrahl/pytest-dependency
 .. _distutils-pytest: https://github.com/RKrahl/distutils-pytest
 .. _Installing Python Modules: https://docs.python.org/2.7/install/
