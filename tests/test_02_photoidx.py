@@ -30,6 +30,7 @@ def imgdir(tmpdir):
 # "photoidx -d imgdir".  We more or less try both variants at random
 # in the tests.
 
+@pytest.mark.dependency()
 def test_create(imgdir, monkeypatch):
     """Create the index.
     """
@@ -38,6 +39,7 @@ def test_create(imgdir, monkeypatch):
     idxfile = os.path.join(imgdir, ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
+@pytest.mark.dependency(depends=["test_create"])
 def test_ls_all(imgdir):
     """List all images.
     """
@@ -48,6 +50,7 @@ def test_ls_all(imgdir):
         out = f.read().split()
     assert out == testimgs
 
+@pytest.mark.dependency(depends=["test_create"])
 def test_ls_md5(imgdir, monkeypatch):
     """List with --checksum=md5 option.
     """
@@ -63,6 +66,7 @@ def test_ls_md5(imgdir, monkeypatch):
         print(">", *cmd)
         subprocess.check_call(cmd, stdin=f)
 
+@pytest.mark.dependency(depends=["test_create"])
 def test_addtag_all(imgdir):
     """Tag all images.
     """
@@ -76,6 +80,7 @@ def test_addtag_all(imgdir):
         out = f.read().split()
     assert out == testimgs
 
+@pytest.mark.dependency(depends=["test_create"])
 def test_addtag_by_date(imgdir):
     """Select by date.
     """
@@ -89,6 +94,7 @@ def test_addtag_by_date(imgdir):
         out = f.read().split()
     assert out == ["dsc_4831.jpg"]
 
+@pytest.mark.dependency(depends=["test_create"])
 def test_addtag_by_gpspos(imgdir, monkeypatch):
     """Select by GPS position.
     """
@@ -104,6 +110,7 @@ def test_addtag_by_gpspos(imgdir, monkeypatch):
         out = f.read().split()
     assert out == ["dsc_4623.jpg", "dsc_4664.jpg"]
 
+@pytest.mark.dependency(depends=["test_create"])
 def test_addtag_by_files(imgdir, monkeypatch):
     """Select by file names.
     """
@@ -118,6 +125,10 @@ def test_addtag_by_files(imgdir, monkeypatch):
         out = f.read().split()
     assert out == ["dsc_4664.jpg", "dsc_4831.jpg"]
 
+@pytest.mark.dependency(
+    depends=["test_create", "test_addtag_all", "test_addtag_by_date", 
+             "test_addtag_by_gpspos"]
+)
 def test_rmtag_by_tag(imgdir, monkeypatch):
     """Remove a tag from images selected by tags.
     """
@@ -134,6 +145,7 @@ def test_rmtag_by_tag(imgdir, monkeypatch):
         out = f.read().split()
     assert out == ["dsc_5126.jpg", "dsc_5167.jpg"]
 
+@pytest.mark.dependency(depends=["test_create", "test_addtag_all"])
 def test_rmtag_all(imgdir, monkeypatch):
     """Remove a tag from all images.
     """
@@ -148,6 +160,7 @@ def test_rmtag_all(imgdir, monkeypatch):
         out = f.read().split()
     assert out == []
 
+@pytest.mark.dependency(depends=["test_create", "test_addtag_by_files"])
 def test_ls_by_single_tag(imgdir):
     """Select by one single tag.
     """
@@ -159,6 +172,9 @@ def test_ls_by_single_tag(imgdir):
         out = f.read().split()
     assert out == ["dsc_4664.jpg", "dsc_4831.jpg"]
 
+@pytest.mark.dependency(
+    depends=["test_create", "test_addtag_by_gpspos", "test_addtag_by_files"]
+)
 def test_ls_by_mult_tags(imgdir):
     """Select by multiple tags.
 
@@ -173,6 +189,9 @@ def test_ls_by_mult_tags(imgdir):
         out = f.read().split()
     assert out == ["dsc_4664.jpg"]
 
+@pytest.mark.dependency(
+    depends=["test_create", "test_addtag_by_gpspos", "test_addtag_by_files"]
+)
 def test_ls_by_neg_tags(imgdir, monkeypatch):
     """Select by negating tags.
 
@@ -188,6 +207,10 @@ def test_ls_by_neg_tags(imgdir, monkeypatch):
         out = f.read().split()
     assert out == ["dsc_4623.jpg"]
 
+@pytest.mark.dependency(
+    depends=["test_create", "test_addtag_by_date", "test_addtag_by_gpspos", 
+             "test_addtag_by_files"]
+)
 def test_ls_by_empty_tag(imgdir):
     """Select by empty tags.
 
@@ -201,6 +224,7 @@ def test_ls_by_empty_tag(imgdir):
         out = f.read().split()
     assert out == ["dsc_5126.jpg", "dsc_5167.jpg"]
 
+@pytest.mark.dependency(depends=["test_create", "test_addtag_by_gpspos"])
 def test_ls_by_date_and_tag(imgdir):
     """Select by date and tags.
 
@@ -215,6 +239,10 @@ def test_ls_by_date_and_tag(imgdir):
         out = f.read().split()
     assert out == ["dsc_4623.jpg"]
 
+@pytest.mark.dependency(
+    depends=["test_create", "test_addtag_by_date", "test_addtag_by_gpspos", 
+             "test_addtag_by_files"]
+)
 def test_lstags_all(imgdir):
     """List tags.
     """
@@ -226,6 +254,9 @@ def test_lstags_all(imgdir):
         out = f.read().split()
     assert out == ["Hakone", "Shinto_shrine", "Tokyo"]
 
+@pytest.mark.dependency(
+    depends=["test_create", "test_addtag_by_gpspos", "test_addtag_by_files"]
+)
 def test_lstags_by_tags(imgdir, monkeypatch):
     """List tags selected by tags.
     """
@@ -238,6 +269,7 @@ def test_lstags_by_tags(imgdir, monkeypatch):
         out = f.read().split()
     assert out == ["Shinto_shrine", "Tokyo"]
 
+@pytest.mark.dependency(depends=["test_create"])
 def test_select_by_files(imgdir, monkeypatch):
     """Select by file names.
     """
@@ -252,6 +284,9 @@ def test_select_by_files(imgdir, monkeypatch):
         out = f.read().split()
     assert out == ["dsc_5126.jpg"]
 
+@pytest.mark.dependency(
+    depends=["test_create", "test_addtag_by_files", "test_select_by_files"]
+)
 def test_select_by_tag(imgdir, monkeypatch):
     """Select by tag.
     """
@@ -266,6 +301,7 @@ def test_select_by_tag(imgdir, monkeypatch):
         out = f.read().split()
     assert out == ["dsc_4664.jpg", "dsc_4831.jpg", "dsc_5126.jpg"]
 
+@pytest.mark.dependency(depends=["test_create", "test_select_by_tag"])
 def test_deselect_by_files(imgdir, monkeypatch):
     """Deselect by file names.
     """

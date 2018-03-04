@@ -24,12 +24,14 @@ hashalg = {
     "sha512": "/usr/bin/sha512sum",
 }
 
+@pytest.mark.dependency()
 def test_create_checksum(tmpdir):
     for fname in testimgfiles:
         shutil.copy(fname, tmpdir)
     idx = photo.index.Index(imgdir=tmpdir, hashalg=hashalg.keys())
     idx.write()
 
+@pytest.mark.dependency(depends=["test_create_checksum"])
 @pytest.mark.parametrize("alg", hashalg.keys())
 def test_check_checksum(tmpdir, monkeypatch, alg):
     checkprog = hashalg[alg]

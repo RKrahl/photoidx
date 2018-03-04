@@ -48,7 +48,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'photo-tools'
-copyright = u'2016, Rolf Krahl'
+copyright = u'2018, Rolf Krahl'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

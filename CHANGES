@@ -1,6 +1,27 @@
 		  History of changes to photo-tools
 		  =================================
 
+* Version 0.8 (not yet released)
+
+** New features
+
+ + Issue #20: Add a preferred order.  Add actions to the GUI to push
+   images back and forth in the image order.
+
+* Version 0.7 (2017-12-31)
+
+** New features
+
+ + Issue #21: Add more information to the info window.
+
+ + Issue #27: Set default scale of imageview such that the first image
+   just fits the maximum window size.
+
+** Bug fixes and minor changes
+
+ + Issue #28: use pytest-dependency to mark dependencies in the test
+   suite.
+
 * Version 0.6 (2017-05-22)
 
 ** New features

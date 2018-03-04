@@ -1,7 +1,7 @@
 %define pkgname		 photo
 
 Name:		python-%{pkgname}
-Version:	0.6
+Version:	0.7
 Release:	1
 Summary:	Tools for managing photo collections
 License:	Apache-2.0
@@ -12,6 +12,10 @@ BuildArch:	noarch
 BuildRequires:	python-devel >= 2.7
 BuildRequires:	python-PyYAML
 BuildRequires:	python-gexiv2
+BuildRequires:	python-pytest
+%if 0%{?sle_version} >= 150000 || 0%{?sle_version} >= 120200
+BuildRequires:	python-pytest-dependency
+%endif
 BuildRequires:	python-distutils-pytest
 Requires:	python-PyYAML
 Requires:	python-gexiv2

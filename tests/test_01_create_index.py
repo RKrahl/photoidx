@@ -31,6 +31,7 @@ def test_create_curdir(imgdir, monkeypatch):
     idxfile = ".index.yaml"
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
+@pytest.mark.dependency()
 def test_create(imgdir):
     """Create a new index adding all images in the imgdir.
     """
@@ -39,6 +40,7 @@ def test_create(imgdir):
     idxfile = os.path.join(imgdir, ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
+@pytest.mark.dependency(depends=["test_create"])
 def test_read(imgdir):
     """Read the index file and write it out again.
     """

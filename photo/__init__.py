@@ -3,5 +3,5 @@
 This package provides tools for managing photo collections.
 """
 
-__version__ = "0.6"
+__version__ = "0.7"
 __author__ = "Rolf Krahl <rolf@rotkraut.de>"
