@@ -78,6 +78,10 @@ class ImageViewer(QtGui.QMainWindow):
                 shortcut="s", triggered=self.selectImage)
         self.deselectImageAct = QtGui.QAction("&Deselect Image", self,
                 shortcut="d", triggered=self.deselectImage)
+        self.pushForwardAct = QtGui.QAction("Push Image &Forward", self,
+                shortcut="Ctrl+f", triggered=self.pushImageForward)
+        self.pushBackwardAct = QtGui.QAction("Push Image &Backward", self,
+                shortcut="Ctrl+b", triggered=self.pushImageBackward)
         self.tagSelectAct = QtGui.QAction("&Tags", self,
                 shortcut="t", enabled=tagSelect, triggered=self.tagSelect)
 
@@ -104,6 +108,9 @@ class ImageViewer(QtGui.QMainWindow):
         self.imageMenu.addAction(self.nextImageAct)
         self.imageMenu.addAction(self.selectImageAct)
         self.imageMenu.addAction(self.deselectImageAct)
+        self.imageMenu.addSeparator()
+        self.imageMenu.addAction(self.pushForwardAct)
+        self.imageMenu.addAction(self.pushBackwardAct)
         self.imageMenu.addSeparator()
         self.imageMenu.addAction(self.tagSelectAct)
         self.menuBar().addMenu(self.imageMenu)
@@ -185,7 +192,9 @@ class ImageViewer(QtGui.QMainWindow):
         """Enable and disable actions as appropriate.
         """
         self.prevImageAct.setEnabled(self.cur > 0)
+        self.pushForwardAct.setEnabled(self.cur > 0)
         self.nextImageAct.setEnabled(self._haveNext())
+        self.pushBackwardAct.setEnabled(self._haveNext())
         try:
             item = self.selection[self.cur].item
         except IndexError:
@@ -332,3 +341,33 @@ class ImageViewer(QtGui.QMainWindow):
     def scaleImage(self, factor):
         self.scaleFactor *= factor
         self._setSize()
+
+    def pushImageForward(self):
+        """Move the current image forward one position in the image order.
+        """
+        if self.cur > 0:
+            i = self.images.index(self.selection[self.cur].item)
+            pi = self.images.index(self.selection[self.cur - 1].item)
+            item = self.images.pop(i)
+            self.images.insert(pi, item)
+            img = self.selection.pop(self.cur)
+            self.selection.insert(self.cur - 1, img)
+            self.images.write()
+            if self.overviewwindow:
+                self.overviewwindow.updateThumbs()
+            self.moveCurrentTo(self.cur - 1)
+
+    def pushImageBackward(self):
+        """Move the current image backward one position in the image order.
+        """
+        if self._haveNext():
+            i = self.images.index(self.selection[self.cur].item)
+            ni = self.images.index(self.selection[self.cur + 1].item)
+            item = self.images.pop(i)
+            self.images.insert(ni - 1, item)
+            img = self.selection.pop(self.cur)
+            self.selection.insert(self.cur + 1, img)
+            self.images.write()
+            if self.overviewwindow:
+                self.overviewwindow.updateThumbs()
+            self.moveCurrentTo(self.cur + 1)

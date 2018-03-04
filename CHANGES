@@ -1,6 +1,13 @@
 		  History of changes to photo-tools
 		  =================================
 
+* Version 0.8 (not yet released)
+
+** New features
+
+ + Issue #20: Add a preferred order.  Add actions to the GUI to push
+   images back and forth in the image order.
+
 * Version 0.7 (2017-12-31)
 
 ** New features
