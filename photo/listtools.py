@@ -87,6 +87,13 @@ class LazyList(MutableSequence):
     []
     >>> l
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    >>> l = LazyList(naturals())
+    >>> l
+    []
+    >>> bool(l)
+    True
+    >>> l
+    [0]
 
     """
 
@@ -143,10 +150,9 @@ class LazyList(MutableSequence):
         self._access(-1)
         self.elements.append(value)
 
-
     def __nonzero__(self):
         self._access(0)
-        return len(self) > 0
+        return bool(self.elements)
 
     def __str__(self):
         return str(self.elements)
