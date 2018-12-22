@@ -39,7 +39,6 @@ def test_by_date(imgdir, argparser):
     idxfilter = photo.idxfilter.IdxFilter(args)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4831.jpg"]
-    idx.write()
 
 def test_by_gpspos(imgdir, argparser):
     """Select by GPS position.
@@ -50,7 +49,6 @@ def test_by_gpspos(imgdir, argparser):
     idxfilter = photo.idxfilter.IdxFilter(args)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4623.jpg", "dsc_4664.jpg"]
-    idx.write()
 
 def test_by_files(imgdir, argparser):
     """Select by file names.
@@ -60,7 +58,6 @@ def test_by_files(imgdir, argparser):
     idxfilter = photo.idxfilter.IdxFilter(args)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4664.jpg", "dsc_4831.jpg"]
-    idx.write()
 
 def test_by_single_tag(imgdir, argparser):
     """Select by one single tag.
