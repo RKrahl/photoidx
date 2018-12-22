@@ -2,11 +2,13 @@
 """
 
 from __future__ import print_function
+import datetime
+import filecmp
 import os.path
 import shutil
-import filecmp
 import subprocess
 import pytest
+import yaml
 from conftest import tmpdir, gettestdata, callscript
 
 testimgs = [ 
@@ -315,3 +317,57 @@ def test_deselect_by_files(imgdir, monkeypatch):
     with open(fname, "rt") as f:
         out = f.read().split()
     assert out == ["dsc_4664.jpg", "dsc_5126.jpg"]
+
+@pytest.mark.dependency(
+    depends=["test_create", "test_addtag_by_date", "test_addtag_by_gpspos", 
+             "test_addtag_by_files", "test_rmtag_all"]
+)
+def test_stats_all(imgdir):
+    """Show stats.
+    """
+    fname = os.path.join(imgdir, "out")
+    with open(fname, "wt") as f:
+        args = ["-d", imgdir, "stats"]
+        callscript("photoidx.py", args, stdout=f)
+    with open(fname, "rt") as f:
+        stats = yaml.load(f)
+    assert stats["Count"] == 5
+    assert stats["Oldest"] == datetime.datetime(2016, 2, 28, 17, 26, 39)
+    assert stats["Newest"] == datetime.datetime(2016, 3, 9, 10, 7, 48)
+    assert stats["By date"] == {
+        datetime.date(2016, 2, 28) : 1,
+        datetime.date(2016, 2, 29) : 1,
+        datetime.date(2016, 3, 5) : 1,
+        datetime.date(2016, 3, 8) : 1,
+        datetime.date(2016, 3, 9) : 1,
+    }
+    assert stats["By tag"] == {
+        "Hakone": 1,
+        "Shinto_shrine": 2,
+        "Tokyo": 2,
+    }
+
+@pytest.mark.dependency(
+    depends=["test_create", "test_addtag_by_date", "test_addtag_by_gpspos", 
+             "test_addtag_by_files", "test_rmtag_all"]
+)
+def test_stats_all(imgdir):
+    """Show stats on a selection.
+    """
+    fname = os.path.join(imgdir, "out")
+    with open(fname, "wt") as f:
+        args = ["-d", imgdir, "stats", "--tags", "Tokyo"]
+        callscript("photoidx.py", args, stdout=f)
+    with open(fname, "rt") as f:
+        stats = yaml.load(f)
+    assert stats["Count"] == 2
+    assert stats["Oldest"] == datetime.datetime(2016, 2, 28, 17, 26, 39)
+    assert stats["Newest"] == datetime.datetime(2016, 2, 29, 11, 37, 51)
+    assert stats["By date"] == {
+        datetime.date(2016, 2, 28) : 1,
+        datetime.date(2016, 2, 29) : 1,
+    }
+    assert stats["By tag"] == {
+        "Shinto_shrine": 1,
+        "Tokyo": 2,
+    }

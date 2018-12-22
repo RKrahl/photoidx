@@ -4,6 +4,7 @@ from __future__ import print_function
 import argparse
 import photo.index
 import photo.idxfilter
+from photo.stats import Stats
 
 
 def create(args):
@@ -63,6 +64,12 @@ def deselect(args):
         i.selected = False
     idx.write()
 
+def stats(args):
+    idx = photo.index.Index(idxfile=args.directory)
+    idxfilter = photo.idxfilter.IdxFilter(args)
+    stats = Stats(idxfilter.filter(idx))
+    print(str(stats))
+
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('-d', '--directory', 
@@ -105,6 +112,10 @@ deselect_parser = subparsers.add_parser('deselect',
                                         help="remove images from the selection")
 photo.idxfilter.addFilterArguments(deselect_parser)
 deselect_parser.set_defaults(func=deselect)
+
+stats_parser = subparsers.add_parser('stats', help="show statistics")
+photo.idxfilter.addFilterArguments(stats_parser)
+stats_parser.set_defaults(func=stats)
 
 args = argparser.parse_args()
 args.func(args)
