@@ -31,12 +31,6 @@ def argparser():
     photo.idxfilter.addFilterArguments(parser)
     return parser
 
-# Note: We need images to be tagged in order to test selection by tags
-# in test_by_single_tag, test_by_mult_tags, test_by_neg_tags,
-# test_by_empty_tag, and test_by_date_and_tag.  To this end
-# test_by_date, test_by_gpspos, and test_by_files add tags to the
-# images as a side effect.
-
 def test_by_date(imgdir, argparser):
     """Select by date.
     """
