@@ -22,7 +22,7 @@ def test_single_date(argparser):
     """
     idx = photo.index.Index(idxfile=indexfile)
     args = argparser.parse_args(["--date=2016-02-29"])
-    idxfilter = photo.idxfilter.IdxFilter(args)
+    idxfilter = photo.idxfilter.IdxFilter.from_args(args)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == testimgs[1:4]
 
@@ -32,7 +32,7 @@ def test_interval_date_date(argparser):
     """
     idx = photo.index.Index(idxfile=indexfile)
     args = argparser.parse_args(["--date=2016-02-29--2016-03-05"])
-    idxfilter = photo.idxfilter.IdxFilter(args)
+    idxfilter = photo.idxfilter.IdxFilter.from_args(args)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == testimgs[1:11]
 
@@ -42,7 +42,7 @@ def test_interval_date_datetime(argparser):
     """
     idx = photo.index.Index(idxfile=indexfile)
     args = argparser.parse_args(["--date=2016-02-29/2016-03-05T03:47:08"])
-    idxfilter = photo.idxfilter.IdxFilter(args)
+    idxfilter = photo.idxfilter.IdxFilter.from_args(args)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == testimgs[1:9]
 
@@ -54,7 +54,7 @@ def test_single_datetime(argparser):
     """
     idx = photo.index.Index(idxfile=indexfile)
     args = argparser.parse_args(["--date=2016-03-03T11:21:40"])
-    idxfilter = photo.idxfilter.IdxFilter(args)
+    idxfilter = photo.idxfilter.IdxFilter.from_args(args)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == testimgs[6:7]
 
@@ -64,7 +64,7 @@ def test_interval_datetime_date(argparser):
     """
     idx = photo.index.Index(idxfile=indexfile)
     args = argparser.parse_args(["--date=2016-03-03T11:21:40/2016-03-05"])
-    idxfilter = photo.idxfilter.IdxFilter(args)
+    idxfilter = photo.idxfilter.IdxFilter.from_args(args)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == testimgs[6:11]
 
@@ -75,6 +75,6 @@ def test_interval_datetime_datetime(argparser):
     idx = photo.index.Index(idxfile=indexfile)
     args = argparser.parse_args(["--date=2016-03-03T11:21:41"
                                  "--2016-03-05T03:47:08"])
-    idxfilter = photo.idxfilter.IdxFilter(args)
+    idxfilter = photo.idxfilter.IdxFilter.from_args(args)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == testimgs[7:9]

@@ -21,6 +21,6 @@ try:
 except IOError:
     idx = photo.index.Index(imgdir=args.directory)
     tagSelect=False
-idxfilter = photo.idxfilter.IdxFilter(args)
+idxfilter = photo.idxfilter.IdxFilter.from_args(args)
 imageViewer = ImageViewer(idx, idxfilter, args.scale, tagSelect)
 sys.exit(app.exec_())

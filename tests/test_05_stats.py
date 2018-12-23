@@ -81,7 +81,7 @@ def test_stats_filtered(imgdir, argparser):
     """
     idx = photo.index.Index(idxfile=imgdir)
     args = argparser.parse_args(["--tags=Tokyo"])
-    idxfilter = photo.idxfilter.IdxFilter(args)
+    idxfilter = photo.idxfilter.IdxFilter.from_args(args)
     stats = Stats(idxfilter.filter(idx))
     assert stats.count == 2
     assert stats.oldest == datetime.datetime(2016, 2, 28, 17, 26, 39)

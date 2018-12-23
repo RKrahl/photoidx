@@ -22,12 +22,21 @@ else:
 
 class IdxFilter(object):
 
-    def __init__(self, args):
-        if args.tags is not None:
+    @classmethod
+    def from_args(cls, args):
+        kwargs = {}
+        for a in ("tags", "select", "date", "gpspos", "gpsradius", "files"):
+            kwargs[a] = getattr(args, a)
+        return cls(**kwargs)
+
+    def __init__(self, 
+                 tags=None, select=None, date=None, 
+                 gpspos=None, gpsradius=3.0, files=None):
+        if tags is not None:
             self.taglist = set()
             self.negtaglist = set()
-            if args.tags:
-                for t in args.tags.split(","):
+            if tags:
+                for t in tags.split(","):
                     if t.startswith("!"):
                         self.negtaglist.add(t[1:])
                     else:
@@ -35,14 +44,23 @@ class IdxFilter(object):
         else:
             self.taglist = None
             self.negtaglist = None
-        self.select = args.select
-        self.date = args.date
-        if args.gpspos:
-            self.gpspos = args.gpspos
-            self.gpsradius = args.gpsradius
+        self.select = select
+        if date:
+            if isinstance(date, basestring):
+                self.date = _strpdate(date)
+            else:
+                self.date = date
+        else:
+            self.date = None
+        if gpspos:
+            if isinstance(gpspos, basestring):
+                self.gpspos = GeoPosition(gpspos)
+            else:
+                self.gpspos = gpspos
+            self.gpsradius = float(gpsradius)
         else:
             self.gpspos = None
-        self.filelist = set(args.files) if args.files else None
+        self.filelist = set(files) if files else None
 
     def __call__(self, item):
         if self.filelist and not item.filename in self.filelist:

@@ -64,7 +64,7 @@ def test_tag_ref(imgdir, argparser):
                 "Ginza", "Shinto_shrine", "Geisha", "Ryoan-ji" ]
     for t in taglist:
         args = argparser.parse_args(tags[t])
-        idxfilter = photo.idxfilter.IdxFilter(args)
+        idxfilter = photo.idxfilter.IdxFilter.from_args(args)
         for i in idxfilter.filter(idx):
             i.tags.add(t)
     idx.write()
@@ -82,7 +82,7 @@ def test_tag_shuffle(imgdir, argparser):
                 "Shinto_shrine", "Tokyo", "Kyoto", "Ryoan-ji" ]
     for t in taglist:
         args = argparser.parse_args(tags[t])
-        idxfilter = photo.idxfilter.IdxFilter(args)
+        idxfilter = photo.idxfilter.IdxFilter.from_args(args)
         for i in idxfilter.filter(idx):
             i.tags.add(t)
     idx.write()
@@ -122,7 +122,7 @@ def test_tag_extra(imgdir, argparser):
         i.tags.add("extra")
     for t in taglist:
         args = argparser.parse_args(tags[t])
-        idxfilter = photo.idxfilter.IdxFilter(args)
+        idxfilter = photo.idxfilter.IdxFilter.from_args(args)
         for i in idxfilter.filter(idx):
             i.tags.add(t)
     for i in idx:
