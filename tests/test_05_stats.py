@@ -1,7 +1,6 @@
 """Get statistics about the items in an index from using class Stats.
 """
 
-import argparse
 import datetime
 import os.path
 import shutil
@@ -26,12 +25,6 @@ def imgdir(tmpdir):
     shutil.copy(gettestdata("index-tagged.yaml"), 
                 os.path.join(tmpdir, ".index.yaml"))
     return tmpdir
-
-@pytest.fixture(scope="module")
-def argparser():
-    parser = argparse.ArgumentParser()
-    photo.idxfilter.addFilterArguments(parser)
-    return parser
 
 
 def test_stats_all(imgdir):
@@ -76,12 +69,11 @@ def test_stats_all_yaml(imgdir):
         "Tokyo": 2,
     }
 
-def test_stats_filtered(imgdir, argparser):
+def test_stats_filtered(imgdir):
     """Get statistics on a selection of images.
     """
     idx = photo.index.Index(idxfile=imgdir)
-    args = argparser.parse_args(["--tags=Tokyo"])
-    idxfilter = photo.idxfilter.IdxFilter.from_args(args)
+    idxfilter = photo.idxfilter.IdxFilter(tags="Tokyo")
     stats = Stats(idxfilter.filter(idx))
     assert stats.count == 2
     assert stats.oldest == datetime.datetime(2016, 2, 28, 17, 26, 39)
