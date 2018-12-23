@@ -8,6 +8,7 @@ import datetime
 import pytest
 import photo.index
 import photo.idxfilter
+from photo.geo import GeoPosition
 from conftest import tmpdir, gettestdata
 
 testimgs = [ 
@@ -28,7 +29,8 @@ def test_by_date(imgdir):
     """Select by date.
     """
     idx = photo.index.Index(idxfile=imgdir)
-    idxfilter = photo.idxfilter.IdxFilter(date="2016-03-05")
+    date = (datetime.datetime(2016, 3, 5), datetime.datetime(2016, 3, 6))
+    idxfilter = photo.idxfilter.IdxFilter(date=date)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4831.jpg"]
 
@@ -36,8 +38,8 @@ def test_by_gpspos(imgdir):
     """Select by GPS position.
     """
     idx = photo.index.Index(idxfile=imgdir)
-    idxfilter = photo.idxfilter.IdxFilter(gpspos="35.6883 N, 139.7544 E", 
-                                          gpsradius=20.0)
+    pos = GeoPosition("35.6883 N, 139.7544 E")
+    idxfilter = photo.idxfilter.IdxFilter(gpspos=pos, gpsradius=20.0)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4623.jpg", "dsc_4664.jpg"]
 
@@ -45,10 +47,10 @@ def test_by_files(imgdir):
     """Select by file names.
     """
     idx = photo.index.Index(idxfile=imgdir)
-    idxfilter = photo.idxfilter.IdxFilter(files=["dsc_4664.jpg", 
-                                                 "dsc_4831.jpg"])
+    files = ["dsc_4664.jpg", "dsc_4831.jpg"]
+    idxfilter = photo.idxfilter.IdxFilter(files=files)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
-    assert fnames == ["dsc_4664.jpg", "dsc_4831.jpg"]
+    assert fnames == files
 
 def test_by_single_tag(imgdir):
     """Select by one single tag.
@@ -97,7 +99,8 @@ def test_by_date_and_tag(imgdir):
     combined.
     """
     idx = photo.index.Index(idxfile=imgdir)
-    idxfilter = photo.idxfilter.IdxFilter(tags="Tokyo", date="2016-02-28")
+    date = (datetime.datetime(2016, 2, 28), datetime.datetime(2016, 2, 29))
+    idxfilter = photo.idxfilter.IdxFilter(tags="Tokyo", date=date)
     fnames = [ i.filename for i in idxfilter.filter(idx) ]
     assert fnames == ["dsc_4623.jpg"]
 

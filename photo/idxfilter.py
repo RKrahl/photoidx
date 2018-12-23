@@ -45,19 +45,10 @@ class IdxFilter(object):
             self.taglist = None
             self.negtaglist = None
         self.select = select
-        if date:
-            if isinstance(date, basestring):
-                self.date = _strpdate(date)
-            else:
-                self.date = date
-        else:
-            self.date = None
+        self.date = date
         if gpspos:
-            if isinstance(gpspos, basestring):
-                self.gpspos = GeoPosition(gpspos)
-            else:
-                self.gpspos = gpspos
-            self.gpsradius = float(gpsradius)
+            self.gpspos = gpspos
+            self.gpsradius = gpsradius
         else:
             self.gpspos = None
         self.filelist = set(files) if files else None
