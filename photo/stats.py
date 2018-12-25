@@ -8,12 +8,15 @@ class Stats(object):
 
     def __init__(self, items):
         self.count = 0
+        self.selected = 0
         self.oldest = datetime.datetime.max
         self.newest = datetime.datetime.min
         self.by_date = {}
         self.by_tag = {}
         for i in items:
             self.count += 1
+            if i.selected:
+                self.selected += 1
             if i.createDate:
                 if i.createDate < self.oldest:
                     self.oldest = i.createDate
@@ -30,7 +33,7 @@ class Stats(object):
         return bool(self.count)
 
     def __str__(self):
-        s = "Count: %d\n" % self.count
+        s = "Count: %d\nSelected: %d\n" % (self.count, self.selected)
         if self.newest >= self.oldest:
             s += "Oldest: %s\n" % str(self.oldest)
             s += "Newest: %s\n" % str(self.newest)
