@@ -93,6 +93,10 @@ class GeoPosition(object):
                     u"%d\xb0 %d\u2032 %.2f\u2033 %s"
                     % (self.lat.dmsref() + self.lon.dmsref()))
 
+    def floatstr(self):
+        return "%f %s, %f %s" % (abs(self.lat), self.lat.ref(), 
+                                 abs(self.lon), self.lon.ref())
+
     def as_dict(self):
         return {
             self.lat.ref(): float(abs(self.lat)),
