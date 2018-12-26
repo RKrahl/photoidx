@@ -136,22 +136,20 @@ class FilterDialog(QtGui.QDialog):
     def __init__(self):
         super(FilterDialog, self).__init__()
 
-        optionsLayout = QtGui.QVBoxLayout()
+        mainLayout = QtGui.QVBoxLayout()
 
-        self.tagFilterOption = TagFilterOption(optionsLayout)
-        self.selectFilterOption = SelectFilterOption(optionsLayout)
-        self.dateFilterOption = DateFilterOption(optionsLayout)
-        self.gpsFilterOption = GPSFilterOption(optionsLayout)
-        self.filelistFilterOption = ListFilterOption(optionsLayout)
+        self.tagFilterOption = TagFilterOption(mainLayout)
+        self.selectFilterOption = SelectFilterOption(mainLayout)
+        self.dateFilterOption = DateFilterOption(mainLayout)
+        self.gpsFilterOption = GPSFilterOption(mainLayout)
+        self.filelistFilterOption = ListFilterOption(mainLayout)
 
         buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | 
                                            QtGui.QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
-
-        mainLayout = QtGui.QVBoxLayout()
-        mainLayout.addLayout(optionsLayout)
         mainLayout.addWidget(buttonBox, alignment=QtCore.Qt.AlignHCenter)
+
         self.setLayout(mainLayout)
         self.setWindowTitle("Filter options")
 
