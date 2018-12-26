@@ -3,6 +3,18 @@
 
 from PySide import QtCore, QtGui
 import photo.idxfilter
+from photo.geo import GeoPosition
+
+
+class GeoPosEdit(QtGui.QLineEdit):
+    """A QLineEdit with a suitable size for a GeoPosition.
+    """
+    def sizeHint(self):
+        sh = super(GeoPosEdit, self).sizeHint()
+        fm = self.fontMetrics()
+        postext = u"\u2014%s\u2014" % GeoPosition("90.0 S, 180.0 E").floatstr()
+        sh.setWidth(fm.boundingRect(postext).width())
+        return sh
 
 
 class FilterOption(object):
@@ -82,7 +94,7 @@ class DateFilterOption(FilterOption):
 class GPSFilterOption(FilterOption):
 
     def __init__(self, parent):
-        self.posEntry = QtGui.QLineEdit()
+        self.posEntry = GeoPosEdit()
         posLabel = QtGui.QLabel("Position:")
         posLabel.setBuddy(self.posEntry)
         self.radiusEntry = QtGui.QLineEdit()

@@ -94,8 +94,8 @@ class GeoPosition(object):
                     % (self.lat.dmsref() + self.lon.dmsref()))
 
     def floatstr(self):
-        return "%f %s, %f %s" % (abs(self.lat), self.lat.ref(), 
-                                 abs(self.lon), self.lon.ref())
+        return "%.5f %s, %.5f %s" % (abs(self.lat), self.lat.ref(), 
+                                     abs(self.lon), self.lon.ref())
 
     def as_dict(self):
         return {
