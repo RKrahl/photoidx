@@ -54,6 +54,9 @@ class Index(MutableSequence):
     def __delitem__(self, index):
         self.items.__delitem__(index)
 
+    def index(self, value, *args):
+        return self.items.index(value, *args)
+
     def insert(self, index, value):
         self.items.insert(index, value)
 
