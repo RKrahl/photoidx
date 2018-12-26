@@ -49,10 +49,6 @@ def strpdate(s):
             enddate = startdate + datetime.timedelta(seconds=1)
     else:
         enddate = _dt(match.group('y1', 'm1', 'd1', 'h1', 'min1', 's1'))
-        if match.group('h1') is None:
-            enddate += datetime.timedelta(days=1)
-        else:
-            enddate += datetime.timedelta(seconds=1)
     return (startdate, enddate)
 
 

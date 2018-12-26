@@ -39,6 +39,10 @@ class LazyList(MutableSequence):
     >>> del l[1]
     >>> l
     [0]
+    >>> l[1]
+    2
+    >>> l
+    [0, 2]
     >>> l[8]
     Traceback (most recent call last):
       ...
@@ -94,6 +98,27 @@ class LazyList(MutableSequence):
     True
     >>> l
     [0]
+    >>> l = LazyList((0, 1, 2, 3, 4, 5, 6))
+    >>> l.index(1)
+    1
+    >>> l
+    [0, 1]
+    >>> l.index(2, 1)
+    2
+    >>> l
+    [0, 1, 2]
+    >>> l.index(2, 3, 5)
+    Traceback (most recent call last):
+      ...
+    ValueError: 2 is not in list
+    >>> l
+    [0, 1, 2, 3, 4]
+    >>> l.index(2, 3)
+    Traceback (most recent call last):
+      ...
+    ValueError: 2 is not in list
+    >>> l
+    [0, 1, 2, 3, 4, 5, 6]
 
     """
 
@@ -105,7 +130,9 @@ class LazyList(MutableSequence):
         """Take out the next element from the iterable.
         Raise StopIteration if the iterable is exhausted.
         """
-        self.elements.append(next(self.iterable))
+        v = next(self.iterable)
+        self.elements.append(v)
+        return v
 
     def _access(self, index):
         """Try to take out the elements covered by index from the iterable.
@@ -141,6 +168,31 @@ class LazyList(MutableSequence):
     def __delitem__(self, index):
         self._access(index)
         self.elements.__delitem__(index)
+
+    def index(self, value, *args):
+        try:
+            startidx = args[0]
+        except IndexError:
+            startidx = 0
+        try:
+            endidx = args[1]
+        except IndexError:
+            endidx = None
+        self._access(startidx)
+        try:
+            return self.elements.index(value, *args)
+        except ValueError:
+            i = len(self.elements)
+            while True:
+                if endidx and i >= endidx:
+                    raise ValueError("%s is not in list" % repr(value))
+                try:
+                    v = self._access_next()
+                    if v == value:
+                        return i
+                    i += 1
+                except StopIteration:
+                    raise ValueError("%s is not in list" % repr(value))
 
     def insert(self, index, value):
         self._access(index)

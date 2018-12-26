@@ -33,6 +33,7 @@ def test_stats_all(imgdir):
     idx = photo.index.Index(idxfile=imgdir)
     stats = Stats(idx)
     assert stats.count == 5
+    assert stats.selected == 2
     assert stats.oldest == datetime.datetime(2016, 2, 28, 17, 26, 39)
     assert stats.newest == datetime.datetime(2016, 3, 9, 10, 7, 48)
     assert stats.by_date == {
@@ -54,6 +55,7 @@ def test_stats_all_yaml(imgdir):
     idx = photo.index.Index(idxfile=imgdir)
     stats = yaml.load(str(Stats(idx)))
     assert stats["Count"] == 5
+    assert stats["Selected"] == 2
     assert stats["Oldest"] == datetime.datetime(2016, 2, 28, 17, 26, 39)
     assert stats["Newest"] == datetime.datetime(2016, 3, 9, 10, 7, 48)
     assert stats["By date"] == {
@@ -76,6 +78,7 @@ def test_stats_filtered(imgdir):
     idxfilter = photo.idxfilter.IdxFilter(tags="Tokyo")
     stats = Stats(idxfilter.filter(idx))
     assert stats.count == 2
+    assert stats.selected == 1
     assert stats.oldest == datetime.datetime(2016, 2, 28, 17, 26, 39)
     assert stats.newest == datetime.datetime(2016, 2, 29, 11, 37, 51)
     assert stats.by_date == {
