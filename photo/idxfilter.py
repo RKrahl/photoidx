@@ -87,6 +87,7 @@ class IdxFilter(object):
             self.gpsradius = gpsradius
         else:
             self.gpspos = None
+            self.gpsradius = None
         self.filelist = set(files) if files else None
 
     def __call__(self, item):
