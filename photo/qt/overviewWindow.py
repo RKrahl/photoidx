@@ -81,7 +81,11 @@ class OverviewWindow(QtGui.QMainWindow):
         self.resize(size)
 
         self.activeWidget = None
-        self.markActive(self.imageViewer.selection[self.imageViewer.cur])
+        try:
+            image = self.imageViewer.selection[self.imageViewer.cur]
+            self.markActive(image)
+        except IndexError:
+            pass
 
     def _populate(self):
         """Populate the mainLayout with thumbnail images.

@@ -22,6 +22,9 @@
 
 ** Bug fixes and minor changes
 
+ + Issue #36: Opening the overview images fails with IndexError if no
+   image is shown.
+
  + Index.index() now supports the full variant having start and end
    index arguments.
 
