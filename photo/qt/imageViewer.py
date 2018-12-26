@@ -8,9 +8,10 @@ from PySide import QtCore, QtGui
 import photo.index
 from photo.listtools import LazyList
 from photo.qt.image import Image
-from photo.qt.tagSelectDialog import TagSelectDialog
+from photo.qt.filterDialog import FilterDialog
 from photo.qt.imageInfoDialog import ImageInfoDialog
 from photo.qt.overviewWindow import OverviewWindow
+from photo.qt.tagSelectDialog import TagSelectDialog
 
 
 class ImageViewer(QtGui.QMainWindow):
@@ -35,6 +36,8 @@ class ImageViewer(QtGui.QMainWindow):
         else:
             self.tagSelectDialog = None
 
+        self.filterDialog = FilterDialog()
+
         self.imageLabel = QtGui.QLabel()
         self.imageLabel.setSizePolicy(QtGui.QSizePolicy.Ignored,
                                       QtGui.QSizePolicy.Ignored)
@@ -51,6 +54,8 @@ class ImageViewer(QtGui.QMainWindow):
 
         self.closeAct = QtGui.QAction("&Close", self, 
                 shortcut="q", triggered=self.close)
+        self.filterOptsAct = QtGui.QAction("Filter Options", self,
+                shortcut="Shift+Ctrl+f", triggered=self.filterOptions)
         self.zoomInAct = QtGui.QAction("Zoom &In", self,
                 shortcut=">", triggered=self.zoomIn)
         self.zoomOutAct = QtGui.QAction("Zoom &Out", self,
@@ -87,6 +92,7 @@ class ImageViewer(QtGui.QMainWindow):
 
         self.fileMenu = QtGui.QMenu("&File", self)
         self.fileMenu.addAction(self.closeAct)
+        self.fileMenu.addAction(self.filterOptsAct)
         self.menuBar().addMenu(self.fileMenu)
 
         self.viewMenu = QtGui.QMenu("&View", self)
@@ -337,6 +343,26 @@ class ImageViewer(QtGui.QMainWindow):
             item.tags = self.tagSelectDialog.checkedTags()
             self.images.write()
             self._reevalFilter()
+
+    def filterOptions(self):
+        self.filterDialog.setfilter(self.imgFilter)
+        if self.filterDialog.exec_():
+            if self.overviewwindow:
+                # The overview window would need to be rebuild in any case.
+                self.overviewwindow.close()
+                self.overviewwindow = None
+            curidx = self.images.index(self.selection[self.cur].item)
+            self.imgFilter = self.filterDialog.imgFilter
+            self.selection = LazyList(self._filteredImages())
+            item_i = 0
+            for img_i, img in enumerate(self.selection):
+                item_i = self.images.index(img.item, item_i)
+                if item_i >= curidx:
+                    cur = img_i
+                    break
+            else:
+                cur = len(self.selection)
+            self.moveCurrentTo(cur)
 
     def scaleImage(self, factor):
         self.scaleFactor *= factor
