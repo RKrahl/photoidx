@@ -19,28 +19,25 @@ class GeoPosEdit(QtGui.QLineEdit):
 
 class FilterOption(object):
 
-    def __init__(self, parent, optionLayout, criterion):
-        self.selectCheck = QtGui.QCheckBox("Filter by %s" % criterion)
-        self.optionLayout = optionLayout
-        parent.addWidget(self.selectCheck)
-        parent.addLayout(self.optionLayout)
+    def __init__(self, criterion, parent):
+        self.groupbox = QtGui.QGroupBox("Filter by %s" % criterion)
+        self.groupbox.setCheckable(True)
+        parent.addWidget(self.groupbox)
 
     def setOption(self, optionValue):
-        if optionValue is not None:
-            self.selectCheck.setCheckState(QtCore.Qt.Checked)
-        else:
-            self.selectCheck.setCheckState(QtCore.Qt.Unchecked)
+        self.groupbox.setChecked(optionValue is not None)
 
 class TagFilterOption(FilterOption):
 
     def __init__(self, parent):
+        super(TagFilterOption, self).__init__("tags", parent)
         self.entry = QtGui.QLineEdit()
         label = QtGui.QLabel("Tags:")
         label.setBuddy(self.entry)
         layout = QtGui.QHBoxLayout()
         layout.addWidget(label)
         layout.addWidget(self.entry)
-        super(TagFilterOption, self).__init__(parent, layout, "tags")
+        self.groupbox.setLayout(layout)
 
     def setOption(self, taglist, negtaglist):
         super(TagFilterOption, self).setOption(taglist)
@@ -52,12 +49,13 @@ class TagFilterOption(FilterOption):
 class SelectFilterOption(FilterOption):
 
     def __init__(self, parent):
+        super(SelectFilterOption, self).__init__("selection", parent)
         self.buttonYes = QtGui.QRadioButton("selected")
         self.buttonNo = QtGui.QRadioButton("not selected")
         layout = QtGui.QHBoxLayout()
         layout.addWidget(self.buttonYes)
         layout.addWidget(self.buttonNo)
-        super(SelectFilterOption, self).__init__(parent, layout, "selection")
+        self.groupbox.setLayout(layout)
 
     def setOption(self, select):
         super(SelectFilterOption, self).setOption(select)
@@ -72,6 +70,7 @@ class SelectFilterOption(FilterOption):
 class DateFilterOption(FilterOption):
 
     def __init__(self, parent):
+        super(DateFilterOption, self).__init__("date", parent)
         self.startEntry = QtGui.QLineEdit()
         startLabel = QtGui.QLabel("Start:")
         startLabel.setBuddy(self.startEntry)
@@ -83,7 +82,7 @@ class DateFilterOption(FilterOption):
         layout.addWidget(self.startEntry, 0, 1)
         layout.addWidget(endLabel, 1, 0)
         layout.addWidget(self.endEntry, 1, 1)
-        super(DateFilterOption, self).__init__(parent, layout, "date")
+        self.groupbox.setLayout(layout)
 
     def setOption(self, date):
         super(DateFilterOption, self).setOption(date)
@@ -94,6 +93,7 @@ class DateFilterOption(FilterOption):
 class GPSFilterOption(FilterOption):
 
     def __init__(self, parent):
+        super(GPSFilterOption, self).__init__("GPS position", parent)
         self.posEntry = GeoPosEdit()
         posLabel = QtGui.QLabel("Position:")
         posLabel.setBuddy(self.posEntry)
@@ -105,7 +105,7 @@ class GPSFilterOption(FilterOption):
         layout.addWidget(self.posEntry, 0, 1)
         layout.addWidget(radiusLabel, 1, 0)
         layout.addWidget(self.radiusEntry, 1, 1)
-        super(GPSFilterOption, self).__init__(parent, layout, "GPS position")
+        self.groupbox.setLayout(layout)
 
     def setOption(self, gpspos, gpsradius):
         super(GPSFilterOption, self).setOption(gpspos)
@@ -116,14 +116,14 @@ class GPSFilterOption(FilterOption):
 class ListFilterOption(FilterOption):
 
     def __init__(self, parent):
+        super(ListFilterOption, self).__init__("explicit file names", parent)
         self.entry = QtGui.QLineEdit()
         label = QtGui.QLabel("Files:")
         label.setBuddy(self.entry)
         layout = QtGui.QHBoxLayout()
         layout.addWidget(label)
         layout.addWidget(self.entry)
-        super(ListFilterOption, self).__init__(parent, layout, 
-                                               "explicit file names")
+        self.groupbox.setLayout(layout)
 
     def setOption(self, filelist):
         super(ListFilterOption, self).setOption(filelist)
