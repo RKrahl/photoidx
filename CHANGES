@@ -3,12 +3,25 @@
 
 * Version 0.8 (not yet released)
 
+** Incompatible changes
+
+ + Issue #35: Change the sematic of the --date command line option to
+   photoidx.py and imageview.py: when an intervall is given as
+   argument, the end time is taken exclusively.
+   E.g. --date=2015-03-14--2015-03-15 excludes images taken on
+   March 15.
+
 ** New features
 
- + Issue #32:Add a stats command line interface subcommand.
+ + Issue #32: Add a stats command line interface subcommand.
 
  + Issue #20: Add a preferred order.  Add actions to the GUI to push
    images back and forth in the image order.
+
+** Bug fixes and minor changes
+
+ + Index.index() now supports the full variant having start and end
+   index arguments.
 
 * Version 0.7 (2017-12-31)
 
