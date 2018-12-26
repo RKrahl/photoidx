@@ -1,6 +1,7 @@
 """A dialog window to change the filter options.
 """
 
+import datetime
 from PySide import QtCore, QtGui
 import photo.idxfilter
 from photo.geo import GeoPosition
@@ -24,6 +25,9 @@ class FilterOption(object):
         self.groupbox.setCheckable(True)
         parent.addWidget(self.groupbox)
 
+    def getOption(self):
+        raise NotImplementedError
+
     def setOption(self, optionValue):
         self.groupbox.setChecked(optionValue is not None)
 
@@ -38,6 +42,12 @@ class TagFilterOption(FilterOption):
         layout.addWidget(label)
         layout.addWidget(self.entry)
         self.groupbox.setLayout(layout)
+
+    def getOption(self):
+        if self.groupbox.isChecked():
+            return { 'tags': self.entry.text() }
+        else:
+            return {}
 
     def setOption(self, taglist, negtaglist):
         super(TagFilterOption, self).setOption(taglist)
@@ -56,6 +66,12 @@ class SelectFilterOption(FilterOption):
         layout.addWidget(self.buttonYes)
         layout.addWidget(self.buttonNo)
         self.groupbox.setLayout(layout)
+
+    def getOption(self):
+        if self.groupbox.isChecked():
+            return { 'select': bool(self.buttonYes.isChecked()) }
+        else:
+            return {}
 
     def setOption(self, select):
         super(SelectFilterOption, self).setOption(select)
@@ -84,6 +100,18 @@ class DateFilterOption(FilterOption):
         layout.addWidget(self.endEntry, 1, 1)
         self.groupbox.setLayout(layout)
 
+    def getOption(self):
+        if self.groupbox.isChecked():
+            startdate = self.startEntry.text()
+            enddate = self.endEntry.text()
+            if enddate:
+                datestr = "%s--%s" % (startdate, enddate)
+            else:
+                datestr = startdate
+            return { 'date': photo.idxfilter.strpdate(datestr) }
+        else:
+            return {}
+
     def setOption(self, date):
         super(DateFilterOption, self).setOption(date)
         if date is not None:
@@ -107,6 +135,13 @@ class GPSFilterOption(FilterOption):
         layout.addWidget(self.radiusEntry, 1, 1)
         self.groupbox.setLayout(layout)
 
+    def getOption(self):
+        if self.groupbox.isChecked():
+            return { 'gpspos': GeoPosition(self.posEntry.text()), 
+                     'gpsradius': float(self.radiusEntry.text()) }
+        else:
+            return {}
+
     def setOption(self, gpspos, gpsradius):
         super(GPSFilterOption, self).setOption(gpspos)
         if gpspos is not None:
@@ -124,6 +159,12 @@ class ListFilterOption(FilterOption):
         layout.addWidget(label)
         layout.addWidget(self.entry)
         self.groupbox.setLayout(layout)
+
+    def getOption(self):
+        if self.groupbox.isChecked():
+            return { 'files': self.entry.text().split() }
+        else:
+            return {}
 
     def setOption(self, filelist):
         super(ListFilterOption, self).setOption(filelist)
@@ -154,9 +195,19 @@ class FilterDialog(QtGui.QDialog):
         self.setWindowTitle("Filter options")
 
     def setfilter(self, imgFilter):
+        self.imgFilter = imgFilter
         self.tagFilterOption.setOption(imgFilter.taglist, imgFilter.negtaglist)
         self.selectFilterOption.setOption(imgFilter.select)
         self.dateFilterOption.setOption(imgFilter.date)
         self.gpsFilterOption.setOption(imgFilter.gpspos, imgFilter.gpsradius)
         self.filelistFilterOption.setOption(imgFilter.filelist)
 
+    def accept(self):
+        filterArgs = {}
+        filterArgs.update(self.tagFilterOption.getOption())
+        filterArgs.update(self.selectFilterOption.getOption())
+        filterArgs.update(self.dateFilterOption.getOption())
+        filterArgs.update(self.gpsFilterOption.getOption())
+        filterArgs.update(self.filelistFilterOption.getOption())
+        self.imgFilter = photo.idxfilter.IdxFilter(**filterArgs)
+        super(FilterDialog, self).accept()
