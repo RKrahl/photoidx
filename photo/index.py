@@ -50,6 +50,12 @@ class Index(MutableSequence):
             self.idxfile.close()
             self.idxfile = None
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, tb):
+        self.close()
+
     def __del__(self):
         self.close()
 

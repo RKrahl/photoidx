@@ -19,11 +19,11 @@ refindex = gettestdata("index-create.yaml")
 def test_createupdate(tmpdir):
     for fname in testimgfiles[:3]:
         shutil.copy(fname, tmpdir)
-    idx = photo.index.Index(imgdir=tmpdir)
-    idx.write()
+    with photo.index.Index(imgdir=tmpdir) as idx:
+        idx.write()
     for fname in testimgfiles[3:]:
         shutil.copy(fname, tmpdir)
-    idx = photo.index.Index(idxfile=tmpdir, imgdir=tmpdir)
-    idx.write()
+    with photo.index.Index(idxfile=tmpdir, imgdir=tmpdir) as idx:
+        idx.write()
     idxfile = os.path.join(tmpdir, ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

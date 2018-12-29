@@ -36,10 +36,10 @@ def imgdir(tmpdir):
     return tmpdir
 
 def test_tag_unicode(imgdir):
-    idx = photo.index.Index(imgdir=imgdir)
-    for item in idx:
-        for t in tags[item.filename]:
-            item.tags.add(t)
-    idx.write()
+    with photo.index.Index(imgdir=imgdir) as idx:
+        for item in idx:
+            for t in tags[item.filename]:
+                item.tags.add(t)
+        idx.write()
     idxfile = os.path.join(imgdir, ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

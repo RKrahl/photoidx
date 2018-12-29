@@ -28,6 +28,6 @@ def test_legacyconvert(tmpdir):
     idxfile = os.path.join(tmpdir, ".index.yaml")
     shutil.copy(legacyindex, idxfile)
     # reading and writing the index transparantly converts it.
-    idx = photo.index.Index(idxfile=tmpdir)
-    idx.write()
+    with photo.index.Index(idxfile=tmpdir) as idx:
+        idx.write()
     assert filecmp.cmp(idxfile, refindex), "index file differs from reference"

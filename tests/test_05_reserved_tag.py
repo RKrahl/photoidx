@@ -27,6 +27,6 @@ def test_reserved_tags_convert(tmpdir):
     shutil.copy(invindex, idxfile)
     # reading and writing the index transparantly filters out tags
     # using the reserved prefix.
-    idx = photo.index.Index(idxfile=tmpdir)
-    idx.write()
+    with photo.index.Index(idxfile=tmpdir) as idx:
+        idx.write()
     assert filecmp.cmp(idxfile, refindex), "index file differs from reference"

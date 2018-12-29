@@ -28,8 +28,8 @@ hashalg = {
 def test_create_checksum(tmpdir):
     for fname in testimgfiles:
         shutil.copy(fname, tmpdir)
-    idx = photo.index.Index(imgdir=tmpdir, hashalg=hashalg.keys())
-    idx.write()
+    with photo.index.Index(imgdir=tmpdir, hashalg=hashalg.keys()) as idx:
+        idx.write()
 
 @pytest.mark.dependency(depends=["test_create_checksum"])
 @pytest.mark.parametrize("alg", hashalg.keys())
@@ -38,8 +38,7 @@ def test_check_checksum(tmpdir, monkeypatch, alg):
     if not os.path.isfile(checkprog):
         pytest.skip("%s not found." % checkprog)
     fname = os.path.join(tmpdir, alg)
-    idx = photo.index.Index(idxfile=tmpdir)
-    with open(fname, "wt") as f:
+    with photo.index.Index(idxfile=tmpdir) as idx, open(fname, "wt") as f:
         for i in idx:
             print("%s  %s" % (i.checksum[alg], i.filename), file=f)
     monkeypatch.chdir(tmpdir)
@@ -49,8 +48,8 @@ def test_check_checksum(tmpdir, monkeypatch, alg):
         subprocess.check_call(cmd, stdin=f)
 
 def test_no_checksum(tmpdir):
-    idx = photo.index.Index(imgdir=tmpdir, hashalg=[])
-    idx.write()
-    idx = photo.index.Index(idxfile=tmpdir)
-    for i in idx:
-        assert i.checksum == {}
+    with photo.index.Index(imgdir=tmpdir, hashalg=[]) as idx:
+        idx.write()
+    with photo.index.Index(idxfile=tmpdir) as idx:
+        for i in idx:
+            assert i.checksum == {}

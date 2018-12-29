@@ -26,8 +26,8 @@ def test_create_curdir(imgdir, monkeypatch):
     """Create a new index in the current directory adding all images.
     """
     monkeypatch.chdir(imgdir)
-    idx = photo.index.Index(imgdir=".")
-    idx.write()
+    with photo.index.Index(imgdir=".") as idx:
+        idx.write()
     idxfile = ".index.yaml"
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
@@ -35,8 +35,8 @@ def test_create_curdir(imgdir, monkeypatch):
 def test_create(imgdir):
     """Create a new index adding all images in the imgdir.
     """
-    idx = photo.index.Index(imgdir=imgdir)
-    idx.write()
+    with photo.index.Index(imgdir=imgdir) as idx:
+        idx.write()
     idxfile = os.path.join(imgdir, ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
@@ -44,7 +44,7 @@ def test_create(imgdir):
 def test_read(imgdir):
     """Read the index file and write it out again.
     """
-    idx = photo.index.Index(idxfile=imgdir)
-    idx.write()
+    with photo.index.Index(idxfile=imgdir) as idx:
+        idx.write()
     idxfile = os.path.join(imgdir, ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
