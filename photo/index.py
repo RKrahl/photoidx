@@ -26,7 +26,7 @@ class Index(MutableSequence):
     def __init__(self, idxfile=None, imgdir=None, hashalg=['md5']):
         super(Index, self).__init__()
         self.directory = None
-        self.idxfilename = None
+        self.idxfile = None
         self.items = []
         if idxfile:
             self.read(idxfile)
@@ -44,6 +44,14 @@ class Index(MutableSequence):
         known = { i.filename for i in self.items }
         newitems = _readdir(imgdir, self.directory, hashalg, known)
         self.items.extend(newitems)
+
+    def close(self):
+        if self.idxfile:
+            self.idxfile.close()
+            self.idxfile = None
+
+    def __del__(self):
+        self.close()
 
     def __len__(self):
         return len(self.items)
@@ -63,31 +71,36 @@ class Index(MutableSequence):
     def insert(self, index, value):
         self.items.insert(index, value)
 
-    def _idxfilename(self, idxfile):
-        """Determine the index file name for reading and writing.
-        """
-        if idxfile is not None:
-            idxfile = os.path.abspath(idxfile)
-            if os.path.isdir(idxfile):
-                idxfile = os.path.join(idxfile, self.defIdxFilename)
-            return idxfile
-        elif self.idxfilename is not None:
-            return self.idxfilename
+    def _get_idxfile(self, fname):
+        if fname is not None:
+            self.close()
+            fname = os.path.abspath(fname)
+            if os.path.isdir(fname):
+                fname = os.path.join(fname, self.defIdxFilename)
+            self.directory = os.path.dirname(fname)
+            fd = os.open(fname, os.O_RDWR|os.O_CREAT)
+            self.idxfile = os.fdopen(fd, "r+t")
+        elif self.idxfile:
+            self.idxfile.seek(0)
         else:
-            d = self.directory if self.directory is not None else os.getcwd()
-            return os.path.abspath(os.path.join(d, self.defIdxFilename))
+            if not self.directory:
+                self.directory = os.getcwd()
+            fname = os.path.join(self.directory, self.defIdxFilename)
+            fd = os.open(fname, os.O_RDWR|os.O_CREAT)
+            self.idxfile = os.fdopen(fd, "r+t")
 
     def read(self, idxfile=None):
         """Read the index from a file.
         """
-        self.idxfilename = self._idxfilename(idxfile)
-        self.directory = os.path.dirname(self.idxfilename)
-        with open(self.idxfilename, 'rt') as f:
-            self.items = [IdxItem(data=i) for i in yaml.load(f)]
+        self._get_idxfile(idxfile)
+        self.items = [ IdxItem(data=i) for i in yaml.load(self.idxfile) ]
 
     def write(self, idxfile=None):
         """Write the index to a file.
         """
-        with open(self._idxfilename(idxfile), 'wt') as f:
-            items = [i.as_dict() for i in self.items]
-            yaml.dump(items, f, default_flow_style=False)
+        items = [ i.as_dict() for i in self.items ]
+        self._get_idxfile(idxfile)
+        yaml.dump(items, self.idxfile, default_flow_style=False)
+        self.idxfile.truncate()
+        self.idxfile.flush()
+
