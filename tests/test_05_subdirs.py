@@ -41,10 +41,9 @@ def test_create(imgdir):
     """Create the index.
     """
     idx = photo.index.Index(imgdir=imgdir)
-    idx.write()
     for k in ("Japan", "Quebec"):
-        idx = photo.index.Index(idxfile=imgdir, imgdir=os.path.join(imgdir, k))
-        idx.write()
+        idx.extend_dir(os.path.join(imgdir, k))
+    idx.write()
     idxfile = os.path.join(imgdir, ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
