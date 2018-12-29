@@ -1,0 +1,63 @@
+- checksum:
+    md5: e08205e982f5649088ab0ef047d60706
+  createDate: 2016-02-28 17:26:39
+  filename: Japan/dsc_4623.jpg
+  gpsPosition:
+    E: 139.76603333333333
+    N: 35.671189999999996
+  orientation: Rotate 90 CW
+  tags: []
+- checksum:
+    md5: bc8605c7394fbf818dbc694776db6534
+  createDate: 2016-02-29 11:37:51
+  filename: Japan/dsc_4664.jpg
+  gpsPosition:
+    E: 139.70024333333333
+    N: 35.675639999999994
+  orientation: Horizontal (normal)
+  tags: []
+- checksum:
+    md5: 8753a712e0f426a7ac8b9c47368b7528
+  createDate: 2016-03-05 14:53:42
+  filename: Japan/dsc_4831.jpg
+  gpsPosition:
+    E: 139.02553666666668
+    N: 35.20459666666667
+  orientation: Horizontal (normal)
+  tags: []
+- checksum:
+    md5: 0f6f58cdb353b837fb340d107a1f5fb0
+  createDate: 2016-03-09 10:07:48
+  filename: Japan/dsc_5167.jpg
+  gpsPosition:
+    E: 135.718705
+    N: 35.033955
+  orientation: Horizontal (normal)
+  tags: []
+- checksum:
+    md5: 75a1dd2ba81ca7e8caceb36dcb9b86a8
+  createDate: 2017-09-25 17:25:15
+  filename: Quebec/dsc_7157.jpg
+  gpsPosition:
+    N: 48.129565
+    W: 69.731795
+  orientation: Horizontal (normal)
+  tags: []
+- checksum:
+    md5: a32ef48ec7373573301346a2ae08f111
+  createDate: 2017-09-28 11:41:25
+  filename: Quebec/dsc_7490.jpg
+  gpsPosition:
+    N: 46.81007333333333
+    W: 71.20413333333333
+  orientation: Horizontal (normal)
+  tags: []
+- checksum:
+    md5: 5b00c2f500c84b1b7271aeb7737ae66d
+  createDate: 2017-09-29 12:39:40
+  filename: Quebec/dsc_7582.jpg
+  gpsPosition:
+    N: 45.479135
+    W: 73.57552666666666
+  orientation: Horizontal (normal)
+  tags: []
