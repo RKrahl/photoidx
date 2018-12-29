@@ -1,13 +1,20 @@
 """Provide the class Index which represents an index of photos.
 """
 
+from collections import MutableSequence
+import errno
+import fcntl
+import fnmatch
 import os
 import os.path
-import fnmatch
-from collections import MutableSequence
 import yaml
 from photo.idxitem import IdxItem
 from photo.listtools import LazyList
+
+
+class AlreadyLockedError(OSError):
+    def __init__(self, *args):
+        super().__init__(*args)
 
 
 def _readdir(imgdir, basedir, hashalg, known=set()):
@@ -95,10 +102,20 @@ class Index(MutableSequence):
             fd = os.open(fname, os.O_RDWR|os.O_CREAT)
             self.idxfile = os.fdopen(fd, "r+t")
 
+    def _lockf(self, mode=fcntl.LOCK_SH):
+        try:
+            fcntl.lockf(self.idxfile.fileno(), mode | fcntl.LOCK_NB)
+        except Exception as e:
+            if (isinstance(e, (OSError, IOError)) and 
+                e.errno in [errno.EACCES, errno.EAGAIN]):
+                e = AlreadyLockedError(*e.args)
+            raise e
+
     def read(self, idxfile=None):
         """Read the index from a file.
         """
         self._get_idxfile(idxfile)
+        self._lockf()
         self.items = [ IdxItem(data=i) for i in yaml.load(self.idxfile) ]
 
     def write(self, idxfile=None):
@@ -106,7 +123,9 @@ class Index(MutableSequence):
         """
         items = [ i.as_dict() for i in self.items ]
         self._get_idxfile(idxfile)
+        self._lockf(mode=fcntl.LOCK_EX)
         yaml.dump(items, self.idxfile, default_flow_style=False)
         self.idxfile.truncate()
         self.idxfile.flush()
+        self._lockf()
 
