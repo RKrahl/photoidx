@@ -35,12 +35,15 @@ class Index(MutableSequence):
             if not self.directory:
                 self.directory = imgdir
             if idxfile:
-                known = { i.filename for i in self.items }
-                newitems = _readdir(imgdir, self.directory, hashalg, known)
-                self.items.extend(newitems)
+                self.extend_dir(imgdir, hashalg)
             else:
                 newitems = _readdir(imgdir, self.directory, hashalg)
                 self.items = LazyList(newitems)
+
+    def extend_dir(self, imgdir, hashalg=['md5']):
+        known = { i.filename for i in self.items }
+        newitems = _readdir(imgdir, self.directory, hashalg, known)
+        self.items.extend(newitems)
 
     def __len__(self):
         return len(self.items)
