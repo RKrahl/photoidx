@@ -7,6 +7,9 @@
 
  + Issue #31: Implement modifying the current filter in imageview.
 
+ + Issue #30: Protect the index file against conflicting concurrent
+   access using file system locking.
+
  + Issue #32: Add a stats command line interface subcommand.
 
  + Issue #20: Add a preferred order.  Add actions to the GUI to push
@@ -24,6 +27,8 @@
 
  + Issue #36: Opening the overview images fails with IndexError if no
    image is shown.
+
+ + Add a method Add method Index.extend_dir().
 
  + Index.index() now supports the full variant having start and end
    index arguments.
