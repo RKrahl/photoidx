@@ -28,6 +28,9 @@
  + Issue #36: Opening the overview images fails with IndexError if no
    image is shown.
 
+ + Issue #37: AttributeError is raised when when calling photoidx.py
+   without arguments.
+
  + Add a method Add method Index.extend_dir().
 
  + Index.index() now supports the full variant having start and end

@@ -118,4 +118,6 @@ photo.idxfilter.addFilterArguments(stats_parser)
 stats_parser.set_defaults(func=stats)
 
 args = argparser.parse_args()
+if not hasattr(args, "func"):
+    argparser.error("subcommand is required")
 args.func(args)
