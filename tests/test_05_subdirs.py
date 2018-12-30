@@ -40,10 +40,10 @@ def imgdir(tmpdir):
 def test_create(imgdir):
     """Create the index.
     """
-    idx = photo.index.Index(imgdir=imgdir)
-    for k in ("Japan", "Quebec"):
-        idx.extend_dir(os.path.join(imgdir, k))
-    idx.write()
+    with photo.index.Index(imgdir=imgdir) as idx:
+        for k in ("Japan", "Quebec"):
+            idx.extend_dir(os.path.join(imgdir, k))
+        idx.write()
     idxfile = os.path.join(imgdir, ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
@@ -57,10 +57,10 @@ def test_checksum(imgdir, monkeypatch):
     if not os.path.isfile(checkprog):
         pytest.skip("%s not found." % checkprog)
     fname = os.path.join(imgdir, hashalg)
-    idx = photo.index.Index(idxfile=imgdir)
-    with open(fname, "wt") as f:
-        for i in idx:
-            print("%s  %s" % (i.checksum[hashalg], i.filename), file=f)
+    with photo.index.Index(idxfile=imgdir) as idx:
+        with open(fname, "wt") as f:
+            for i in idx:
+                print("%s  %s" % (i.checksum[hashalg], i.filename), file=f)
     monkeypatch.chdir(imgdir)
     with open(fname, "rt") as f:
         cmd = [checkprog, "-c"]
@@ -71,18 +71,18 @@ def test_checksum(imgdir, monkeypatch):
 def test_tag(imgdir, monkeypatch):
     """Test tagging of images.
     """
-    idx = photo.index.Index(idxfile=imgdir)
-    tokyo = GeoPosition("35.68 N, 139.77 E")
-    idxfilter = photo.idxfilter.IdxFilter(gpspos=tokyo, gpsradius=500.0)
-    for i in idxfilter.filter(idx):
-        i.tags.add("Japan")
-    quebec = GeoPosition("46.81 N, 71.22 W")
-    idxfilter = photo.idxfilter.IdxFilter(gpspos=quebec, gpsradius=500.0)
-    for i in idxfilter.filter(idx):
-        i.tags.add("Quebec")
-    idx.write()
-    idx = photo.index.Index(idxfile=imgdir)
-    for k in ("Japan", "Quebec"):
-        idxfilter = photo.idxfilter.IdxFilter(tags=k)
-        fnames = [ i.filename for i in idxfilter.filter(idx) ]
-        assert fnames == [ os.path.join(k, f) for f in testimgs[k] ]
+    with photo.index.Index(idxfile=imgdir) as idx:
+        tokyo = GeoPosition("35.68 N, 139.77 E")
+        idxfilter = photo.idxfilter.IdxFilter(gpspos=tokyo, gpsradius=500.0)
+        for i in idxfilter.filter(idx):
+            i.tags.add("Japan")
+        quebec = GeoPosition("46.81 N, 71.22 W")
+        idxfilter = photo.idxfilter.IdxFilter(gpspos=quebec, gpsradius=500.0)
+        for i in idxfilter.filter(idx):
+            i.tags.add("Quebec")
+        idx.write()
+    with photo.index.Index(idxfile=imgdir) as idx:
+        for k in ("Japan", "Quebec"):
+            idxfilter = photo.idxfilter.IdxFilter(tags=k)
+            fnames = [ i.filename for i in idxfilter.filter(idx) ]
+            assert fnames == [ os.path.join(k, f) for f in testimgs[k] ]

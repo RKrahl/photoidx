@@ -18,10 +18,10 @@ def imgdir(tmpdir):
 def test_readwrite(imgdir):
     """Read the index file and write it out again.
     """
-    idx = photo.index.Index(idxfile=imgdir)
-    assert idx[0].name == "ginza.jpg"
-    assert idx[1].name is None
-    assert idx[3].name == "geisha.jpg"
-    idx.write()
+    with photo.index.Index(idxfile=imgdir) as idx:
+        assert idx[0].name == "ginza.jpg"
+        assert idx[1].name is None
+        assert idx[3].name == "geisha.jpg"
+        idx.write()
     idxfile = os.path.join(imgdir, ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

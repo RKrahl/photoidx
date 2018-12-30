@@ -24,5 +24,5 @@ def imgdir(tmpdir):
     return tmpdir
 
 def test_create(imgdir):
-    idx = photo.index.Index(imgdir=imgdir)
-    idx.write()
+    with photo.index.Index(imgdir=imgdir) as idx:
+        idx.write()

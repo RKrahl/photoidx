@@ -30,8 +30,8 @@ def imgdir(tmpdir):
 def test_stats_all(imgdir):
     """Get statistics on all images.
     """
-    idx = photo.index.Index(idxfile=imgdir)
-    stats = Stats(idx)
+    with photo.index.Index(idxfile=imgdir) as idx:
+        stats = Stats(idx)
     assert stats.count == 5
     assert stats.selected == 2
     assert stats.oldest == datetime.datetime(2016, 2, 28, 17, 26, 39)
@@ -52,8 +52,8 @@ def test_stats_all(imgdir):
 def test_stats_all_yaml(imgdir):
     """The string representation of a Stats object is YAML.
     """
-    idx = photo.index.Index(idxfile=imgdir)
-    stats = yaml.load(str(Stats(idx)))
+    with photo.index.Index(idxfile=imgdir) as idx:
+        stats = yaml.load(str(Stats(idx)))
     assert stats["Count"] == 5
     assert stats["Selected"] == 2
     assert stats["Oldest"] == datetime.datetime(2016, 2, 28, 17, 26, 39)
@@ -74,9 +74,9 @@ def test_stats_all_yaml(imgdir):
 def test_stats_filtered(imgdir):
     """Get statistics on a selection of images.
     """
-    idx = photo.index.Index(idxfile=imgdir)
-    idxfilter = photo.idxfilter.IdxFilter(tags="Tokyo")
-    stats = Stats(idxfilter.filter(idx))
+    with photo.index.Index(idxfile=imgdir) as idx:
+        idxfilter = photo.idxfilter.IdxFilter(tags="Tokyo")
+        stats = Stats(idxfilter.filter(idx))
     assert stats.count == 2
     assert stats.selected == 1
     assert stats.oldest == datetime.datetime(2016, 2, 28, 17, 26, 39)
