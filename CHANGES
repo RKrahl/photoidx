@@ -1,6 +1,12 @@
 		  History of changes to photo-tools
 		  =================================
 
+* Version 0.9 (not yet released)
+
+** Incompatible changes
+
+ + Drop support for Python 2.  Require Python 3.4 or newer.
+
 * Version 0.8 (2018-12-31)
 
 ** New features

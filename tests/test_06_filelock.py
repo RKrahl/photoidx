@@ -5,7 +5,6 @@ conflicts in concurrent file access using file system locking.
 We will need multiple processes to test this.
 """
 
-from __future__ import print_function
 import filecmp
 from multiprocessing import Process, Queue
 import os.path

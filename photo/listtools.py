@@ -202,7 +202,7 @@ class LazyList(MutableSequence):
         self._access(-1)
         self.elements.append(value)
 
-    def __nonzero__(self):
+    def __bool__(self):
         self._access(0)
         return bool(self.elements)
 

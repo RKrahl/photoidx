@@ -83,7 +83,7 @@ class ImageInfoDialog(QtGui.QDialog):
             self.orientation.setText(None)
         pos = item.gpsPosition
         if pos:
-            link = "<a href='%s'>%s</a>" % (pos.as_osmurl(), unicode(pos))
+            link = "<a href='%s'>%s</a>" % (pos.as_osmurl(), str(pos))
             self.gpsPosition.setText(link)
         else:
             self.gpsPosition.setText(None)

@@ -7,18 +7,6 @@ import argparse
 import collections
 from photo.geo import GeoPosition
 
-# Need a filter function that returns an iterator.
-# With Python 3, the builtin filter() is what we want.  With Python 2,
-# filter() returns a list, this is not suitable.  But we can use
-# itertools.ifilter in Python 2 instead.
-if isinstance(filter(lambda i: True, []), collections.Iterator):
-    # Python 3
-    ifilter = filter
-else:
-    # Python 2
-    import itertools
-    ifilter = itertools.ifilter
-
 
 _datere = re.compile(r'''^
     (?P<y0>\d{4})-(?P<m0>\d{2})-(?P<d0>\d{2})              # start date
@@ -108,7 +96,7 @@ class IdxFilter(object):
         return True
 
     def filter(self, idx):
-        return ifilter(self, idx)
+        return filter(self, idx)
 
 
 def addFilterArguments(argparser):

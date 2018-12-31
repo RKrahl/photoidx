@@ -1,7 +1,6 @@
 """An overview window showing thumbnails of the image set.
 """
 
-from __future__ import division, print_function
 import sys
 import math
 from PySide import QtCore, QtGui

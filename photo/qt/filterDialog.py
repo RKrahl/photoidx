@@ -13,7 +13,7 @@ class GeoPosEdit(QtGui.QLineEdit):
     def sizeHint(self):
         sh = super(GeoPosEdit, self).sizeHint()
         fm = self.fontMetrics()
-        postext = u"\u2014%s\u2014" % GeoPosition("90.0 S, 180.0 E").floatstr()
+        postext = "\u2014%s\u2014" % GeoPosition("90.0 S, 180.0 E").floatstr()
         sh.setWidth(fm.boundingRect(postext).width())
         return sh
 

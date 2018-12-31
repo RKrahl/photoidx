@@ -1,7 +1,6 @@
 """A dialog window to set and remove tags.
 """
 
-from __future__ import division
 import math
 from PySide import QtCore, QtGui
 

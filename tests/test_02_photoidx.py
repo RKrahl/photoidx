@@ -1,7 +1,6 @@
 """Call the command line script photoidx.py.
 """
 
-from __future__ import print_function
 import datetime
 import filecmp
 import os.path

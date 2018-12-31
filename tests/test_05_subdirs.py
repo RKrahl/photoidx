@@ -6,7 +6,6 @@ All the tooling around does not use this feature for the time being,
 though.
 """
 
-from __future__ import print_function
 import filecmp
 import os
 import os.path

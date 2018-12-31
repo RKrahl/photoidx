@@ -1,7 +1,6 @@
 """Provide a PySide ImageViewer window.
 """
 
-from __future__ import division, print_function
 import sys
 import os.path
 from PySide import QtCore, QtGui

@@ -29,7 +29,7 @@ class Stats(object):
                 self.by_tag.setdefault(tag, 0)
                 self.by_tag[tag] += 1
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self.count)
 
     def __str__(self):

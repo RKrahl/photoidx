@@ -20,11 +20,11 @@ baseindex = gettestdata("index-create.yaml")
 refindex = gettestdata("index-unicode-tags.yaml")
 
 tags = {
-    "dsc_4623.jpg": [ u"T\u014Dky\u014D", u"Ginza" ],
-    "dsc_4664.jpg": [ u"T\u014Dky\u014D", u"Meiji-jing\u016B", u"Shint\u014D" ],
-    "dsc_4831.jpg": [ u"Hakone", u"Shint\u014D" ],
-    "dsc_5126.jpg": [ u"Ky\u014Dto", u"Gion" ],
-    "dsc_5167.jpg": [ u"Ky\u014Dto", u"Ry\u014Dan-ji", u"Buddha" ],
+    "dsc_4623.jpg": [ "T\u014Dky\u014D", "Ginza" ],
+    "dsc_4664.jpg": [ "T\u014Dky\u014D", "Meiji-jing\u016B", "Shint\u014D" ],
+    "dsc_4831.jpg": [ "Hakone", "Shint\u014D" ],
+    "dsc_5126.jpg": [ "Ky\u014Dto", "Gion" ],
+    "dsc_5167.jpg": [ "Ky\u014Dto", "Ry\u014Dan-ji", "Buddha" ],
 }
 
 
