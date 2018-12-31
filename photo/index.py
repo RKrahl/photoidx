@@ -14,7 +14,7 @@ from photo.listtools import LazyList
 
 class AlreadyLockedError(OSError):
     def __init__(self, *args):
-        super().__init__(*args)
+        super(AlreadyLockedError, self).__init__(*args)
 
 
 def _readdir(imgdir, basedir, hashalg, known=set()):
