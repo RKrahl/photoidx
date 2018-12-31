@@ -11,7 +11,7 @@ class GeoPosEdit(QtGui.QLineEdit):
     """A QLineEdit with a suitable size for a GeoPosition.
     """
     def sizeHint(self):
-        sh = super(GeoPosEdit, self).sizeHint()
+        sh = super().sizeHint()
         fm = self.fontMetrics()
         postext = "\u2014%s\u2014" % GeoPosition("90.0 S, 180.0 E").floatstr()
         sh.setWidth(fm.boundingRect(postext).width())
@@ -34,7 +34,7 @@ class FilterOption(object):
 class TagFilterOption(FilterOption):
 
     def __init__(self, parent):
-        super(TagFilterOption, self).__init__("tags", parent)
+        super().__init__("tags", parent)
         self.entry = QtGui.QLineEdit()
         label = QtGui.QLabel("Tags:")
         label.setBuddy(self.entry)
@@ -50,7 +50,7 @@ class TagFilterOption(FilterOption):
             return {}
 
     def setOption(self, taglist, negtaglist):
-        super(TagFilterOption, self).setOption(taglist)
+        super().setOption(taglist)
         if taglist is not None:
             tags = sorted(taglist)
             negtags = ["!%s" % t for t in sorted(negtaglist)]
@@ -59,7 +59,7 @@ class TagFilterOption(FilterOption):
 class SelectFilterOption(FilterOption):
 
     def __init__(self, parent):
-        super(SelectFilterOption, self).__init__("selection", parent)
+        super().__init__("selection", parent)
         self.buttonYes = QtGui.QRadioButton("selected")
         self.buttonNo = QtGui.QRadioButton("not selected")
         layout = QtGui.QHBoxLayout()
@@ -74,7 +74,7 @@ class SelectFilterOption(FilterOption):
             return {}
 
     def setOption(self, select):
-        super(SelectFilterOption, self).setOption(select)
+        super().setOption(select)
         if select is not None:
             if select:
                 self.buttonYes.setChecked(QtCore.Qt.Checked)
@@ -86,7 +86,7 @@ class SelectFilterOption(FilterOption):
 class DateFilterOption(FilterOption):
 
     def __init__(self, parent):
-        super(DateFilterOption, self).__init__("date", parent)
+        super().__init__("date", parent)
         self.startEntry = QtGui.QLineEdit()
         startLabel = QtGui.QLabel("Start:")
         startLabel.setBuddy(self.startEntry)
@@ -113,7 +113,7 @@ class DateFilterOption(FilterOption):
             return {}
 
     def setOption(self, date):
-        super(DateFilterOption, self).setOption(date)
+        super().setOption(date)
         if date is not None:
             self.startEntry.setText(date[0].isoformat())
             self.endEntry.setText(date[1].isoformat())
@@ -121,7 +121,7 @@ class DateFilterOption(FilterOption):
 class GPSFilterOption(FilterOption):
 
     def __init__(self, parent):
-        super(GPSFilterOption, self).__init__("GPS position", parent)
+        super().__init__("GPS position", parent)
         self.posEntry = GeoPosEdit()
         posLabel = QtGui.QLabel("Position:")
         posLabel.setBuddy(self.posEntry)
@@ -143,7 +143,7 @@ class GPSFilterOption(FilterOption):
             return {}
 
     def setOption(self, gpspos, gpsradius):
-        super(GPSFilterOption, self).setOption(gpspos)
+        super().setOption(gpspos)
         if gpspos is not None:
             self.posEntry.setText(gpspos.floatstr())
             self.radiusEntry.setText(str(gpsradius))
@@ -151,7 +151,7 @@ class GPSFilterOption(FilterOption):
 class ListFilterOption(FilterOption):
 
     def __init__(self, parent):
-        super(ListFilterOption, self).__init__("explicit file names", parent)
+        super().__init__("explicit file names", parent)
         self.entry = QtGui.QLineEdit()
         label = QtGui.QLabel("Files:")
         label.setBuddy(self.entry)
@@ -167,7 +167,7 @@ class ListFilterOption(FilterOption):
             return {}
 
     def setOption(self, filelist):
-        super(ListFilterOption, self).setOption(filelist)
+        super().setOption(filelist)
         if filelist is not None:
             self.entry.setText(" ".join(sorted(filelist)))
 
@@ -175,7 +175,7 @@ class ListFilterOption(FilterOption):
 class FilterDialog(QtGui.QDialog):
 
     def __init__(self):
-        super(FilterDialog, self).__init__()
+        super().__init__()
 
         mainLayout = QtGui.QVBoxLayout()
 
@@ -210,4 +210,4 @@ class FilterDialog(QtGui.QDialog):
         filterArgs.update(self.gpsFilterOption.getOption())
         filterArgs.update(self.filelistFilterOption.getOption())
         self.imgFilter = photo.idxfilter.IdxFilter(**filterArgs)
-        super(FilterDialog, self).accept()
+        super().accept()

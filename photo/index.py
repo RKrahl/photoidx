@@ -14,7 +14,7 @@ from photo.listtools import LazyList
 
 class AlreadyLockedError(OSError):
     def __init__(self, *args):
-        super(AlreadyLockedError, self).__init__(*args)
+        super().__init__(*args)
 
 
 def _readdir(imgdir, basedir, hashalg, known=set()):
@@ -31,7 +31,7 @@ class Index(MutableSequence):
     defIdxFilename = ".index.yaml"
 
     def __init__(self, idxfile=None, imgdir=None, hashalg=['md5']):
-        super(Index, self).__init__()
+        super().__init__()
         self.directory = None
         self.idxfile = None
         self.items = []

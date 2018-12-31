@@ -9,7 +9,7 @@ from photo.exif import Exif
 class ImageInfoDialog(QtGui.QDialog):
 
     def __init__(self, basedir):
-        super(ImageInfoDialog, self).__init__()
+        super().__init__()
         self.basedir = basedir
 
         infoLayout = QtGui.QGridLayout()

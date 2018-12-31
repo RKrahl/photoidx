@@ -15,7 +15,7 @@ class deg(float):
     """A degree as float that can be converted to (degree, minute, second).
     """
     def __abs__(self):
-        return deg(super(deg, self).__abs__())
+        return deg(super().__abs__())
     def dms(self):
         dg = int(self)
         dm = int(60*(self-dg))

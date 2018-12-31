@@ -16,7 +16,7 @@ from photo.qt.tagSelectDialog import TagSelectDialog
 class ImageViewer(QtGui.QMainWindow):
 
     def __init__(self, images, imgFilter, scaleFactor=1.0, tagSelect=True):
-        super(ImageViewer, self).__init__()
+        super().__init__()
 
         self.images = images
         self.imgFilter = imgFilter
@@ -128,7 +128,7 @@ class ImageViewer(QtGui.QMainWindow):
     def close(self):
         if self.overviewwindow:
             self.overviewwindow.close()
-        super(ImageViewer, self).close()
+        super().close()
 
     def _filteredImages(self):
         for item in self.images:
