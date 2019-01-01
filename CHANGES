@@ -7,6 +7,11 @@
 
  + Drop support for Python 2.  Require Python 3.4 or newer.
 
+ + Use pathlib.Path rather then string in the IdxItem.filename
+   attribute.  Switch to pathlib for most internal representation of
+   filesystem paths.  As a side effect, the semantic of file paths may
+   be taken somewhat more coherent and strict now at some places.
+
 * Version 0.8.1 (2019-01-01)
 
 ** Bug fixes and minor changes
