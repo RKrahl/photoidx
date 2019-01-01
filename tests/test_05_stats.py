@@ -2,7 +2,6 @@
 """
 
 import datetime
-import os.path
 import shutil
 import pytest
 import yaml
@@ -21,9 +20,9 @@ testimgfiles = [ gettestdata(i) for i in testimgs ]
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, tmpdir)
+        shutil.copy(fname, str(tmpdir))
     shutil.copy(gettestdata("index-tagged.yaml"), 
-                os.path.join(tmpdir, ".index.yaml"))
+                str(tmpdir.joinpath(".index.yaml")))
     return tmpdir
 
 

@@ -1,23 +1,12 @@
 """Define filter for photo indices by command line arguments.
 """
 
-import re
-import datetime
 import argparse
 import collections
+import datetime
+from pathlib import Path
+import re
 from photo.geo import GeoPosition
-
-# Need a filter function that returns an iterator.
-# With Python 3, the builtin filter() is what we want.  With Python 2,
-# filter() returns a list, this is not suitable.  But we can use
-# itertools.ifilter in Python 2 instead.
-if isinstance(filter(lambda i: True, []), collections.Iterator):
-    # Python 3
-    ifilter = filter
-else:
-    # Python 2
-    import itertools
-    ifilter = itertools.ifilter
 
 
 _datere = re.compile(r'''^
@@ -84,7 +73,10 @@ class IdxFilter(object):
         else:
             self.gpspos = None
             self.gpsradius = None
-        self.filelist = set(files) if files else None
+        if files:
+            self.filelist = { Path(f) for f in files }
+        else:
+            self.filelist = None
 
     def __call__(self, item):
         if self.filelist and not item.filename in self.filelist:
@@ -108,7 +100,7 @@ class IdxFilter(object):
         return True
 
     def filter(self, idx):
-        return ifilter(self, idx)
+        return filter(self, idx)
 
 
 def addFilterArguments(argparser):

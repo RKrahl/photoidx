@@ -1,8 +1,7 @@
 """Check checksums.
 """
 
-from __future__ import print_function
-import os.path
+from pathlib import Path
 import shutil
 import subprocess
 import pytest
@@ -27,7 +26,7 @@ hashalg = {
 @pytest.mark.dependency()
 def test_create_checksum(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, tmpdir)
+        shutil.copy(fname, str(tmpdir))
     with photo.index.Index(imgdir=tmpdir, hashalg=hashalg.keys()) as idx:
         idx.write()
 
@@ -35,14 +34,14 @@ def test_create_checksum(tmpdir):
 @pytest.mark.parametrize("alg", hashalg.keys())
 def test_check_checksum(tmpdir, monkeypatch, alg):
     checkprog = hashalg[alg]
-    if not os.path.isfile(checkprog):
+    if not Path(checkprog).is_file():
         pytest.skip("%s not found." % checkprog)
-    fname = os.path.join(tmpdir, alg)
-    with photo.index.Index(idxfile=tmpdir) as idx, open(fname, "wt") as f:
+    fname = tmpdir.joinpath(alg)
+    with photo.index.Index(idxfile=tmpdir) as idx, fname.open("wt") as f:
         for i in idx:
             print("%s  %s" % (i.checksum[alg], i.filename), file=f)
-    monkeypatch.chdir(tmpdir)
-    with open(fname, "rt") as f:
+    monkeypatch.chdir(str(tmpdir))
+    with fname.open("rt") as f:
         cmd = [checkprog, "-c"]
         print(">", *cmd)
         subprocess.check_call(cmd, stdin=f)

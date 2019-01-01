@@ -1,7 +1,6 @@
 """An overview window showing thumbnails of the image set.
 """
 
-from __future__ import division, print_function
 import sys
 import math
 from PySide import QtCore, QtGui
@@ -10,7 +9,7 @@ from PySide import QtCore, QtGui
 class ThumbnailWidget(QtGui.QLabel):
 
     def __init__(self, image):
-        super(ThumbnailWidget, self).__init__()
+        super().__init__()
 
         self.setFrameStyle(self.Box | self.Plain)
         self.setLineWidth(4)
@@ -49,7 +48,7 @@ class ThumbnailWidget(QtGui.QLabel):
 class OverviewWindow(QtGui.QMainWindow):
 
     def __init__(self, imageViewer):
-        super(OverviewWindow, self).__init__()
+        super().__init__()
 
         self.imageViewer = imageViewer
         self.numcolumns = 4

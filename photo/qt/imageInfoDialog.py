@@ -1,7 +1,6 @@
 """A dialog window to show some informations on the current image.
 """
 
-import os.path
 from PySide import QtCore, QtGui
 from photo.exif import Exif
 
@@ -9,7 +8,7 @@ from photo.exif import Exif
 class ImageInfoDialog(QtGui.QDialog):
 
     def __init__(self, basedir):
-        super(ImageInfoDialog, self).__init__()
+        super().__init__()
         self.basedir = basedir
 
         infoLayout = QtGui.QGridLayout()
@@ -70,9 +69,9 @@ class ImageInfoDialog(QtGui.QDialog):
         self.setWindowTitle("Image Info")
 
     def setinfo(self, item):
-        exifdata = Exif(os.path.join(self.basedir, item.filename))
+        exifdata = Exif(self.basedir.joinpath(item.filename))
         self.cameraModel.setText(str(exifdata.cameraModel))
-        self.filename.setText(item.filename)
+        self.filename.setText(str(item.filename))
         if item.createDate:
             self.createDate.setText(item.createDate.strftime("%a, %x %X"))
         else:
@@ -83,7 +82,7 @@ class ImageInfoDialog(QtGui.QDialog):
             self.orientation.setText(None)
         pos = item.gpsPosition
         if pos:
-            link = "<a href='%s'>%s</a>" % (pos.as_osmurl(), unicode(pos))
+            link = "<a href='%s'>%s</a>" % (pos.as_osmurl(), str(pos))
             self.gpsPosition.setText(link)
         else:
             self.gpsPosition.setText(None)

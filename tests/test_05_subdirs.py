@@ -6,10 +6,9 @@ All the tooling around does not use this feature for the time being,
 though.
 """
 
-from __future__ import print_function
 import filecmp
 import os
-import os.path
+from pathlib import Path
 import shutil
 import subprocess
 import pytest
@@ -31,10 +30,10 @@ checkprog = "/usr/bin/md5sum"
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for k in testimgs.keys():
-        d = os.path.join(tmpdir, k)
-        os.mkdir(d)
+        d = tmpdir.joinpath(k)
+        d.mkdir()
         for f in testimgs[k]:
-            shutil.copy(gettestdata(f), os.path.join(d, f))
+            shutil.copy(gettestdata(f), str(d.joinpath(f)))
     return tmpdir
 
 @pytest.mark.dependency()
@@ -43,9 +42,9 @@ def test_create(imgdir):
     """
     with photo.index.Index(imgdir=imgdir) as idx:
         for k in ("Japan", "Quebec"):
-            idx.extend_dir(os.path.join(imgdir, k))
+            idx.extend_dir(imgdir.joinpath(k))
         idx.write()
-    idxfile = os.path.join(imgdir, ".index.yaml")
+    idxfile = str(imgdir.joinpath(".index.yaml"))
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_create"])
@@ -55,15 +54,15 @@ def test_checksum(imgdir, monkeypatch):
     As a side effect, this checks whether the image files are
     accessible by the filename stored in the index.
     """
-    if not os.path.isfile(checkprog):
+    if not Path(checkprog).is_file():
         pytest.skip("%s not found." % checkprog)
-    fname = os.path.join(imgdir, hashalg)
+    fname = imgdir.joinpath(hashalg)
     with photo.index.Index(idxfile=imgdir) as idx:
-        with open(fname, "wt") as f:
+        with fname.open("wt") as f:
             for i in idx:
                 print("%s  %s" % (i.checksum[hashalg], i.filename), file=f)
-    monkeypatch.chdir(imgdir)
-    with open(fname, "rt") as f:
+    monkeypatch.chdir(str(imgdir))
+    with fname.open("rt") as f:
         cmd = [checkprog, "-c"]
         print(">", *cmd)
         subprocess.check_call(cmd, stdin=f)
@@ -86,4 +85,4 @@ def test_tag(imgdir, monkeypatch):
         for k in ("Japan", "Quebec"):
             idxfilter = photo.idxfilter.IdxFilter(tags=k)
             fnames = [ i.filename for i in idxfilter.filter(idx) ]
-            assert fnames == [ os.path.join(k, f) for f in testimgs[k] ]
+            assert fnames == [ Path(k, f) for f in testimgs[k] ]

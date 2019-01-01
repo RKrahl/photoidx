@@ -50,7 +50,7 @@ class Exif(object):
     }
 
     def __init__(self, filename):
-        self._exif = GExiv2.Metadata(filename)
+        self._exif = GExiv2.Metadata(str(filename))
 
     @property
     def createDate(self):

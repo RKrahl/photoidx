@@ -1,7 +1,6 @@
 """Provide the class Image corresponding to an IdxItem.
 """
 
-import os.path
 import re
 from PySide import QtCore, QtGui
 try:
@@ -30,8 +29,8 @@ class Image(object):
 
     def __init__(self, basedir, item):
         self.item = item
-        self.fileName = os.path.join(basedir, item.filename)
-        self.name = item.name or os.path.basename(self.fileName)
+        self.fileName = basedir.joinpath(item.filename)
+        self.name = item.name or self.fileName.name
         self.transform = QtGui.QMatrix()
         if self.item.orientation:
             m = re.match(r"Rotate (\d+) CW", self.item.orientation)
@@ -39,20 +38,20 @@ class Image(object):
                 self.rotate(int(m.group(1)))
 
     def getPixmap(self):
-        image = QtGui.QImage(self.fileName)
+        image = QtGui.QImage(str(self.fileName))
         if image.isNull():
             raise ImageNotFoundError("Cannot load %s." % self.fileName)
         return QtGui.QPixmap.fromImage(image).transformed(self.transform)
 
     def getThumbPixmap(self):
         if vignette:
-            thumbpath = vignette.get_thumbnail(self.fileName, 'normal')
+            thumbpath = vignette.get_thumbnail(str(self.fileName), 'normal')
             image = QtGui.QImage(thumbpath)
             if image.isNull():
                 raise ImageNotFoundError("Cannot load %s." % self.fileName)
             pixmap = QtGui.QPixmap.fromImage(image)
         else:
-            image = QtGui.QImage(self.fileName)
+            image = QtGui.QImage(str(self.fileName))
             if image.isNull():
                 raise ImageNotFoundError("Cannot load %s." % self.fileName)
             pixmap = QtGui.QPixmap.fromImage(image)
