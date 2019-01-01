@@ -2,7 +2,6 @@
 """
 
 import sys
-import os.path
 from PySide import QtCore, QtGui
 import photo.index
 from photo.listtools import LazyList

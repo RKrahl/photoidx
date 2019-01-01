@@ -1,10 +1,11 @@
 """Define filter for photo indices by command line arguments.
 """
 
-import re
-import datetime
 import argparse
 import collections
+import datetime
+from pathlib import Path
+import re
 from photo.geo import GeoPosition
 
 
@@ -72,7 +73,10 @@ class IdxFilter(object):
         else:
             self.gpspos = None
             self.gpsradius = None
-        self.filelist = set(files) if files else None
+        if files:
+            self.filelist = { Path(f) for f in files }
+        else:
+            self.filelist = None
 
     def __call__(self, item):
         if self.filelist and not item.filename in self.filelist:

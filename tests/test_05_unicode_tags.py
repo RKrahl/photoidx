@@ -38,7 +38,7 @@ def imgdir(tmpdir):
 def test_tag_unicode(imgdir):
     with photo.index.Index(imgdir=imgdir) as idx:
         for item in idx:
-            for t in tags[item.filename]:
+            for t in tags[str(item.filename)]:
                 item.tags.add(t)
         idx.write()
     idxfile = os.path.join(imgdir, ".index.yaml")

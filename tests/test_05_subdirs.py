@@ -84,5 +84,5 @@ def test_tag(imgdir, monkeypatch):
     with photo.index.Index(idxfile=imgdir) as idx:
         for k in ("Japan", "Quebec"):
             idxfilter = photo.idxfilter.IdxFilter(tags=k)
-            fnames = [ i.filename for i in idxfilter.filter(idx) ]
+            fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
             assert fnames == [ os.path.join(k, f) for f in testimgs[k] ]

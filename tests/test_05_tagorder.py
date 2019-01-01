@@ -94,7 +94,7 @@ def test_tag_remove(imgdir):
                 i.tags.add(t)
         for t in taglist:
             for i in idx:
-                if i.filename not in tags[t]:
+                if str(i.filename) not in tags[t]:
                     i.tags.remove(t)
         idx.write()
     assert filecmp.cmp(idxfname, reffname), "index file differs from reference"

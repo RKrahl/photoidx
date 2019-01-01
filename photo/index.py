@@ -4,9 +4,8 @@
 from collections import MutableSequence
 import errno
 import fcntl
-import fnmatch
 import os
-import os.path
+from pathlib import Path
 import yaml
 from photo.idxitem import IdxItem
 from photo.listtools import LazyList
@@ -18,17 +17,15 @@ class AlreadyLockedError(OSError):
 
 
 def _readdir(imgdir, basedir, hashalg, known=set()):
-    for f in sorted(os.listdir(imgdir)):
-        absfile = os.path.join(imgdir, f)
-        f = os.path.relpath(absfile, basedir)
-        if (os.path.isfile(absfile) and fnmatch.fnmatch(f, '*.jpg')
-            and f not in known):
-            yield IdxItem(filename=f, basedir=basedir, hashalg=hashalg)
+    for f in sorted(imgdir.iterdir()):
+        rel = f.relative_to(basedir)
+        if f.is_file() and f.suffix == '.jpg' and rel not in known:
+            yield IdxItem(filename=rel, basedir=basedir, hashalg=hashalg)
 
 
 class Index(MutableSequence):
 
-    defIdxFilename = ".index.yaml"
+    defIdxFilename = Path(".index.yaml")
 
     def __init__(self, idxfile=None, imgdir=None, hashalg=['md5']):
         super().__init__()
@@ -38,7 +35,7 @@ class Index(MutableSequence):
         if idxfile:
             self.read(idxfile)
         if imgdir:
-            imgdir = os.path.abspath(imgdir)
+            imgdir = Path(imgdir).resolve()
             if not self.directory:
                 self.directory = imgdir
             if idxfile:
@@ -48,6 +45,7 @@ class Index(MutableSequence):
                 self.items = LazyList(newitems)
 
     def extend_dir(self, imgdir, hashalg=['md5']):
+        imgdir = Path(imgdir).resolve()
         known = { i.filename for i in self.items }
         newitems = _readdir(imgdir, self.directory, hashalg, known)
         self.items.extend(newitems)
@@ -87,19 +85,19 @@ class Index(MutableSequence):
     def _get_idxfile(self, fname, flags):
         if fname is not None:
             self.close()
-            fname = os.path.abspath(fname)
-            if os.path.isdir(fname):
-                fname = os.path.join(fname, self.defIdxFilename)
-            self.directory = os.path.dirname(fname)
-            fd = os.open(fname, flags, 0o666)
+            fname = Path(fname)
+            if fname.is_dir():
+                fname = fname.joinpath(self.defIdxFilename)
+            self.directory = fname.parent.resolve()
+            fd = os.open(str(fname), flags, mode=0o666)
             self.idxfile = os.fdopen(fd, "r+t")
         elif self.idxfile:
             self.idxfile.seek(0)
         else:
             if not self.directory:
-                self.directory = os.getcwd()
-            fname = os.path.join(self.directory, self.defIdxFilename)
-            fd = os.open(fname, flags, 0o666)
+                self.directory = Path.cwd()
+            fname = self.directory.joinpath(self.defIdxFilename)
+            fd = os.open(str(fname), flags, mode=0o666)
             self.idxfile = os.fdopen(fd, "r+t")
 
     def _lockf(self, mode=fcntl.LOCK_SH):
