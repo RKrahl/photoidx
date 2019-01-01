@@ -84,14 +84,14 @@ class Index(MutableSequence):
     def insert(self, index, value):
         self.items.insert(index, value)
 
-    def _get_idxfile(self, fname):
+    def _get_idxfile(self, fname, flags):
         if fname is not None:
             self.close()
             fname = os.path.abspath(fname)
             if os.path.isdir(fname):
                 fname = os.path.join(fname, self.defIdxFilename)
             self.directory = os.path.dirname(fname)
-            fd = os.open(fname, os.O_RDWR|os.O_CREAT)
+            fd = os.open(fname, flags, 0o666)
             self.idxfile = os.fdopen(fd, "r+t")
         elif self.idxfile:
             self.idxfile.seek(0)
@@ -99,7 +99,7 @@ class Index(MutableSequence):
             if not self.directory:
                 self.directory = os.getcwd()
             fname = os.path.join(self.directory, self.defIdxFilename)
-            fd = os.open(fname, os.O_RDWR|os.O_CREAT)
+            fd = os.open(fname, flags, 0o666)
             self.idxfile = os.fdopen(fd, "r+t")
 
     def _lockf(self, mode=fcntl.LOCK_SH):
@@ -114,7 +114,7 @@ class Index(MutableSequence):
     def read(self, idxfile=None):
         """Read the index from a file.
         """
-        self._get_idxfile(idxfile)
+        self._get_idxfile(idxfile, os.O_RDWR)
         self._lockf()
         self.items = [ IdxItem(data=i) for i in yaml.load(self.idxfile) ]
 
@@ -122,7 +122,7 @@ class Index(MutableSequence):
         """Write the index to a file.
         """
         items = [ i.as_dict() for i in self.items ]
-        self._get_idxfile(idxfile)
+        self._get_idxfile(idxfile, os.O_RDWR|os.O_CREAT)
         self._lockf(mode=fcntl.LOCK_EX)
         yaml.dump(items, self.idxfile, default_flow_style=False)
         self.idxfile.truncate()

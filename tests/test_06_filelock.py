@@ -1,6 +1,6 @@
 """Concurrent access to the index file.
 
-The Index class is supposed to pretect the index file against
+The Index class is supposed to protect the index file against
 conflicts in concurrent file access using file system locking.
 We will need multiple processes to test this.
 """

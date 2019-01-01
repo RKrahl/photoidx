@@ -23,6 +23,13 @@ def imgdir(tmpdir):
         shutil.copy(fname, tmpdir)
     return tmpdir
 
+def test_read_non_existent(imgdir):
+    """Try to read an index file that does not exist.
+    """
+    with pytest.raises(OSError):
+        with photo.index.Index(idxfile=imgdir) as idx:
+            pass
+
 def test_read_write(imgdir):
     """Read the index file and write it out again.
     """
