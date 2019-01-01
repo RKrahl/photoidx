@@ -26,7 +26,7 @@ def imgdir(tmpdir):
 def test_read_non_existent(imgdir):
     """Try to read an index file that does not exist.
     """
-    with pytest.raises(IOError):
+    with pytest.raises(OSError):
         with photo.index.Index(idxfile=imgdir) as idx:
             pass
 

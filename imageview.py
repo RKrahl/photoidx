@@ -18,7 +18,7 @@ app = QtGui.QApplication([])
 try:
     idx = photo.index.Index(idxfile=args.directory)
     tagSelect=True
-except IOError:
+except OSError:
     idx = photo.index.Index(imgdir=args.directory)
     tagSelect=False
 idxfilter = photo.idxfilter.IdxFilter.from_args(args)
