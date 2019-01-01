@@ -1,6 +1,13 @@
 		  History of changes to photo-tools
 		  =================================
 
+* Version 0.8.2 (2019-01-01)
+
+** Bug fixes and minor changes
+
+ + Issue #41: Setting filter options in imageviewer fails with
+   IndexError if current filter selects no image.
+
 * Version 0.8.1 (2019-01-01)
 
 ** Bug fixes and minor changes

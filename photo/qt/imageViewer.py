@@ -351,17 +351,23 @@ class ImageViewer(QtGui.QMainWindow):
                 # The overview window would need to be rebuild in any case.
                 self.overviewwindow.close()
                 self.overviewwindow = None
-            curidx = self.images.index(self.selection[self.cur].item)
+            try:
+                curidx = self.images.index(self.selection[self.cur].item)
+            except IndexError:
+                curidx = None
             self.imgFilter = self.filterDialog.imgFilter
             self.selection = LazyList(self._filteredImages())
-            item_i = 0
-            for img_i, img in enumerate(self.selection):
-                item_i = self.images.index(img.item, item_i)
-                if item_i >= curidx:
-                    cur = img_i
-                    break
+            if curidx:
+                item_i = 0
+                for img_i, img in enumerate(self.selection):
+                    item_i = self.images.index(img.item, item_i)
+                    if item_i >= curidx:
+                        cur = img_i
+                        break
+                else:
+                    cur = len(self.selection)
             else:
-                cur = len(self.selection)
+                cur = 0
             self.moveCurrentTo(cur)
 
     def scaleImage(self, factor):
