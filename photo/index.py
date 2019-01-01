@@ -103,9 +103,8 @@ class Index(MutableSequence):
     def _lockf(self, mode=fcntl.LOCK_SH):
         try:
             fcntl.lockf(self.idxfile.fileno(), mode | fcntl.LOCK_NB)
-        except Exception as e:
-            if (isinstance(e, (OSError, IOError)) and 
-                e.errno in [errno.EACCES, errno.EAGAIN]):
+        except OSError as e:
+            if e.errno in (errno.EACCES, errno.EAGAIN):
                 e = AlreadyLockedError(*e.args)
             raise e
 
