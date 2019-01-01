@@ -351,7 +351,7 @@ def test_stats_all(imgdir):
     depends=["test_create", "test_addtag_by_date", "test_addtag_by_gpspos", 
              "test_addtag_by_files", "test_rmtag_all"]
 )
-def test_stats_all(imgdir):
+def test_stats_filtered(imgdir):
     """Show stats on a selection.
     """
     fname = os.path.join(imgdir, "out")
