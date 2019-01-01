@@ -1,6 +1,13 @@
 		  History of changes to photo-tools
 		  =================================
 
+* Version 0.8.1 (2019-01-01)
+
+** Bug fixes and minor changes
+
+ + Issue #40: TypeError is raised when trying to read a non existing
+   index file.
+
 * Version 0.8 (2018-12-31)
 
 ** New features
