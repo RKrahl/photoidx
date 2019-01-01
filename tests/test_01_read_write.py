@@ -23,7 +23,6 @@ def imgdir(tmpdir):
         shutil.copy(fname, tmpdir)
     return tmpdir
 
-@pytest.mark.xfail(reason="Issue #40")
 def test_read_non_existent(imgdir):
     """Try to read an index file that does not exist.
     """
