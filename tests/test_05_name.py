@@ -1,9 +1,8 @@
 """Read and write an index having optional name attributes in it.
 """
 
-import os.path
-import shutil
 import filecmp
+import shutil
 import pytest
 import photo.index
 from conftest import tmpdir, gettestdata
@@ -12,7 +11,7 @@ refindex = gettestdata("index-name.yaml")
 
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
-    shutil.copy(refindex, os.path.join(tmpdir, ".index.yaml"))
+    shutil.copy(refindex, str(tmpdir.joinpath(".index.yaml")))
     return tmpdir
 
 def test_readwrite(imgdir):
@@ -23,5 +22,5 @@ def test_readwrite(imgdir):
         assert idx[1].name is None
         assert idx[3].name == "geisha.jpg"
         idx.write()
-    idxfile = os.path.join(imgdir, ".index.yaml")
+    idxfile = str(imgdir.joinpath(".index.yaml"))
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

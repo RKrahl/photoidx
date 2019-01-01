@@ -4,9 +4,8 @@ When tags are set as unicode while the content is pure ASCII, PyYAML
 marks them as `!!python/unicode 'tag'`.
 """
 
-import os.path
-import shutil
 import filecmp
+import shutil
 import pytest
 import photo.index
 from conftest import tmpdir, gettestdata
@@ -31,8 +30,8 @@ tags = {
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, tmpdir)
-    shutil.copy(baseindex, os.path.join(tmpdir, ".index.yaml"))
+        shutil.copy(fname, str(tmpdir))
+    shutil.copy(baseindex, str(tmpdir.joinpath(".index.yaml")))
     return tmpdir
 
 def test_tag_unicode(imgdir):
@@ -41,5 +40,5 @@ def test_tag_unicode(imgdir):
             for t in tags[str(item.filename)]:
                 item.tags.add(t)
         idx.write()
-    idxfile = os.path.join(imgdir, ".index.yaml")
+    idxfile = str(imgdir.joinpath(".index.yaml"))
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

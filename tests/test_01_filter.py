@@ -1,10 +1,9 @@
 """Filter image by various selection criteria.
 """
 
-import os.path
-import shutil
-import filecmp
 import datetime
+import filecmp
+import shutil
 import pytest
 import photo.index
 import photo.idxfilter
@@ -20,9 +19,9 @@ testimgfiles = [ gettestdata(i) for i in testimgs ]
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, tmpdir)
+        shutil.copy(fname, str(tmpdir))
     shutil.copy(gettestdata("index-tagged.yaml"), 
-                os.path.join(tmpdir, ".index.yaml"))
+                str(tmpdir.joinpath(".index.yaml")))
     return tmpdir
 
 def test_by_date(imgdir):

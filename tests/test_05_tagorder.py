@@ -8,9 +8,8 @@ equal unless there is a significant difference in the content.  That
 is why the tags should have a well defined order in the index file.
 """
 
-import os.path
-import shutil
 import filecmp
+import shutil
 import pytest
 import photo.index
 import photo.idxfilter
@@ -25,7 +24,7 @@ testimgfiles = [ gettestdata(i) for i in testimgs ]
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, tmpdir)
+        shutil.copy(fname, str(tmpdir))
     return tmpdir
 
 # Each test ends up adding the same set of tags to each image.  But
@@ -49,8 +48,8 @@ tags = {
 
 @pytest.mark.dependency()
 def test_tag_ref(imgdir):
-    idxfname = os.path.join(imgdir, ".index.yaml")
-    reffname = os.path.join(imgdir, "index-ref.yaml")
+    idxfname = str(imgdir.joinpath(".index.yaml"))
+    reffname = str(imgdir.joinpath("index-ref.yaml"))
     shutil.copy(gettestdata("index-create.yaml"), idxfname)
     with photo.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Japan", "Tokyo", "Hakone", "Kyoto", 
@@ -66,8 +65,8 @@ def test_tag_ref(imgdir):
 def test_tag_shuffle(imgdir):
     """Same as test_tag_ref(), only the order of setting the tags differ.
     """
-    idxfname = os.path.join(imgdir, ".index.yaml")
-    reffname = os.path.join(imgdir, "index-ref.yaml")
+    idxfname = str(imgdir.joinpath(".index.yaml"))
+    reffname = str(imgdir.joinpath("index-ref.yaml"))
     shutil.copy(gettestdata("index-create.yaml"), idxfname)
     with photo.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Ginza", "Hakone", "Japan", "Geisha", 
@@ -83,8 +82,8 @@ def test_tag_shuffle(imgdir):
 def test_tag_remove(imgdir):
     """First set all tags on all images, then remove the wrong ones.
     """
-    idxfname = os.path.join(imgdir, ".index.yaml")
-    reffname = os.path.join(imgdir, "index-ref.yaml")
+    idxfname = str(imgdir.joinpath(".index.yaml"))
+    reffname = str(imgdir.joinpath("index-ref.yaml"))
     shutil.copy(gettestdata("index-create.yaml"), idxfname)
     with photo.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Tokyo", "Shinto_shrine", "Ginza", "Geisha", 
@@ -103,8 +102,8 @@ def test_tag_remove(imgdir):
 def test_tag_extra(imgdir):
     """Add a spurious extra tag first and remove it later.
     """
-    idxfname = os.path.join(imgdir, ".index.yaml")
-    reffname = os.path.join(imgdir, "index-ref.yaml")
+    idxfname = str(imgdir.joinpath(".index.yaml"))
+    reffname = str(imgdir.joinpath("index-ref.yaml"))
     shutil.copy(gettestdata("index-create.yaml"), idxfname)
     with photo.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Japan", "Tokyo", "Hakone", "Kyoto", 

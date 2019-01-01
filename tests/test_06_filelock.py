@@ -7,7 +7,6 @@ We will need multiple processes to test this.
 
 import filecmp
 from multiprocessing import Process, Queue
-import os.path
 import shutil
 import pytest
 import photo.index
@@ -30,8 +29,8 @@ tags = {
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, tmpdir)
-    shutil.copy(refindex, os.path.join(tmpdir, ".index.yaml"))
+        shutil.copy(fname, str(tmpdir))
+    shutil.copy(refindex, str(tmpdir.joinpath(".index.yaml")))
     return tmpdir
 
 # --------------------------------------------------------------------
@@ -124,5 +123,5 @@ def test_concurrent_read_write(imgdir):
         p.join()
     # Finally, verify that the index is still unchanged, so the
     # writing did not succeed.
-    idxfile = os.path.join(imgdir, ".index.yaml")
+    idxfile = str(imgdir.joinpath(".index.yaml"))
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

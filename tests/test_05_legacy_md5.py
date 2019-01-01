@@ -6,9 +6,8 @@ photo-tools still reads legacy files and transparently converts them
 to the new format.  This feature is tested in this module.
 """
 
-import os.path
-import shutil
 import filecmp
+import shutil
 import pytest
 import photo.index
 from conftest import tmpdir, gettestdata
@@ -24,8 +23,8 @@ refindex = gettestdata("index-create.yaml")
 
 def test_legacyconvert(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, tmpdir)
-    idxfile = os.path.join(tmpdir, ".index.yaml")
+        shutil.copy(fname, str(tmpdir))
+    idxfile = str(tmpdir.joinpath(".index.yaml"))
     shutil.copy(legacyindex, idxfile)
     # reading and writing the index transparantly converts it.
     with photo.index.Index(idxfile=tmpdir) as idx:
