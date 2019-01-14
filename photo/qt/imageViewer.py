@@ -79,13 +79,17 @@ class ImageViewer(QtGui.QMainWindow):
                 shortcut="n", enabled=(self._haveNext()), 
                 triggered=self.nextImage)
         self.selectImageAct = QtGui.QAction("&Select Image", self,
-                shortcut="s", triggered=self.selectImage)
+                shortcut="s", enabled=(not self.readOnly), 
+                triggered=self.selectImage)
         self.deselectImageAct = QtGui.QAction("&Deselect Image", self,
-                shortcut="d", triggered=self.deselectImage)
+                shortcut="d", enabled=(not self.readOnly), 
+                triggered=self.deselectImage)
         self.pushForwardAct = QtGui.QAction("Push Image &Forward", self,
-                shortcut="Ctrl+f", triggered=self.pushImageForward)
+                shortcut="Ctrl+f", enabled=(not self.readOnly), 
+                triggered=self.pushImageForward)
         self.pushBackwardAct = QtGui.QAction("Push Image &Backward", self,
-                shortcut="Ctrl+b", triggered=self.pushImageBackward)
+                shortcut="Ctrl+b", enabled=(not self.readOnly), 
+                triggered=self.pushImageBackward)
         self.tagSelectAct = QtGui.QAction("&Tags", self,
                 shortcut="t", enabled=(not self.readOnly), 
                 triggered=self.tagSelect)
@@ -198,9 +202,9 @@ class ImageViewer(QtGui.QMainWindow):
         """Enable and disable actions as appropriate.
         """
         self.prevImageAct.setEnabled(self.cur > 0)
-        self.pushForwardAct.setEnabled(self.cur > 0)
+        self.pushForwardAct.setEnabled(not self.readOnly and self.cur > 0)
         self.nextImageAct.setEnabled(self._haveNext())
-        self.pushBackwardAct.setEnabled(self._haveNext())
+        self.pushBackwardAct.setEnabled(not self.readOnly and self._haveNext())
         try:
             item = self.selection[self.cur].item
         except IndexError:
@@ -217,8 +221,10 @@ class ImageViewer(QtGui.QMainWindow):
             self.rotateRightAct.setEnabled(False)
         else:
             self.imageInfoAct.setEnabled(True)
-            self.selectImageAct.setEnabled(not item.selected)
-            self.deselectImageAct.setEnabled(item.selected)
+            en_select = not self.readOnly and not item.selected
+            en_deselect = not self.readOnly and item.selected
+            self.selectImageAct.setEnabled(en_select)
+            self.deselectImageAct.setEnabled(en_deselect)
             self.tagSelectAct.setEnabled(not self.readOnly)
             self.zoomInAct.setEnabled(True)
             self.zoomOutAct.setEnabled(True)

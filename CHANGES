@@ -12,6 +12,10 @@
    filesystem paths.  As a side effect, the semantic of file paths may
    be taken somewhat more coherent and strict now at some places.
 
+** Bug fixes and minor changes
+
+ + Issue #42: imageview may inadvertently create an image index.
+
 * Version 0.8.2 (2019-01-01)
 
 ** Bug fixes and minor changes
