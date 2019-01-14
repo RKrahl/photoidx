@@ -141,6 +141,23 @@ class ImageViewer(QtGui.QMainWindow):
         self.dirty = False
 
     def close(self):
+        if self.dirty:
+            msgBox = QtGui.QMessageBox()
+            msgBox.setWindowTitle("Save index?")
+            msgBox.setText("The image index been modified.")
+            msgBox.setInformativeText("Save changes before closing?")
+            msgBox.setIcon(QtGui.QMessageBox.Question)
+            msgBox.setStandardButtons(QtGui.QMessageBox.Save | 
+                                      QtGui.QMessageBox.Discard | 
+                                      QtGui.QMessageBox.Cancel)
+            msgBox.setDefaultButton(QtGui.QMessageBox.Save)
+            ret = msgBox.exec_()
+            if ret == QtGui.QMessageBox.Save:
+                self.saveIndex()
+            elif ret == QtGui.QMessageBox.Discard:
+                pass
+            elif ret == QtGui.QMessageBox.Cancel:
+                return
         if self.overviewwindow:
             self.overviewwindow.close()
         super().close()
