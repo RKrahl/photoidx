@@ -14,7 +14,8 @@ from photo.qt.tagSelectDialog import TagSelectDialog
 
 class ImageViewer(QtGui.QMainWindow):
 
-    def __init__(self, images, imgFilter, scaleFactor=1.0, readOnly=False):
+    def __init__(self, images, imgFilter, 
+                 scaleFactor=1.0, readOnly=False, dirty=False):
         super().__init__()
 
         self.images = images
@@ -22,6 +23,7 @@ class ImageViewer(QtGui.QMainWindow):
         self.selection = LazyList(self._filteredImages())
         self.scaleFactor = scaleFactor
         self.readOnly = readOnly
+        self.dirty = dirty
         self.cur = 0
 
         self.imageInfoDialog = ImageInfoDialog(self.images.directory)
@@ -51,6 +53,9 @@ class ImageViewer(QtGui.QMainWindow):
         maxSize = 0.95 * QtGui.QApplication.desktop().screenGeometry().size()
         self.setMaximumSize(maxSize)
 
+        self.saveAct = QtGui.QAction("&Save index", self, 
+                shortcut="Ctrl+s", enabled=(not self.readOnly), 
+                triggered=self.saveIndex)
         self.closeAct = QtGui.QAction("&Close", self, 
                 shortcut="q", triggered=self.close)
         self.filterOptsAct = QtGui.QAction("Filter Options", self,
@@ -95,6 +100,7 @@ class ImageViewer(QtGui.QMainWindow):
                 triggered=self.tagSelect)
 
         self.fileMenu = QtGui.QMenu("&File", self)
+        self.fileMenu.addAction(self.saveAct)
         self.fileMenu.addAction(self.closeAct)
         self.fileMenu.addAction(self.filterOptsAct)
         self.menuBar().addMenu(self.fileMenu)
@@ -129,6 +135,10 @@ class ImageViewer(QtGui.QMainWindow):
         self._extraSize = self.size() - self.scrollArea.viewport().size()
         self._loadImage()
         self._checkActions()
+
+    def saveIndex(self):
+        self.images.write()
+        self.dirty = False
 
     def close(self):
         if self.overviewwindow:
@@ -316,7 +326,7 @@ class ImageViewer(QtGui.QMainWindow):
             # No current image.
             pass
         else:
-            self.images.write()
+            self.dirty = True
             self.selectImageAct.setEnabled(False)
             self.deselectImageAct.setEnabled(True)
             self._reevalFilter()
@@ -328,7 +338,7 @@ class ImageViewer(QtGui.QMainWindow):
             # No current image.
             pass
         else:
-            self.images.write()
+            self.dirty = True
             self.selectImageAct.setEnabled(True)
             self.deselectImageAct.setEnabled(False)
             self._reevalFilter()
@@ -347,7 +357,7 @@ class ImageViewer(QtGui.QMainWindow):
         self.tagSelectDialog.setCheckedTags(item.tags)
         if self.tagSelectDialog.exec_():
             item.tags = self.tagSelectDialog.checkedTags()
-            self.images.write()
+            self.dirty = True
             self._reevalFilter()
 
     def filterOptions(self):
@@ -390,7 +400,7 @@ class ImageViewer(QtGui.QMainWindow):
             self.images.insert(pi, item)
             img = self.selection.pop(self.cur)
             self.selection.insert(self.cur - 1, img)
-            self.images.write()
+            self.dirty = True
             if self.overviewwindow:
                 self.overviewwindow.updateThumbs()
             self.moveCurrentTo(self.cur - 1)
@@ -405,7 +415,7 @@ class ImageViewer(QtGui.QMainWindow):
             self.images.insert(ni - 1, item)
             img = self.selection.pop(self.cur)
             self.selection.insert(self.cur + 1, img)
-            self.images.write()
+            self.dirty = True
             if self.overviewwindow:
                 self.overviewwindow.updateThumbs()
             self.moveCurrentTo(self.cur + 1)
