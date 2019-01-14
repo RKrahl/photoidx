@@ -14,19 +14,20 @@ from photo.qt.tagSelectDialog import TagSelectDialog
 
 class ImageViewer(QtGui.QMainWindow):
 
-    def __init__(self, images, imgFilter, scaleFactor=1.0, tagSelect=True):
+    def __init__(self, images, imgFilter, scaleFactor=1.0, readOnly=False):
         super().__init__()
 
         self.images = images
         self.imgFilter = imgFilter
         self.selection = LazyList(self._filteredImages())
         self.scaleFactor = scaleFactor
+        self.readOnly = readOnly
         self.cur = 0
 
         self.imageInfoDialog = ImageInfoDialog(self.images.directory)
         self.overviewwindow = None
 
-        if tagSelect:
+        if not self.readOnly:
             taglist = set()
             for i in images:
                 taglist |= i.tags
@@ -86,7 +87,8 @@ class ImageViewer(QtGui.QMainWindow):
         self.pushBackwardAct = QtGui.QAction("Push Image &Backward", self,
                 shortcut="Ctrl+b", triggered=self.pushImageBackward)
         self.tagSelectAct = QtGui.QAction("&Tags", self,
-                shortcut="t", enabled=tagSelect, triggered=self.tagSelect)
+                shortcut="t", enabled=(not self.readOnly), 
+                triggered=self.tagSelect)
 
         self.fileMenu = QtGui.QMenu("&File", self)
         self.fileMenu.addAction(self.closeAct)
@@ -217,7 +219,7 @@ class ImageViewer(QtGui.QMainWindow):
             self.imageInfoAct.setEnabled(True)
             self.selectImageAct.setEnabled(not item.selected)
             self.deselectImageAct.setEnabled(item.selected)
-            self.tagSelectAct.setEnabled(self.tagSelectDialog is not None)
+            self.tagSelectAct.setEnabled(not self.readOnly)
             self.zoomInAct.setEnabled(True)
             self.zoomOutAct.setEnabled(True)
             self.zoomFitHeightAct.setEnabled(True)

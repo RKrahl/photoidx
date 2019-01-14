@@ -17,10 +17,10 @@ args = argparser.parse_args()
 app = QtGui.QApplication([])
 try:
     idx = photo.index.Index(idxfile=args.directory)
-    tagSelect=True
+    readOnly=False
 except OSError:
     idx = photo.index.Index(imgdir=args.directory)
-    tagSelect=False
+    readOnly=True
 idxfilter = photo.idxfilter.IdxFilter.from_args(args)
-imageViewer = ImageViewer(idx, idxfilter, args.scale, tagSelect)
+imageViewer = ImageViewer(idx, idxfilter, args.scale, readOnly)
 sys.exit(app.exec_())
