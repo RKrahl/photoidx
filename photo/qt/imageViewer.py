@@ -137,8 +137,17 @@ class ImageViewer(QtGui.QMainWindow):
         self._checkActions()
 
     def saveIndex(self):
-        self.images.write()
-        self.dirty = False
+        try:
+            self.images.write()
+            self.dirty = False
+        except photo.index.AlreadyLockedError:
+            msgBox = QtGui.QMessageBox()
+            msgBox.setWindowTitle("Index is locked")
+            msgBox.setText("Saving the image index failed!")
+            msgBox.setInformativeText("Another process is currently "
+                                      "accessing the file")
+            msgBox.setIcon(QtGui.QMessageBox.Critical)
+            msgBox.exec_()
 
     def close(self):
         if self.dirty:
@@ -154,6 +163,8 @@ class ImageViewer(QtGui.QMainWindow):
             ret = msgBox.exec_()
             if ret == QtGui.QMessageBox.Save:
                 self.saveIndex()
+                if self.dirty:
+                    return
             elif ret == QtGui.QMessageBox.Discard:
                 pass
             elif ret == QtGui.QMessageBox.Cancel:
