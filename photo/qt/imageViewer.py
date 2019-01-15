@@ -21,6 +21,8 @@ class ImageViewer(QtGui.QMainWindow):
         self.images = images
         self.imgFilter = imgFilter
         self.selection = LazyList(self._filteredImages())
+        if readOnly:
+            dirty = False
         self.scaleFactor = scaleFactor
         self.readOnly = readOnly
         self.dirty = dirty
