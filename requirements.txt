@@ -1,0 +1,4 @@
+distutils-pytest
+pytest >= 3.6.0
+pytest-dependency
+PyYAML
