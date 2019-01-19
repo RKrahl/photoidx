@@ -1,7 +1,6 @@
 #! /usr/bin/python
 
 from distutils.core import setup
-from distutils.command.build_py import build_py
 try:
     import distutils_pytest
 except ImportError:
@@ -39,6 +38,5 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         ],
-    cmdclass = {'build_py': build_py},
 )
 
