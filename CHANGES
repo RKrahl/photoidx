@@ -3,6 +3,14 @@
 
 * Version 0.9 (not yet released)
 
+** New features
+
+ + Issue #39: Review behavior of imageview concerning writing the
+   index: the index is not automatically written to disk any more
+   after each modification, but the user need to explicitly save it.
+   imageview may create a new index if started with the --create
+   command line flag.
+
 ** Incompatible changes
 
  + Drop support for Python 2.  Require Python 3.4 or newer.
@@ -11,6 +19,10 @@
    attribute.  Switch to pathlib for most internal representation of
    filesystem paths.  As a side effect, the semantic of file paths may
    be taken somewhat more coherent and strict now at some places.
+
+** Bug fixes and minor changes
+
+ + Issue #42: imageview may inadvertently create an image index.
 
 * Version 0.8.2 (2019-01-01)
 
@@ -43,7 +55,7 @@
 ** Incompatible changes
 
  + Issue #35: Change the sematic of the --date command line option to
-   photoidx.py and imageview.py: when an intervall is given as
+   photoidx.py and imageview.py: when an interval is given as
    argument, the end time is taken exclusively.
    E.g. --date=2015-03-14--2015-03-15 excludes images taken on
    March 15.

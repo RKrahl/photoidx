@@ -14,19 +14,24 @@ from photo.qt.tagSelectDialog import TagSelectDialog
 
 class ImageViewer(QtGui.QMainWindow):
 
-    def __init__(self, images, imgFilter, scaleFactor=1.0, tagSelect=True):
+    def __init__(self, images, imgFilter, 
+                 scaleFactor=1.0, readOnly=False, dirty=False):
         super().__init__()
 
         self.images = images
         self.imgFilter = imgFilter
         self.selection = LazyList(self._filteredImages())
+        if readOnly:
+            dirty = False
         self.scaleFactor = scaleFactor
+        self.readOnly = readOnly
+        self.dirty = dirty
         self.cur = 0
 
         self.imageInfoDialog = ImageInfoDialog(self.images.directory)
         self.overviewwindow = None
 
-        if tagSelect:
+        if not self.readOnly:
             taglist = set()
             for i in images:
                 taglist |= i.tags
@@ -50,6 +55,9 @@ class ImageViewer(QtGui.QMainWindow):
         maxSize = 0.95 * QtGui.QApplication.desktop().screenGeometry().size()
         self.setMaximumSize(maxSize)
 
+        self.saveAct = QtGui.QAction("&Save index", self, 
+                shortcut="Ctrl+s", enabled=(not self.readOnly), 
+                triggered=self.saveIndex)
         self.closeAct = QtGui.QAction("&Close", self, 
                 shortcut="q", triggered=self.close)
         self.filterOptsAct = QtGui.QAction("Filter Options", self,
@@ -78,17 +86,23 @@ class ImageViewer(QtGui.QMainWindow):
                 shortcut="n", enabled=(self._haveNext()), 
                 triggered=self.nextImage)
         self.selectImageAct = QtGui.QAction("&Select Image", self,
-                shortcut="s", triggered=self.selectImage)
+                shortcut="s", enabled=(not self.readOnly), 
+                triggered=self.selectImage)
         self.deselectImageAct = QtGui.QAction("&Deselect Image", self,
-                shortcut="d", triggered=self.deselectImage)
+                shortcut="d", enabled=(not self.readOnly), 
+                triggered=self.deselectImage)
         self.pushForwardAct = QtGui.QAction("Push Image &Forward", self,
-                shortcut="Ctrl+f", triggered=self.pushImageForward)
+                shortcut="Ctrl+f", enabled=(not self.readOnly), 
+                triggered=self.pushImageForward)
         self.pushBackwardAct = QtGui.QAction("Push Image &Backward", self,
-                shortcut="Ctrl+b", triggered=self.pushImageBackward)
+                shortcut="Ctrl+b", enabled=(not self.readOnly), 
+                triggered=self.pushImageBackward)
         self.tagSelectAct = QtGui.QAction("&Tags", self,
-                shortcut="t", enabled=tagSelect, triggered=self.tagSelect)
+                shortcut="t", enabled=(not self.readOnly), 
+                triggered=self.tagSelect)
 
         self.fileMenu = QtGui.QMenu("&File", self)
+        self.fileMenu.addAction(self.saveAct)
         self.fileMenu.addAction(self.closeAct)
         self.fileMenu.addAction(self.filterOptsAct)
         self.menuBar().addMenu(self.fileMenu)
@@ -124,7 +138,39 @@ class ImageViewer(QtGui.QMainWindow):
         self._loadImage()
         self._checkActions()
 
+    def saveIndex(self):
+        try:
+            self.images.write()
+            self.dirty = False
+        except photo.index.AlreadyLockedError:
+            msgBox = QtGui.QMessageBox()
+            msgBox.setWindowTitle("Index is locked")
+            msgBox.setText("Saving the image index failed!")
+            msgBox.setInformativeText("Another process is currently "
+                                      "accessing the file")
+            msgBox.setIcon(QtGui.QMessageBox.Critical)
+            msgBox.exec_()
+
     def close(self):
+        if self.dirty:
+            msgBox = QtGui.QMessageBox()
+            msgBox.setWindowTitle("Save index?")
+            msgBox.setText("The image index been modified.")
+            msgBox.setInformativeText("Save changes before closing?")
+            msgBox.setIcon(QtGui.QMessageBox.Question)
+            msgBox.setStandardButtons(QtGui.QMessageBox.Save | 
+                                      QtGui.QMessageBox.Discard | 
+                                      QtGui.QMessageBox.Cancel)
+            msgBox.setDefaultButton(QtGui.QMessageBox.Save)
+            ret = msgBox.exec_()
+            if ret == QtGui.QMessageBox.Save:
+                self.saveIndex()
+                if self.dirty:
+                    return
+            elif ret == QtGui.QMessageBox.Discard:
+                pass
+            elif ret == QtGui.QMessageBox.Cancel:
+                return
         if self.overviewwindow:
             self.overviewwindow.close()
         super().close()
@@ -196,9 +242,9 @@ class ImageViewer(QtGui.QMainWindow):
         """Enable and disable actions as appropriate.
         """
         self.prevImageAct.setEnabled(self.cur > 0)
-        self.pushForwardAct.setEnabled(self.cur > 0)
+        self.pushForwardAct.setEnabled(not self.readOnly and self.cur > 0)
         self.nextImageAct.setEnabled(self._haveNext())
-        self.pushBackwardAct.setEnabled(self._haveNext())
+        self.pushBackwardAct.setEnabled(not self.readOnly and self._haveNext())
         try:
             item = self.selection[self.cur].item
         except IndexError:
@@ -215,9 +261,11 @@ class ImageViewer(QtGui.QMainWindow):
             self.rotateRightAct.setEnabled(False)
         else:
             self.imageInfoAct.setEnabled(True)
-            self.selectImageAct.setEnabled(not item.selected)
-            self.deselectImageAct.setEnabled(item.selected)
-            self.tagSelectAct.setEnabled(self.tagSelectDialog is not None)
+            en_select = not self.readOnly and not item.selected
+            en_deselect = not self.readOnly and item.selected
+            self.selectImageAct.setEnabled(en_select)
+            self.deselectImageAct.setEnabled(en_deselect)
+            self.tagSelectAct.setEnabled(not self.readOnly)
             self.zoomInAct.setEnabled(True)
             self.zoomOutAct.setEnabled(True)
             self.zoomFitHeightAct.setEnabled(True)
@@ -308,7 +356,7 @@ class ImageViewer(QtGui.QMainWindow):
             # No current image.
             pass
         else:
-            self.images.write()
+            self.dirty = True
             self.selectImageAct.setEnabled(False)
             self.deselectImageAct.setEnabled(True)
             self._reevalFilter()
@@ -320,7 +368,7 @@ class ImageViewer(QtGui.QMainWindow):
             # No current image.
             pass
         else:
-            self.images.write()
+            self.dirty = True
             self.selectImageAct.setEnabled(True)
             self.deselectImageAct.setEnabled(False)
             self._reevalFilter()
@@ -339,7 +387,7 @@ class ImageViewer(QtGui.QMainWindow):
         self.tagSelectDialog.setCheckedTags(item.tags)
         if self.tagSelectDialog.exec_():
             item.tags = self.tagSelectDialog.checkedTags()
-            self.images.write()
+            self.dirty = True
             self._reevalFilter()
 
     def filterOptions(self):
@@ -382,7 +430,7 @@ class ImageViewer(QtGui.QMainWindow):
             self.images.insert(pi, item)
             img = self.selection.pop(self.cur)
             self.selection.insert(self.cur - 1, img)
-            self.images.write()
+            self.dirty = True
             if self.overviewwindow:
                 self.overviewwindow.updateThumbs()
             self.moveCurrentTo(self.cur - 1)
@@ -397,7 +445,7 @@ class ImageViewer(QtGui.QMainWindow):
             self.images.insert(ni - 1, item)
             img = self.selection.pop(self.cur)
             self.selection.insert(self.cur + 1, img)
-            self.images.write()
+            self.dirty = True
             if self.overviewwindow:
                 self.overviewwindow.updateThumbs()
             self.moveCurrentTo(self.cur + 1)
