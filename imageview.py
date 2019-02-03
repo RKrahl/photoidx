@@ -27,12 +27,12 @@ try:
     dirty = False
 except OSError:
     idx = photo.index.Index(imgdir=args.directory)
-    if args.create:
-        readOnly = args.readOnly
-        dirty = True
-    else:
+    if args.readOnly:
         readOnly = True
         dirty = False
+    else:
+        readOnly = not args.create
+        dirty = args.create
 idxfilter = photo.idxfilter.IdxFilter.from_args(args)
 imageViewer = ImageViewer(idx, idxfilter, args.scale, readOnly, dirty)
 sys.exit(app.exec_())
