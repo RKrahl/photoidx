@@ -1,8 +1,8 @@
 language: python
 python:
-  - "3.4"
+  - "3.5"
 before_install:
-  - sudo apt-get install -y libgexiv2-dev libyaml-dev python3-gobject
+  - sudo apt-get install -y libgexiv2-dev libyaml-dev python3-gi
 virtualenv:
   system_site_packages: true
 install: pip install -r requirements.txt
