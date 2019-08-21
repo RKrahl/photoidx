@@ -20,8 +20,7 @@ testimgfiles = [ gettestdata(i) for i in testimgs ]
 def imgdir(tmpdir):
     for fname in testimgfiles:
         shutil.copy(fname, str(tmpdir))
-    shutil.copy(gettestdata("index-tagged.yaml"), 
-                str(tmpdir.joinpath(".index.yaml")))
+    shutil.copy(gettestdata("index-tagged.yaml"), str(tmpdir / ".index.yaml"))
     return tmpdir
 
 def test_by_date(imgdir):

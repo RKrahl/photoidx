@@ -24,5 +24,5 @@ def test_createupdate(tmpdir):
         shutil.copy(fname, str(tmpdir))
     with photo.index.Index(idxfile=tmpdir, imgdir=tmpdir) as idx:
         idx.write()
-    idxfile = str(tmpdir.joinpath(".index.yaml"))
+    idxfile = str(tmpdir / ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

@@ -169,7 +169,7 @@ class ListFilterOption(FilterOption):
     def setOption(self, filelist):
         super().setOption(filelist)
         if filelist is not None:
-            self.entry.setText(" ".join(sorted(filelist)))
+            self.entry.setText(" ".join(sorted(str(p) for p in filelist)))
 
 
 class FilterDialog(QtGui.QDialog):

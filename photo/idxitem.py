@@ -50,7 +50,7 @@ class IdxItem(object):
             self.filename = filename
             self.name = None
             if basedir is not None:
-                filename = Path(basedir).joinpath(filename)
+                filename = Path(basedir) / filename
             self.checksum = _checksum(filename, hashalg)
             exifdata = Exif(filename)
             self.createDate = exifdata.createDate

@@ -36,7 +36,7 @@ def test_check_checksum(tmpdir, monkeypatch, alg):
     checkprog = hashalg[alg]
     if not Path(checkprog).is_file():
         pytest.skip("%s not found." % checkprog)
-    fname = tmpdir.joinpath(alg)
+    fname = tmpdir / alg
     with photo.index.Index(idxfile=tmpdir) as idx, fname.open("wt") as f:
         for i in idx:
             print("%s  %s" % (i.checksum[alg], i.filename), file=f)

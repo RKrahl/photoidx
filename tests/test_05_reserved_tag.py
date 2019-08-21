@@ -22,7 +22,7 @@ refindex = gettestdata("index-tagged.yaml")
 def test_reserved_tags_convert(tmpdir):
     for fname in testimgfiles:
         shutil.copy(fname, str(tmpdir))
-    idxfile = str(tmpdir.joinpath(".index.yaml"))
+    idxfile = str(tmpdir / ".index.yaml")
     shutil.copy(invindex, idxfile)
     # reading and writing the index transparantly filters out tags
     # using the reserved prefix.

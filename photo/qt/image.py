@@ -29,7 +29,7 @@ class Image(object):
 
     def __init__(self, basedir, item):
         self.item = item
-        self.fileName = basedir.joinpath(item.filename)
+        self.fileName = basedir / item.filename
         self.name = item.name or self.fileName.name
         self.transform = QtGui.QMatrix()
         if self.item.orientation:

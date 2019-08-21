@@ -36,7 +36,7 @@ def test_create(imgdir):
     """
     with photo.index.Index(imgdir=imgdir) as idx:
         idx.write()
-    idxfile = str(imgdir.joinpath(".index.yaml"))
+    idxfile = str(imgdir / ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_create"])
@@ -45,5 +45,5 @@ def test_read(imgdir):
     """
     with photo.index.Index(idxfile=imgdir) as idx:
         idx.write()
-    idxfile = str(imgdir.joinpath(".index.yaml"))
+    idxfile = str(imgdir / ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

@@ -32,7 +32,7 @@ def test_read_non_existent(imgdir):
 def test_read_write(imgdir):
     """Read the index file and write it out again.
     """
-    idxfile = str(imgdir.joinpath(".index.yaml"))
+    idxfile = str(imgdir / ".index.yaml")
     shutil.copy(refindex, idxfile)
     with photo.index.Index(idxfile=imgdir) as idx:
         idx.write()
@@ -41,7 +41,7 @@ def test_read_write(imgdir):
 def test_read_write_unicode(imgdir):
     """Same test as above but with non-ASCII characters in the tags.
     """
-    idxfile = str(imgdir.joinpath(".index.yaml"))
+    idxfile = str(imgdir / ".index.yaml")
     shutil.copy(refindexu, idxfile)
     with photo.index.Index(idxfile=imgdir) as idx:
         idx.write()

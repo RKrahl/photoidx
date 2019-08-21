@@ -30,7 +30,7 @@ tags = {
 def imgdir(tmpdir):
     for fname in testimgfiles:
         shutil.copy(fname, str(tmpdir))
-    shutil.copy(refindex, str(tmpdir.joinpath(".index.yaml")))
+    shutil.copy(refindex, str(tmpdir / ".index.yaml"))
     return tmpdir
 
 # --------------------------------------------------------------------
@@ -123,5 +123,5 @@ def test_concurrent_read_write(imgdir):
         p.join()
     # Finally, verify that the index is still unchanged, so the
     # writing did not succeed.
-    idxfile = str(imgdir.joinpath(".index.yaml"))
+    idxfile = str(imgdir / ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
