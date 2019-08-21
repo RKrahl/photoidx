@@ -37,14 +37,14 @@ def test_create(imgdir, monkeypatch):
     """
     monkeypatch.chdir(str(imgdir))
     callscript("photoidx.py", ["create"])
-    idxfile = str(imgdir.joinpath(".index.yaml"))
+    idxfile = str(imgdir / ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_create"])
 def test_ls_all(imgdir):
     """List all images.
     """
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         callscript("photoidx.py", ["-d", str(imgdir), "ls"], stdout=f)
     with fname.open("rt") as f:
@@ -59,7 +59,7 @@ def test_ls_md5(imgdir, monkeypatch):
     if not Path(md5sum).is_file():
         pytest.skip("md5sum not found.")
     monkeypatch.chdir(str(imgdir))
-    fname = imgdir.joinpath("md5")
+    fname = imgdir / "md5"
     with fname.open("wt") as f:
         callscript("photoidx.py", ["ls", "--checksum=md5"], stdout=f)
     with fname.open("rt") as f:
@@ -73,7 +73,7 @@ def test_addtag_all(imgdir):
     """
     args = ["-d", str(imgdir), "addtag", "all"]
     callscript("photoidx.py", args)
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", "--tags", "all"]
         callscript("photoidx.py", args, stdout=f)
@@ -87,7 +87,7 @@ def test_addtag_by_date(imgdir):
     """
     args = ["-d", str(imgdir), "addtag", "--date", "2016-03-05", "Hakone"]
     callscript("photoidx.py", args)
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", "--tags", "Hakone"]
         callscript("photoidx.py", args, stdout=f)
@@ -103,7 +103,7 @@ def test_addtag_by_gpspos(imgdir, monkeypatch):
     args = ["addtag", "--gpspos", "35.6883 N, 139.7544 E", 
             "--gpsradius", "20.0", "Tokyo"]
     callscript("photoidx.py", args)
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--tags", "Tokyo"]
         callscript("photoidx.py", args, stdout=f)
@@ -118,7 +118,7 @@ def test_addtag_by_files(imgdir, monkeypatch):
     monkeypatch.chdir(str(imgdir))
     args = ["addtag", "Shinto_shrine", "dsc_4664.jpg", "dsc_4831.jpg"]
     callscript("photoidx.py", args)
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--tags", "Shinto_shrine"]
         callscript("photoidx.py", args, stdout=f)
@@ -138,7 +138,7 @@ def test_rmtag_by_tag(imgdir, monkeypatch):
     callscript("photoidx.py", args)
     args = ["rmtag", "--tags", "Hakone", "all"]
     callscript("photoidx.py", args)
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--tags", "all"]
         callscript("photoidx.py", args, stdout=f)
@@ -153,7 +153,7 @@ def test_rmtag_all(imgdir, monkeypatch):
     monkeypatch.chdir(str(imgdir))
     args = ["-d", str(imgdir), "rmtag", "all"]
     callscript("photoidx.py", args)
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", "--tags", "all"]
         callscript("photoidx.py", args, stdout=f)
@@ -165,7 +165,7 @@ def test_rmtag_all(imgdir, monkeypatch):
 def test_ls_by_single_tag(imgdir):
     """Select by one single tag.
     """
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", "--tags", "Shinto_shrine"]
         callscript("photoidx.py", args, stdout=f)
@@ -182,7 +182,7 @@ def test_ls_by_mult_tags(imgdir):
     Combining multiple tags acts like an and, it selects only images
     having all the tags set.
     """
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", "--tags", "Tokyo,Shinto_shrine"]
         callscript("photoidx.py", args, stdout=f)
@@ -200,7 +200,7 @@ def test_ls_by_neg_tags(imgdir, monkeypatch):
     the tag not set.
     """
     monkeypatch.chdir(str(imgdir))
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--tags", "Tokyo,!Shinto_shrine"]
         callscript("photoidx.py", args, stdout=f)
@@ -217,7 +217,7 @@ def test_ls_by_empty_tag(imgdir):
 
     The option tags with empty value selects images having no tag.
     """
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", "--tags", ""]
         callscript("photoidx.py", args, stdout=f)
@@ -232,7 +232,7 @@ def test_ls_by_date_and_tag(imgdir):
     Multiple selection criteria, such as date and tags may be
     combined.
     """
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", 
                 "--tags", "Tokyo", "--date", "2016-02-28"]
@@ -248,7 +248,7 @@ def test_ls_by_date_and_tag(imgdir):
 def test_lstags_all(imgdir):
     """List tags.
     """
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "lstags"]
         callscript("photoidx.py", args, stdout=f)
@@ -263,7 +263,7 @@ def test_lstags_by_tags(imgdir, monkeypatch):
     """List tags selected by tags.
     """
     monkeypatch.chdir(str(imgdir))
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["lstags", "--tags", "Tokyo"]
         callscript("photoidx.py", args, stdout=f)
@@ -278,7 +278,7 @@ def test_select_by_files(imgdir, monkeypatch):
     monkeypatch.chdir(str(imgdir))
     args = ["select", "dsc_5126.jpg"]
     callscript("photoidx.py", args)
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--selected"]
         callscript("photoidx.py", args, stdout=f)
@@ -295,7 +295,7 @@ def test_select_by_tag(imgdir, monkeypatch):
     monkeypatch.chdir(str(imgdir))
     args = ["select", "--tags", "Shinto_shrine"]
     callscript("photoidx.py", args)
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--selected"]
         callscript("photoidx.py", args, stdout=f)
@@ -310,7 +310,7 @@ def test_deselect_by_files(imgdir, monkeypatch):
     monkeypatch.chdir(str(imgdir))
     args = ["deselect", "dsc_4831.jpg"]
     callscript("photoidx.py", args)
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--selected"]
         callscript("photoidx.py", args, stdout=f)
@@ -325,7 +325,7 @@ def test_deselect_by_files(imgdir, monkeypatch):
 def test_stats_all(imgdir):
     """Show stats.
     """
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "stats"]
         callscript("photoidx.py", args, stdout=f)
@@ -354,7 +354,7 @@ def test_stats_all(imgdir):
 def test_stats_filtered(imgdir):
     """Show stats on a selection.
     """
-    fname = imgdir.joinpath("out")
+    fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "stats", "--tags", "Tokyo"]
         callscript("photoidx.py", args, stdout=f)

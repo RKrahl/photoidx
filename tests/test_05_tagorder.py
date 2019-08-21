@@ -48,8 +48,8 @@ tags = {
 
 @pytest.mark.dependency()
 def test_tag_ref(imgdir):
-    idxfname = str(imgdir.joinpath(".index.yaml"))
-    reffname = str(imgdir.joinpath("index-ref.yaml"))
+    idxfname = str(imgdir / ".index.yaml")
+    reffname = str(imgdir / "index-ref.yaml")
     shutil.copy(gettestdata("index-create.yaml"), idxfname)
     with photo.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Japan", "Tokyo", "Hakone", "Kyoto", 
@@ -65,8 +65,8 @@ def test_tag_ref(imgdir):
 def test_tag_shuffle(imgdir):
     """Same as test_tag_ref(), only the order of setting the tags differ.
     """
-    idxfname = str(imgdir.joinpath(".index.yaml"))
-    reffname = str(imgdir.joinpath("index-ref.yaml"))
+    idxfname = str(imgdir / ".index.yaml")
+    reffname = str(imgdir / "index-ref.yaml")
     shutil.copy(gettestdata("index-create.yaml"), idxfname)
     with photo.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Ginza", "Hakone", "Japan", "Geisha", 
@@ -82,8 +82,8 @@ def test_tag_shuffle(imgdir):
 def test_tag_remove(imgdir):
     """First set all tags on all images, then remove the wrong ones.
     """
-    idxfname = str(imgdir.joinpath(".index.yaml"))
-    reffname = str(imgdir.joinpath("index-ref.yaml"))
+    idxfname = str(imgdir / ".index.yaml")
+    reffname = str(imgdir / "index-ref.yaml")
     shutil.copy(gettestdata("index-create.yaml"), idxfname)
     with photo.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Tokyo", "Shinto_shrine", "Ginza", "Geisha", 
@@ -102,8 +102,8 @@ def test_tag_remove(imgdir):
 def test_tag_extra(imgdir):
     """Add a spurious extra tag first and remove it later.
     """
-    idxfname = str(imgdir.joinpath(".index.yaml"))
-    reffname = str(imgdir.joinpath("index-ref.yaml"))
+    idxfname = str(imgdir / ".index.yaml")
+    reffname = str(imgdir / "index-ref.yaml")
     shutil.copy(gettestdata("index-create.yaml"), idxfname)
     with photo.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Japan", "Tokyo", "Hakone", "Kyoto", 

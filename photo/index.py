@@ -87,7 +87,7 @@ class Index(MutableSequence):
             self.close()
             fname = Path(fname)
             if fname.is_dir():
-                fname = fname.joinpath(self.defIdxFilename)
+                fname = fname / self.defIdxFilename
             self.directory = fname.parent.resolve()
             fd = os.open(str(fname), flags, mode=0o666)
             self.idxfile = os.fdopen(fd, "r+t")
@@ -96,7 +96,7 @@ class Index(MutableSequence):
         else:
             if not self.directory:
                 self.directory = Path.cwd()
-            fname = self.directory.joinpath(self.defIdxFilename)
+            fname = self.directory / self.defIdxFilename
             fd = os.open(str(fname), flags, mode=0o666)
             self.idxfile = os.fdopen(fd, "r+t")
 

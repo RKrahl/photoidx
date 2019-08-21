@@ -69,7 +69,7 @@ class ImageInfoDialog(QtGui.QDialog):
         self.setWindowTitle("Image Info")
 
     def setinfo(self, item):
-        exifdata = Exif(self.basedir.joinpath(item.filename))
+        exifdata = Exif(self.basedir / item.filename)
         self.cameraModel.setText(str(exifdata.cameraModel))
         self.filename.setText(str(item.filename))
         if item.createDate:

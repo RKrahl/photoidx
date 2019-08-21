@@ -13,7 +13,7 @@ import pytest
 testdir = Path(__file__).parent
 
 def gettestdata(fname):
-    fname = testdir.joinpath("data", fname)
+    fname = testdir / "data" / fname
     assert fname.is_file()
     return str(fname)
 

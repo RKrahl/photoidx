@@ -31,7 +31,7 @@ tags = {
 def imgdir(tmpdir):
     for fname in testimgfiles:
         shutil.copy(fname, str(tmpdir))
-    shutil.copy(baseindex, str(tmpdir.joinpath(".index.yaml")))
+    shutil.copy(baseindex, str(tmpdir / ".index.yaml"))
     return tmpdir
 
 def test_tag_unicode(imgdir):
@@ -40,5 +40,5 @@ def test_tag_unicode(imgdir):
             for t in tags[str(item.filename)]:
                 item.tags.add(t)
         idx.write()
-    idxfile = str(imgdir.joinpath(".index.yaml"))
+    idxfile = str(imgdir / ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

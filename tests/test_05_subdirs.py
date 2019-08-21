@@ -30,10 +30,10 @@ checkprog = "/usr/bin/md5sum"
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for k in testimgs.keys():
-        d = tmpdir.joinpath(k)
+        d = tmpdir / k
         d.mkdir()
         for f in testimgs[k]:
-            shutil.copy(gettestdata(f), str(d.joinpath(f)))
+            shutil.copy(gettestdata(f), str(d / f))
     return tmpdir
 
 @pytest.mark.dependency()
@@ -42,9 +42,9 @@ def test_create(imgdir):
     """
     with photo.index.Index(imgdir=imgdir) as idx:
         for k in ("Japan", "Quebec"):
-            idx.extend_dir(imgdir.joinpath(k))
+            idx.extend_dir(imgdir / k)
         idx.write()
-    idxfile = str(imgdir.joinpath(".index.yaml"))
+    idxfile = str(imgdir / ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_create"])
@@ -56,7 +56,7 @@ def test_checksum(imgdir, monkeypatch):
     """
     if not Path(checkprog).is_file():
         pytest.skip("%s not found." % checkprog)
-    fname = imgdir.joinpath(hashalg)
+    fname = imgdir / hashalg
     with photo.index.Index(idxfile=imgdir) as idx:
         with fname.open("wt") as f:
             for i in idx:
