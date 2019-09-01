@@ -1,7 +1,7 @@
 %define pkgname		 photo
 
 Name:		python3-%{pkgname}
-Version:	0.9.1
+Version:	0.9.2
 Release:	1
 Summary:	Tools for managing photo collections
 License:	Apache-2.0
@@ -33,7 +33,7 @@ maintaining tags in a collection of photos.
 Summary:	Tools for managing photo collections
 Requires:	python3-%{pkgname} = %{version}
 Requires:	python3-pyside
-Recommends:	python3-vignette
+Recommends:	python3-vignette >= 4.3.0
 
 %description qt
 This package provides an image viewer for collection of photos.
