@@ -8,15 +8,22 @@ try:
 except ImportError:
     vignette = None
 
-# Disable vignette tumbnailer backends that are not useful in the
-# context of photo-tools.
+# Limit the vignette thumbnailer backends to those dealing with images.
 if vignette:
-    for backcls in (vignette.OooCliBackend, 
-                    vignette.PopplerCliBackend, 
-                    vignette.FFMpegCliBackend):
-        for i in reversed(range(len(vignette.THUMBNAILER_BACKENDS))):
-            if isinstance(vignette.THUMBNAILER_BACKENDS[i], backcls):
-                del vignette.THUMBNAILER_BACKENDS[i]
+    try:
+        # vignette 4.5.2 or newer
+        vignette.select_thumbnailer_types([vignette.FILETYPE_IMAGE])
+    except AttributeError:
+        if hasattr(vignette, 'THUMBNAILER_BACKENDS'):
+            # vignette 4.3.0 or newer
+            vignette.THUMBNAILER_BACKENDS = [
+                vignette.QtBackend(),
+                vignette.PilBackend(),
+                vignette.MagickBackend()
+            ]
+        else:
+            # vignette is too old to be usable
+            vignette = None
 
 
 class ImageNotFoundError(Exception):

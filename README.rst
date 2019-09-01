@@ -27,7 +27,7 @@ Required library packages:
 
 Optional library packages:
 
-+ `vignette`_
++ `vignette`_ >= 4.3.0
 
   Needed to cache thumbnail images for the overview window.  If
   vignette is not available, everything will still work, but
