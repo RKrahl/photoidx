@@ -51,7 +51,7 @@ def test_stats_all_yaml(imgdir):
     """The string representation of a Stats object is YAML.
     """
     with photo.index.Index(idxfile=imgdir) as idx:
-        stats = yaml.load(str(Stats(idx)))
+        stats = yaml.safe_load(str(Stats(idx)))
     assert stats["Count"] == 5
     assert stats["Selected"] == 2
     assert stats["Oldest"] == datetime.datetime(2016, 2, 28, 17, 26, 39)
