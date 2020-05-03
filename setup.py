@@ -25,7 +25,7 @@ setup(
     author = AUTHOR_NAME,
     author_email = AUTHOR_EMAIL,
     license = "Apache-2.0",
-    requires = ["PyYAML"],
+    requires = ["PyYAML", "exif"],
     packages = ["photo", "photo.qt"],
     scripts = ["photoidx.py", "imageview.py"],
     classifiers = [
@@ -33,8 +33,6 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
