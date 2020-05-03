@@ -8,7 +8,7 @@ future versions of the photo-tools distribution without further
 notice.
 """
 
-from collections import MutableSequence
+from collections.abc import MutableSequence
 
 class LazyList(MutableSequence):
     """A list generated lazily from an iterable.

@@ -3,7 +3,7 @@
 
 import re
 import math
-from collections import Mapping
+from collections.abc import Mapping
 
 
 _geopos_pattern = (r"^\s*(?P<lat>\d+(?:\.\d*))\s*(?P<latref>N|S),\s*"

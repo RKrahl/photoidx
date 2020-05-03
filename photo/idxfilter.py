@@ -2,7 +2,6 @@
 """
 
 import argparse
-import collections
 import datetime
 from pathlib import Path
 import re
