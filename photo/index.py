@@ -1,7 +1,7 @@
 """Provide the class Index which represents an index of photos.
 """
 
-from collections import MutableSequence
+from collections.abc import MutableSequence
 import errno
 import fcntl
 import os
