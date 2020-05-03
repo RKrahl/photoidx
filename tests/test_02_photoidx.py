@@ -330,7 +330,7 @@ def test_stats_all(imgdir):
         args = ["-d", str(imgdir), "stats"]
         callscript("photoidx.py", args, stdout=f)
     with fname.open("rt") as f:
-        stats = yaml.load(f)
+        stats = yaml.safe_load(f)
     assert stats["Count"] == 5
     assert stats["Oldest"] == datetime.datetime(2016, 2, 28, 17, 26, 39)
     assert stats["Newest"] == datetime.datetime(2016, 3, 9, 10, 7, 48)
@@ -359,7 +359,7 @@ def test_stats_filtered(imgdir):
         args = ["-d", str(imgdir), "stats", "--tags", "Tokyo"]
         callscript("photoidx.py", args, stdout=f)
     with fname.open("rt") as f:
-        stats = yaml.load(f)
+        stats = yaml.safe_load(f)
     assert stats["Count"] == 2
     assert stats["Oldest"] == datetime.datetime(2016, 2, 28, 17, 26, 39)
     assert stats["Newest"] == datetime.datetime(2016, 2, 29, 11, 37, 51)

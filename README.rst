@@ -77,13 +77,10 @@ the site-packages directory of your Python installation.
 Copyright and License
 ---------------------
 
-Copyright 2015-2019 Rolf Krahl
+Copyright 2015–2020 Rolf Krahl
 
-Licensed under the Apache License, Version 2.0 (the "License"); you
-may not use this file except in compliance with the License.  You may
-obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
+Licensed under the `Apache License`_, Version 2.0 (the "License"); you
+may not use this file except in compliance with the License.
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -92,12 +89,12 @@ implied.  See the License for the specific language governing
 permissions and limitations under the License.
 
 
-
-.. _PyYAML: http://pyyaml.org/wiki/PyYAML
+.. _PyYAML: https://github.com/yaml/pyyaml
 .. _gexiv2: https://wiki.gnome.org/Projects/gexiv2
-.. _PySide: http://qt-project.org/wiki/PySide
+.. _PySide: https://wiki.qt.io/PySide
 .. _vignette: https://github.com/hydrargyrum/vignette
-.. _pytest: http://pytest.org/
+.. _pytest: https://pytest.org/
 .. _pytest-dependency: https://github.com/RKrahl/pytest-dependency
 .. _distutils-pytest: https://github.com/RKrahl/distutils-pytest
-.. _Installing Python Modules: https://docs.python.org/2.7/install/
+.. _Installing Python Modules: https://docs.python.org/3/install/
+.. _Apache License: https://www.apache.org/licenses/LICENSE-2.0

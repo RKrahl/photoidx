@@ -113,7 +113,7 @@ class Index(MutableSequence):
         """
         self._get_idxfile(idxfile, os.O_RDWR)
         self._lockf()
-        self.items = [ IdxItem(data=i) for i in yaml.load(self.idxfile) ]
+        self.items = [ IdxItem(data=i) for i in yaml.safe_load(self.idxfile) ]
 
     def write(self, idxfile=None):
         """Write the index to a file.
