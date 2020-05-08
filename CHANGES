@@ -3,6 +3,10 @@
 
 * Version 0.9.4 (not yet released)
 
+** Internal changes
+
+ + Issue #48: Move from GExiv2 to exif.
+
 ** Bug fixes and minor changes
 
  + PR #49: Fix DeprecationWarning about importing the ABCs from
