@@ -15,13 +15,13 @@ System requirements
 
 Python:
 
-+ Python 3.4 or newer.
++ Python 3.6 or newer.
 
 Required library packages:
 
 + `PyYAML`_
 
-+ `gexiv2`_
++ `exif`_ >= 0.8.3
 
 + `PySide`_
 
@@ -90,7 +90,7 @@ permissions and limitations under the License.
 
 
 .. _PyYAML: https://github.com/yaml/pyyaml
-.. _gexiv2: https://wiki.gnome.org/Projects/gexiv2
+.. _exif: https://github.com/TNThieding/exif
 .. _PySide: https://wiki.qt.io/PySide
 .. _vignette: https://github.com/hydrargyrum/vignette
 .. _pytest: https://pytest.org/

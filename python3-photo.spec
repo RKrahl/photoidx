@@ -9,16 +9,16 @@ Group:		Development/Languages/Python
 Url:		https://github.com/RKrahl/photo-tools
 Source:		%{pkgname}-%{version}.tar.gz
 BuildArch:	noarch
-BuildRequires:	python3-devel
+BuildRequires:	python3-devel >= 3.6
 BuildRequires:	python3-PyYAML
-BuildRequires:	python3-gexiv2
+BuildRequires:	python3-exif >= 0.8.3
 BuildRequires:	python3-pytest
 %if 0%{?sle_version} >= 150000 || 0%{?sle_version} == 120300
 BuildRequires:	python3-pytest-dependency
 %endif
 BuildRequires:	python3-distutils-pytest
 Requires:	python3-PyYAML
-Requires:	python3-gexiv2
+Requires:	python3-exif >= 0.8.3
 %if 0%{?suse_version}
 BuildRequires:	fdupes
 %endif
