@@ -1,27 +1,26 @@
-%define pkgname		 photo
+%bcond_without tests
+%global distname photo
 
-Name:		python3-%{pkgname}
-Version:	0.9.3
-Release:	1
-Summary:	Tools for managing photo collections
+Name:		python3-%{distname}
+Version:	$version
+Release:	0
+Summary:	$description
+Url:		$url
 License:	Apache-2.0
-Group:		Development/Languages/Python
-Url:		https://github.com/RKrahl/photo-tools
-Source:		%{pkgname}-%{version}.tar.gz
-BuildArch:	noarch
-BuildRequires:	python3-devel >= 3.6
+Group:		Productivity/Graphics/Viewers
+Source:		%{distname}-%{version}.tar.gz
+BuildRequires:	fdupes
 BuildRequires:	python3-PyYAML
+BuildRequires:	python3-devel >= 3.6
 BuildRequires:	python3-exif >= 0.8.3
+%if %{with tests}
+BuildRequires:	python3-distutils-pytest
 BuildRequires:	python3-pytest
-%if 0%{?sle_version} >= 150000 || 0%{?sle_version} == 120300
 BuildRequires:	python3-pytest-dependency
 %endif
-BuildRequires:	python3-distutils-pytest
 Requires:	python3-PyYAML
 Requires:	python3-exif >= 0.8.3
-%if 0%{?suse_version}
-BuildRequires:	fdupes
-%endif
+BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-build
 
 %description
@@ -31,7 +30,7 @@ maintaining tags in a collection of photos.
 
 %package qt
 Summary:	Tools for managing photo collections
-Requires:	python3-%{pkgname} = %{version}
+Requires:	python3-%{distname} = %{version}
 Requires:	python3-pyside
 Recommends:	python3-vignette >= 4.3.0
 
@@ -40,7 +39,7 @@ This package provides an image viewer for collection of photos.
 
 
 %prep
-%setup -q -n %{pkgname}-%{version}
+%setup -q -n %{distname}-%{version}
 
 
 %build
@@ -51,17 +50,13 @@ python3 setup.py build
 python3 setup.py install --optimize=1 --prefix=%{_prefix} --root=%{buildroot}
 %__mv %{buildroot}%{_bindir}/photoidx.py %{buildroot}%{_bindir}/photoidx
 %__mv %{buildroot}%{_bindir}/imageview.py %{buildroot}%{_bindir}/imageview
-%if 0%{?suse_version}
 %fdupes %{buildroot}
-%endif
 
 
+%if %{with tests}
 %check
 python3 setup.py test
-
-
-%clean
-rm -rf %{buildroot}
+%endif
 
 
 %files

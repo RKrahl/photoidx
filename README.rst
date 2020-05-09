@@ -33,6 +33,14 @@ Optional library packages:
   vignette is not available, everything will still work, but
   displaying the overview window may be significantly slower.
 
++ `setuptools_scm`_
+
+  The version number is managed using this package.  All source
+  distributions add a static text file with the version number and
+  fall back using that if `setuptools_scm` is not available.  So this
+  package is only needed to build out of the plain development source
+  tree as cloned from GitHub.
+
 + `pytest`_
 
   Only needed to run the test suite.
@@ -93,6 +101,7 @@ permissions and limitations under the License.
 .. _exif: https://github.com/TNThieding/exif
 .. _PySide: https://wiki.qt.io/PySide
 .. _vignette: https://github.com/hydrargyrum/vignette
+.. _setuptools_scm: https://github.com/pypa/setuptools_scm/
 .. _pytest: https://pytest.org/
 .. _pytest-dependency: https://github.com/RKrahl/pytest-dependency
 .. _distutils-pytest: https://github.com/RKrahl/distutils-pytest
