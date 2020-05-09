@@ -1,4 +1,4 @@
-%bcond_with tests
+%bcond_without tests
 %global distname photo
 
 Name:		python3-%{distname}
