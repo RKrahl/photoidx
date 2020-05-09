@@ -1,58 +1,111 @@
-#! /usr/bin/python
+"""Tools for photo collections.
 
+This package provides tools for managing photo collections.
+"""
+
+import distutils.command.build_py
+import distutils.command.sdist
+import distutils.core
 from distutils.core import setup
-try:
-    from distutils.command.build_py import build_py_2to3 as build_py
-    # Must disable the filter fixer.
-    import lib2to3.refactor
-    fixer_names = lib2to3.refactor.get_fixers_from_package('lib2to3.fixes')
-    fixer_names.remove('lib2to3.fixes.fix_filter')
-    build_py.fixer_names = fixer_names
-except ImportError:
-    # Python 2.x
-    from distutils.command.build_py import build_py
+import distutils.log
+from glob import glob
+from pathlib import Path
+import string
 try:
     import distutils_pytest
 except ImportError:
     pass
-import photo
-import re
+try:
+    import setuptools_scm
+    version = setuptools_scm.get_version()
+    with open(".version", "wt") as f:
+        f.write(version)
+except (ImportError, LookupError):
+    try:
+        with open(".version", "rt") as f:
+            version = f.read()
+    except OSError:
+        distutils.log.warn("warning: cannot determine version number")
+        version = "UNKNOWN"
 
-DOCLINES         = photo.__doc__.split("\n")
-DESCRIPTION      = DOCLINES[0]
-LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
-VERSION          = photo.__version__
-AUTHOR           = photo.__author__
-m = re.match(r"^(.*?)\s*<(.*)>$", AUTHOR)
-(AUTHOR_NAME, AUTHOR_EMAIL) = m.groups() if m else (AUTHOR, None)
+doclines = __doc__.strip().split("\n")
+
+
+class init_py(distutils.core.Command):
+
+    description = "generate the main __init__.py file"
+    user_options = []
+    init_template = '''"""%s"""
+
+__version__ = "%s"
+'''
+
+    def initialize_options(self):
+        self.package_dir = None
+
+    def finalize_options(self):
+        self.package_dir = {}
+        if self.distribution.package_dir:
+            for name, path in self.distribution.package_dir.items():
+                self.package_dir[name] = convert_path(path)
+
+    def run(self):
+        try:
+            pkgname = self.distribution.packages[0]
+        except IndexError:
+            distutils.log.warn("warning: no package defined")
+        else:
+            pkgdir = Path(self.package_dir.get(pkgname, pkgname))
+            ver = self.distribution.get_version()
+            if not pkgdir.is_dir():
+                pkgdir.mkdir()
+            with (pkgdir / "__init__.py").open("wt") as f:
+                print(self.init_template % (__doc__, ver), file=f)
+
+
+class sdist(distutils.command.sdist.sdist):
+    def run(self):
+        self.run_command('init_py')
+        super().run()
+        subst = {
+            "version": self.distribution.get_version(),
+            "url": self.distribution.get_url(),
+            "description": self.distribution.get_description(),
+            "long_description": self.distribution.get_long_description(),
+        }
+        for spec in glob("*.spec"):
+            with Path(spec).open('rt') as inf:
+                with Path(self.dist_dir, spec).open('wt') as outf:
+                    outf.write(string.Template(inf.read()).substitute(subst))
+
+
+class build_py(distutils.command.build_py.build_py):
+    def run(self):
+        self.run_command('init_py')
+        super().run()
 
 
 setup(
     name = "photo",
-    version = VERSION,
-    description = DESCRIPTION,
-    long_description = LONG_DESCRIPTION,
-    author = AUTHOR_NAME,
-    author_email = AUTHOR_EMAIL,
+    version = version,
+    description = doclines[0],
+    long_description = "\n".join(doclines[2:]),
+    author = "Rolf Krahl",
+    author_email = "rolf@rotkraut.de",
+    url = "https://github.com/RKrahl/photo-tools",
     license = "Apache-2.0",
-    requires = ["yaml"],
+    requires = ["PyYAML", "exif"],
     packages = ["photo", "photo.qt"],
     scripts = ["photoidx.py", "imageview.py"],
     classifiers = [
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.1",
-        "Programming Language :: Python :: 3.2",
-        "Programming Language :: Python :: 3.3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: End Users/Desktop",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
-        ],
-    cmdclass = {'build_py': build_py},
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+    ],
+    cmdclass = {'build_py': build_py, 'sdist': sdist, 'init_py': init_py},
 )
-

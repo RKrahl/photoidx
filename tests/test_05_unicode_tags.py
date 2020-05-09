@@ -4,9 +4,8 @@ When tags are set as unicode while the content is pure ASCII, PyYAML
 marks them as `!!python/unicode 'tag'`.
 """
 
-import os.path
-import shutil
 import filecmp
+import shutil
 import pytest
 import photo.index
 from conftest import tmpdir, gettestdata
@@ -20,26 +19,26 @@ baseindex = gettestdata("index-create.yaml")
 refindex = gettestdata("index-unicode-tags.yaml")
 
 tags = {
-    "dsc_4623.jpg": [ u"T\u014Dky\u014D", u"Ginza" ],
-    "dsc_4664.jpg": [ u"T\u014Dky\u014D", u"Meiji-jing\u016B", u"Shint\u014D" ],
-    "dsc_4831.jpg": [ u"Hakone", u"Shint\u014D" ],
-    "dsc_5126.jpg": [ u"Ky\u014Dto", u"Gion" ],
-    "dsc_5167.jpg": [ u"Ky\u014Dto", u"Ry\u014Dan-ji", u"Buddha" ],
+    "dsc_4623.jpg": [ "T\u014Dky\u014D", "Ginza" ],
+    "dsc_4664.jpg": [ "T\u014Dky\u014D", "Meiji-jing\u016B", "Shint\u014D" ],
+    "dsc_4831.jpg": [ "Hakone", "Shint\u014D" ],
+    "dsc_5126.jpg": [ "Ky\u014Dto", "Gion" ],
+    "dsc_5167.jpg": [ "Ky\u014Dto", "Ry\u014Dan-ji", "Buddha" ],
 }
 
 
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, tmpdir)
-    shutil.copy(baseindex, os.path.join(tmpdir, ".index.yaml"))
+        shutil.copy(fname, str(tmpdir))
+    shutil.copy(baseindex, str(tmpdir / ".index.yaml"))
     return tmpdir
 
 def test_tag_unicode(imgdir):
-    idx = photo.index.Index(imgdir=imgdir)
-    for item in idx:
-        for t in tags[item.filename]:
-            item.tags.add(t)
-    idx.write()
-    idxfile = os.path.join(imgdir, ".index.yaml")
+    with photo.index.Index(imgdir=imgdir) as idx:
+        for item in idx:
+            for t in tags[str(item.filename)]:
+                item.tags.add(t)
+        idx.write()
+    idxfile = str(imgdir / ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

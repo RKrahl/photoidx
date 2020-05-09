@@ -1,27 +1,26 @@
-%define pkgname		 photo
+%bcond_without tests
+%global distname photo
 
-Name:		python-%{pkgname}
-Version:	0.7
-Release:	1
-Summary:	Tools for managing photo collections
+Name:		python3-%{distname}
+Version:	$version
+Release:	0
+Summary:	$description
+Url:		$url
 License:	Apache-2.0
-Group:		Development/Languages/Python
-Url:		https://github.com/RKrahl/photo-tools
-Source:		%{pkgname}-%{version}.tar.gz
-BuildArch:	noarch
-BuildRequires:	python-devel >= 2.7
-BuildRequires:	python-PyYAML
-BuildRequires:	python-gexiv2
-BuildRequires:	python-pytest
-%if 0%{?sle_version} >= 150000 || 0%{?sle_version} >= 120200
-BuildRequires:	python-pytest-dependency
-%endif
-BuildRequires:	python-distutils-pytest
-Requires:	python-PyYAML
-Requires:	python-gexiv2
-%if 0%{?suse_version}
+Group:		Productivity/Graphics/Viewers
+Source:		%{distname}-%{version}.tar.gz
 BuildRequires:	fdupes
+BuildRequires:	python3-PyYAML
+BuildRequires:	python3-devel >= 3.6
+BuildRequires:	python3-exif >= 0.8.3
+%if %{with tests}
+BuildRequires:	python3-distutils-pytest
+BuildRequires:	python3-pytest
+BuildRequires:	python3-pytest-dependency
 %endif
+Requires:	python3-PyYAML
+Requires:	python3-exif >= 0.8.3
+BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-build
 
 %description
@@ -31,50 +30,46 @@ maintaining tags in a collection of photos.
 
 %package qt
 Summary:	Tools for managing photo collections
-Requires:	python-%{pkgname} = %{version}
-Requires:	python-pyside
-Recommends:	python-vignette
+Requires:	python3-%{distname} = %{version}
+Requires:	python3-pyside
+Recommends:	python3-vignette >= 4.3.0
 
 %description qt
 This package provides an image viewer for collection of photos.
 
 
 %prep
-%setup -q -n %{pkgname}-%{version}
+%setup -q -n %{distname}-%{version}
 
 
 %build
-python setup.py build
+python3 setup.py build
 
 
 %install
-python setup.py install --optimize=1 --prefix=%{_prefix} --root=%{buildroot}
+python3 setup.py install --optimize=1 --prefix=%{_prefix} --root=%{buildroot}
 %__mv %{buildroot}%{_bindir}/photoidx.py %{buildroot}%{_bindir}/photoidx
 %__mv %{buildroot}%{_bindir}/imageview.py %{buildroot}%{_bindir}/imageview
-%if 0%{?suse_version}
 %fdupes %{buildroot}
-%endif
 
 
+%if %{with tests}
 %check
-python setup.py test
-
-
-%clean
-rm -rf %{buildroot}
+python3 setup.py test
+%endif
 
 
 %files
 %defattr(-,root,root)
 %doc README.rst CHANGES
-%{python_sitelib}/*
-%exclude %{python_sitelib}/photo/qt
-%exclude %{_bindir}
+%{python3_sitelib}/*
+%exclude %{python3_sitelib}/photo/qt
+%{_bindir}/photoidx
 
 %files qt
 %defattr(-,root,root)
-%{python_sitelib}/photo/qt
-%exclude %{_bindir}
+%{python3_sitelib}/photo/qt
+%{_bindir}/imageview
 
 
 %changelog

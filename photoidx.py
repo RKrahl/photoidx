@@ -1,67 +1,73 @@
 #! /usr/bin/python
 
-from __future__ import print_function
 import argparse
 import photo.index
 import photo.idxfilter
+from photo.stats import Stats
 
 
 def create(args):
     idxfile = args.directory if args.update else None
     hashalg = args.checksums.split(',') if args.checksums else []
-    idx = photo.index.Index(idxfile=idxfile, imgdir=args.directory, 
-                            hashalg=hashalg)
-    idx.write()
+    with photo.index.Index(idxfile=idxfile, imgdir=args.directory, 
+                           hashalg=hashalg) as idx:
+        idx.write()
 
 def ls(args):
-    idx = photo.index.Index(idxfile=args.directory)
-    idxfilter = photo.idxfilter.IdxFilter(args)
-    for i in idxfilter.filter(idx):
-        if args.checksum:
-            try:
-                checksum = i.checksum[args.checksum]
-            except KeyError:
-                continue
-            print("%s  %s" % (checksum, i.filename))
-        else:
-            print(i.filename)
+    with photo.index.Index(idxfile=args.directory) as idx:
+        idxfilter = photo.idxfilter.IdxFilter.from_args(args)
+        for i in idxfilter.filter(idx):
+            if args.checksum:
+                try:
+                    checksum = i.checksum[args.checksum]
+                except KeyError:
+                    continue
+                print("%s  %s" % (checksum, i.filename))
+            else:
+                print(i.filename)
 
 def lstags(args):
-    idx = photo.index.Index(idxfile=args.directory)
-    idxfilter = photo.idxfilter.IdxFilter(args)
-    tags = set()
-    for i in idxfilter.filter(idx):
-        tags.update(i.tags)
-    for t in sorted(tags):
-        print(t)
+    with photo.index.Index(idxfile=args.directory) as idx:
+        idxfilter = photo.idxfilter.IdxFilter.from_args(args)
+        tags = set()
+        for i in idxfilter.filter(idx):
+            tags.update(i.tags)
+        for t in sorted(tags):
+            print(t)
 
 def addtag(args):
-    idx = photo.index.Index(idxfile=args.directory)
-    idxfilter = photo.idxfilter.IdxFilter(args)
-    for i in idxfilter.filter(idx):
-        i.tags.add(args.tag)
-    idx.write()
+    with photo.index.Index(idxfile=args.directory) as idx:
+        idxfilter = photo.idxfilter.IdxFilter.from_args(args)
+        for i in idxfilter.filter(idx):
+            i.tags.add(args.tag)
+        idx.write()
 
 def rmtag(args):
-    idx = photo.index.Index(idxfile=args.directory)
-    idxfilter = photo.idxfilter.IdxFilter(args)
-    for i in idxfilter.filter(idx):
-        i.tags.discard(args.tag)
-    idx.write()
+    with photo.index.Index(idxfile=args.directory) as idx:
+        idxfilter = photo.idxfilter.IdxFilter.from_args(args)
+        for i in idxfilter.filter(idx):
+            i.tags.discard(args.tag)
+        idx.write()
 
 def select(args):
-    idx = photo.index.Index(idxfile=args.directory)
-    idxfilter = photo.idxfilter.IdxFilter(args)
-    for i in idxfilter.filter(idx):
-        i.selected = True
-    idx.write()
+    with photo.index.Index(idxfile=args.directory) as idx:
+        idxfilter = photo.idxfilter.IdxFilter.from_args(args)
+        for i in idxfilter.filter(idx):
+            i.selected = True
+        idx.write()
 
 def deselect(args):
-    idx = photo.index.Index(idxfile=args.directory)
-    idxfilter = photo.idxfilter.IdxFilter(args)
-    for i in idxfilter.filter(idx):
-        i.selected = False
-    idx.write()
+    with photo.index.Index(idxfile=args.directory) as idx:
+        idxfilter = photo.idxfilter.IdxFilter.from_args(args)
+        for i in idxfilter.filter(idx):
+            i.selected = False
+        idx.write()
+
+def stats(args):
+    with photo.index.Index(idxfile=args.directory) as idx:
+        idxfilter = photo.idxfilter.IdxFilter.from_args(args)
+        stats = Stats(idxfilter.filter(idx))
+        print(str(stats))
 
 
 argparser = argparse.ArgumentParser()
@@ -106,5 +112,11 @@ deselect_parser = subparsers.add_parser('deselect',
 photo.idxfilter.addFilterArguments(deselect_parser)
 deselect_parser.set_defaults(func=deselect)
 
+stats_parser = subparsers.add_parser('stats', help="show statistics")
+photo.idxfilter.addFilterArguments(stats_parser)
+stats_parser.set_defaults(func=stats)
+
 args = argparser.parse_args()
+if not hasattr(args, "func"):
+    argparser.error("subcommand is required")
 args.func(args)

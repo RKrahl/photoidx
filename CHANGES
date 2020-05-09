@@ -1,12 +1,109 @@
 		  History of changes to photo-tools
 		  =================================
 
-* Version 0.8 (not yet released)
+* Version 0.9.4 (not yet released)
+
+** Internal changes
+
+ + Issue #48: Move from GExiv2 to exif.
+
+** Bug fixes and minor changes
+
+ + PR #49: Fix DeprecationWarning about importing the ABCs from
+   'collections'.
+
+ + Issue #47, PR #50: Use setuptools_scm to manage the version number.
+
+* Version 0.9.3 (2020-05-03)
+
+** Bug fixes and minor changes
+
+ + Issue #46: Fix YAMLLoadWarning.
+
+* Version 0.9.2 (2019-09-01)
+
+** Bug fixes and minor changes
+
+ + Issue #45: update the code limiting the vignette thumbnailer
+   backends to use.
+
+* Version 0.9.1 (2019-08-21)
+
+** Bug fixes and minor changes
+
+ + Issue #44: opening the filter options dialog fails with TypeError.
+
+* Version 0.9.0 (2019-08-05)
 
 ** New features
 
+ + Issue #39: Review behavior of imageview concerning writing the
+   index: the index is not automatically written to disk any more
+   after each modification, but the user need to explicitly save it.
+   imageview may create a new index if started with the --create
+   command line flag.
+
+** Incompatible changes
+
+ + Drop support for Python 2.  Require Python 3.4 or newer.
+
+ + Use pathlib.Path rather then string in the IdxItem.filename
+   attribute.  Switch to pathlib for most internal representation of
+   filesystem paths.  As a side effect, the semantic of file paths may
+   be taken somewhat more coherent and strict now at some places.
+
+** Bug fixes and minor changes
+
+ + Issue #42: imageview may inadvertently create an image index.
+
+* Version 0.8.2 (2019-01-01)
+
+** Bug fixes and minor changes
+
+ + Issue #41: Setting filter options in imageviewer fails with
+   IndexError if current filter selects no image.
+
+* Version 0.8.1 (2019-01-01)
+
+** Bug fixes and minor changes
+
+ + Issue #40: TypeError is raised when trying to read a non existing
+   index file.
+
+* Version 0.8 (2018-12-31)
+
+** New features
+
+ + Issue #31: Implement modifying the current filter in imageview.
+
+ + Issue #30: Protect the index file against conflicting concurrent
+   access using file system locking.
+
+ + Issue #32: Add a stats command line interface subcommand.
+
  + Issue #20: Add a preferred order.  Add actions to the GUI to push
    images back and forth in the image order.
+
+** Incompatible changes
+
+ + Issue #35: Change the sematic of the --date command line option to
+   photoidx.py and imageview.py: when an interval is given as
+   argument, the end time is taken exclusively.
+   E.g. --date=2015-03-14--2015-03-15 excludes images taken on
+   March 15.
+
+** Bug fixes and minor changes
+
+ + Issue #36: Opening the overview images fails with IndexError if no
+   image is shown.
+
+ + Issue #37: AttributeError is raised when when calling photoidx.py
+   without arguments.
+
+ + Add a method Add method Index.extend_dir().
+
+ + Index.index() now supports the full variant having start and end
+   index arguments.
 
 * Version 0.7 (2017-12-31)
 

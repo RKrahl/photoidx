@@ -1,7 +1,6 @@
 """A dialog window to set and remove tags.
 """
 
-from __future__ import division
 import math
 from PySide import QtCore, QtGui
 
@@ -9,7 +8,7 @@ from PySide import QtCore, QtGui
 class TagSelectDialog(QtGui.QDialog):
 
     def __init__(self, taglist):
-        super(TagSelectDialog, self).__init__()
+        super().__init__()
 
         self.checkLayout = QtGui.QGridLayout()
         self.settags(taglist)

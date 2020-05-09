@@ -1,10 +1,9 @@
 """Geo tools, in particular class GeoPosition.
 """
 
-import sys
 import re
 import math
-from collections import Mapping
+from collections.abc import Mapping
 
 
 _geopos_pattern = (r"^\s*(?P<lat>\d+(?:\.\d*))\s*(?P<latref>N|S),\s*"
@@ -16,7 +15,7 @@ class deg(float):
     """A degree as float that can be converted to (degree, minute, second).
     """
     def __abs__(self):
-        return deg(super(deg, self).__abs__())
+        return deg(super().__abs__())
     def dms(self):
         dg = int(self)
         dm = int(60*(self-dg))
@@ -63,7 +62,7 @@ class GeoPosition(object):
                 raise ValueError("invalid Geo position %s: "
                                  "must have either 'E' or 'W' in keys." 
                                  % str(pos))
-        elif isinstance(pos, basestring):
+        elif isinstance(pos, str):
             m = _geopos_re.match(pos)
             if m:
                 latsign = 1.0 if m.group('latref') == 'N' else -1.0
@@ -75,23 +74,14 @@ class GeoPosition(object):
         else:
             raise TypeError("invalid type '%s'" % type(pos))
 
-    if sys.version_info < (3, 0):
+    def __str__(self):
+        return ("%d\xb0 %d\u2032 %.2f\u2033 %s, "
+                "%d\xb0 %d\u2032 %.2f\u2033 %s"
+                % (self.lat.dmsref() + self.lon.dmsref()))
 
-        def __str__(self):
-            return ("%d deg %d' %.2f\" %s, %d deg %d' %.2f\" %s"
-                    % (self.lat.dmsref() + self.lon.dmsref()))
-
-        def __unicode__(self):
-            return (u"%d\xb0 %d\u2032 %.2f\u2033 %s, "
-                    u"%d\xb0 %d\u2032 %.2f\u2033 %s"
-                    % (self.lat.dmsref() + self.lon.dmsref()))
-
-    else:
-
-        def __str__(self):
-            return (u"%d\xb0 %d\u2032 %.2f\u2033 %s, "
-                    u"%d\xb0 %d\u2032 %.2f\u2033 %s"
-                    % (self.lat.dmsref() + self.lon.dmsref()))
+    def floatstr(self):
+        return "%.5f %s, %.5f %s" % (abs(self.lat), self.lat.ref(), 
+                                     abs(self.lon), self.lon.ref())
 
     def as_dict(self):
         return {

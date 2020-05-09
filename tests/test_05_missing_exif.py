@@ -20,9 +20,9 @@ testimgfiles = [ gettestdata(i) for i in testimgs ]
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, tmpdir)
+        shutil.copy(fname, str(tmpdir))
     return tmpdir
 
 def test_create(imgdir):
-    idx = photo.index.Index(imgdir=imgdir)
-    idx.write()
+    with photo.index.Index(imgdir=imgdir) as idx:
+        idx.write()

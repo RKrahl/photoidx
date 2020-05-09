@@ -1,7 +1,8 @@
-*.pyc
 *~
 __pycache__/
 /.cache/
+/.env
+/.version
 /MANIFEST
 /build/
 /dist/
@@ -11,3 +12,4 @@ __pycache__/
 /doc/latex/
 /doc/linkcheck/
 /doc/man/
+/photo/__init__.py

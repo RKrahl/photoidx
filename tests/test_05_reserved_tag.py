@@ -4,9 +4,8 @@ The prefix 'pidx:' for tags is reserved for internal use in
 photo-tools.  It should be removed when reading an index file.
 """
 
-import os.path
-import shutil
 import filecmp
+import shutil
 import pytest
 import photo.index
 from conftest import tmpdir, gettestdata
@@ -22,11 +21,11 @@ refindex = gettestdata("index-tagged.yaml")
 
 def test_reserved_tags_convert(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, tmpdir)
-    idxfile = os.path.join(tmpdir, ".index.yaml")
+        shutil.copy(fname, str(tmpdir))
+    idxfile = str(tmpdir / ".index.yaml")
     shutil.copy(invindex, idxfile)
     # reading and writing the index transparantly filters out tags
     # using the reserved prefix.
-    idx = photo.index.Index(idxfile=tmpdir)
-    idx.write()
+    with photo.index.Index(idxfile=tmpdir) as idx:
+        idx.write()
     assert filecmp.cmp(idxfile, refindex), "index file differs from reference"
