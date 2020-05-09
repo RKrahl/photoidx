@@ -12,6 +12,8 @@
  + PR #49: Fix DeprecationWarning about importing the ABCs from
    'collections'.
 
+ + Issue #47, PR #50: Use setuptools_scm to manage the version number.
+
 * Version 0.9.3 (2020-05-03)
 
 ** Bug fixes and minor changes
