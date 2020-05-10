@@ -11,6 +11,7 @@ Misc
    :maxdepth: 2
 
    cli.selectopts
+   changelog
 
 Module reference
 ~~~~~~~~~~~~~~~~

@@ -61,7 +61,7 @@ python3 setup.py test
 
 %files
 %defattr(-,root,root)
-%doc README.rst CHANGES
+%doc README.rst CHANGES.rst
 %{python3_sitelib}/*
 %exclude %{python3_sitelib}/photo/qt
 %{_bindir}/photoidx
