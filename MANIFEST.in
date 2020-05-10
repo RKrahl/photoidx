@@ -3,10 +3,6 @@ include CHANGES.rst
 include LICENSE.txt
 include MANIFEST.in
 include README.rst
-include doc/html/*.html
-include doc/html/*.js
-include doc/html/_static/*
-include doc/html/objects.inv
 include tests/conftest.py
 include tests/test_*.py
 include tests/data/dsc_*.jpg

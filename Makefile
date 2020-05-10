@@ -8,11 +8,14 @@ build:
 test:
 	$(PYTHON) setup.py test
 
-sdist: doc-html
+sdist:
 	$(PYTHON) setup.py sdist
 
-doc-html:
-	$(MAKE) -C doc html
+doc-html: build
+	$(MAKE) -C doc html PYTHONPATH=$(BUILDLIB)
+
+doc-pdf: build
+	$(MAKE) -C doc latexpdf PYTHONPATH=$(BUILDLIB)
 
 clean:
 	rm -f *~ photo/*~ photo/qt/*~ tests/*~
@@ -29,4 +32,5 @@ distclean: clean
 init_py:
 	$(PYTHON) setup.py init_py
 
-.PHONY: build test sdist doc-html clean distclean init_py
+
+.PHONY: build test sdist doc-html doc-pdf clean distclean init_py
