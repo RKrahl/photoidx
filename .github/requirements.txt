@@ -1,5 +1,4 @@
-PyYAML <= 5.2 ; python_version == '3.4'
-PyYAML ; python_version > '3.4'
+PyYAML >=5.4
 distutils-pytest
 exif >= 0.8.3
 pytest >= 3.6.0
