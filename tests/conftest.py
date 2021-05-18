@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import pytest
+import photo
 
 
 testdir = Path(__file__).parent
@@ -44,3 +45,10 @@ def callscript(scriptname, args, stdin=None, stdout=None, stderr=None):
     cmd = [sys.executable, str(script)] + args
     print("\n>", *cmd)
     subprocess.check_call(cmd, stdin=stdin, stdout=stdout, stderr=stderr)
+
+def pytest_report_header(config):
+    """Add information on the package version used in the tests.
+    """
+    modpath = Path(photo.__file__).resolve().parent
+    return [ "photo-tools: %s" % (photo.__version__),
+             "             %s" % (modpath)]
