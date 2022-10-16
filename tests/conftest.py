@@ -18,23 +18,11 @@ def gettestdata(fname):
     assert fname.is_file()
     return str(fname)
 
-class TmpDir(object):
-    """Provide a temporary directory.
-    """
-    def __init__(self):
-        self.dir = Path(tempfile.mkdtemp(prefix="photo-test-"))
-    def __del__(self):
-        self.cleanup()
-    def cleanup(self):
-        if self.dir:
-            shutil.rmtree(str(self.dir))
-        self.dir = None
-
 @pytest.fixture(scope="module")
 def tmpdir(request):
-    td = TmpDir()
-    request.addfinalizer(td.cleanup)
-    return td.dir
+    td = tempfile.mkdtemp(prefix="photo-test-")
+    yield Path(td)
+    shutil.rmtree(td)
 
 def callscript(scriptname, args, stdin=None, stdout=None, stderr=None):
     try:
