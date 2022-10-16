@@ -9,6 +9,8 @@ Internal changes
 ----------------
 
 + `#48`_: Move from `gexiv2`_ to `exif`_.
++ `#51`_: Review build tool chain.
++ `#47`_, `#50`_: Use `setuptools_scm`_ to manage the version number.
 
 Bug fixes and minor changes
 ---------------------------
@@ -16,12 +18,11 @@ Bug fixes and minor changes
 + `#49`_: Fix :exc:`DeprecationWarning` about importing the ABCs from
   :mod:`collections`.
 
-+ `#47`_, `#50`_: Use `setuptools_scm`_ to manage the version number.
-
 .. _#47: https://github.com/RKrahl/photo-tools/issues/47
 .. _#48: https://github.com/RKrahl/photo-tools/issues/48
 .. _#49: https://github.com/RKrahl/photo-tools/pull/49
 .. _#50: https://github.com/RKrahl/photo-tools/pull/50
+.. _#51: https://github.com/RKrahl/photo-tools/pull/51
 
 
 0.9.3 (2020-05-03)
