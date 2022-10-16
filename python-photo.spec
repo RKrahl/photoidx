@@ -4,19 +4,20 @@
 Name:		python3-%{distname}
 Version:	$version
 Release:	0
-Summary:	$description
 Url:		$url
+Summary:	$description
 License:	Apache-2.0
 Group:		Productivity/Graphics/Viewers
 Source:		%{distname}-%{version}.tar.gz
 BuildRequires:	fdupes
-BuildRequires:	python3-PyYAML
-BuildRequires:	python3-devel >= 3.6
-BuildRequires:	python3-exif >= 0.8.3
+BuildRequires:	python3-base >= 3.6
+BuildRequires:	python3-setuptools
 %if %{with tests}
-BuildRequires:	python3-distutils-pytest
 BuildRequires:	python3-pytest
+BuildRequires:	python3-distutils-pytest
 BuildRequires:	python3-pytest-dependency
+BuildRequires:	python3-PyYAML
+BuildRequires:	python3-exif >= 0.8.3
 %endif
 Requires:	python3-PyYAML
 Requires:	python3-exif >= 0.8.3
@@ -61,7 +62,8 @@ python3 setup.py test
 
 %files
 %defattr(-,root,root)
-%doc README.rst CHANGES
+%doc README.rst CHANGES.rst
+%license LICENSE.txt
 %{python3_sitelib}/*
 %exclude %{python3_sitelib}/photo/qt
 %{_bindir}/photoidx

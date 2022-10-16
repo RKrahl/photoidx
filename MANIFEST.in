@@ -1,9 +1,10 @@
-include .version
-include CHANGES
+include CHANGES.rst
 include LICENSE.txt
 include MANIFEST.in
 include README.rst
+include _meta.py
 include tests/conftest.py
+include tests/pytest.ini
 include tests/test_*.py
 include tests/data/dsc_*.jpg
 include tests/data/index-*.yaml

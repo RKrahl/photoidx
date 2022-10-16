@@ -12,18 +12,17 @@ sdist:
 	$(PYTHON) setup.py sdist
 
 clean:
-	rm -f *~ photo/*~ photo/qt/*~ tests/*~
 	rm -rf build
+	rm -rf __pycache__
 
 distclean: clean
-	rm -f MANIFEST .version
+	rm -f MANIFEST _meta.py
 	rm -f photo-tools/__init__.py
-	rm -rf .cache
-	rm -rf photo/__pycache__ photo/qt/__pycache__ tests/__pycache__
 	rm -rf dist
+	rm -rf tests/.pytest_cache
 
-init_py:
-	$(PYTHON) setup.py init_py
+meta:
+	$(PYTHON) setup.py meta
 
 
-.PHONY: build test sdist clean distclean init_py
+.PHONY: build test sdist clean distclean meta
