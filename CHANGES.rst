@@ -1,26 +1,29 @@
 Changelog
 =========
 
-0.10.0 (not yet released)
-~~~~~~~~~~~~~~~~~~~~~~~~~
+
+0.9.4 (not yet released)
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Internal changes
 ----------------
 
 + `#48`_: Move from `gexiv2`_ to `exif`_.
++ `#51`_: Review build tool chain.
++ `#47`_, `#50`_: Use `setuptools_scm`_ to manage the version number.
 
 Bug fixes and minor changes
 ---------------------------
 
 + `#49`_: Fix :exc:`DeprecationWarning` about importing the ABCs from
-   :mod:`collections`.
+  :mod:`collections`.
 
-+ `#47`_, `#50`_: Use `setuptools_scm`_ to manage the version number.
-
-.. _#50: https://github.com/RKrahl/photo-tools/pull/50
-.. _#49: https://github.com/RKrahl/photo-tools/pull/49
-.. _#48: https://github.com/RKrahl/photo-tools/issues/48
 .. _#47: https://github.com/RKrahl/photo-tools/issues/47
+.. _#48: https://github.com/RKrahl/photo-tools/issues/48
+.. _#49: https://github.com/RKrahl/photo-tools/pull/49
+.. _#50: https://github.com/RKrahl/photo-tools/pull/50
+.. _#51: https://github.com/RKrahl/photo-tools/pull/51
+
 
 0.9.3 (2020-05-03)
 ~~~~~~~~~~~~~~~~~~
@@ -31,6 +34,7 @@ Bug fixes and minor changes
 + `#46`_: Fix :exc:`yaml.YAMLLoadWarning`.
 
 .. _#46: https://github.com/RKrahl/photo-tools/issues/46
+
 
 0.9.2 (2019-09-01)
 ~~~~~~~~~~~~~~~~~~
@@ -43,6 +47,7 @@ Bug fixes and minor changes
 
 .. _#45: https://github.com/RKrahl/photo-tools/pull/45
 
+
 0.9.1 (2019-08-21)
 ~~~~~~~~~~~~~~~~~~
 
@@ -53,6 +58,7 @@ Bug fixes and minor changes
   :exc:`TypeError`.
 
 .. _#44: https://github.com/RKrahl/photo-tools/issues/44
+
 
 0.9.0 (2019-08-05)
 ~~~~~~~~~~~~~~~~~~
@@ -82,8 +88,9 @@ Bug fixes and minor changes
 
 + `#42`_: :ref:`imageview` may inadvertently create an image index.
 
-.. _#42: https://github.com/RKrahl/photo-tools/issues/42
 .. _#39: https://github.com/RKrahl/photo-tools/issues/39
+.. _#42: https://github.com/RKrahl/photo-tools/issues/42
+
 
 0.8.2 (2019-01-01)
 ~~~~~~~~~~~~~~~~~~
@@ -97,6 +104,7 @@ Bug fixes and minor changes
 
 .. _#41: https://github.com/RKrahl/photo-tools/issues/41
 
+
 0.8.1 (2019-01-01)
 ~~~~~~~~~~~~~~~~~~
 
@@ -107,6 +115,7 @@ Bug fixes and minor changes
   existing index file.
 
 .. _#40: https://github.com/RKrahl/photo-tools/issues/40
+
 
 0.8 (2018-12-31)
 ~~~~~~~~~~~~~~~~
@@ -140,21 +149,22 @@ Bug fixes and minor changes
 + `#36`_: Opening the overview images fails with :exc:`IndexError` if
   no image is shown.
 
-+ `#37`_: :exc:`AttributeError` is raised when when calling
-  :ref:`photoidx` without arguments.
++ `#37`_: :exc:`AttributeError` is raised when calling :ref:`photoidx`
+  without arguments.
 
 + Add method :meth:`photo.index.Index.extend_dir`.
 
 + :meth:`photo.index.Index.index` now supports the full variant having
   start and end index arguments.
 
-.. _#37: https://github.com/RKrahl/photo-tools/issues/37
-.. _#36: https://github.com/RKrahl/photo-tools/issues/36
-.. _#35: https://github.com/RKrahl/photo-tools/issues/35
-.. _#32: https://github.com/RKrahl/photo-tools/issues/32
-.. _#31: https://github.com/RKrahl/photo-tools/issues/31
-.. _#30: https://github.com/RKrahl/photo-tools/issues/30
 .. _#20: https://github.com/RKrahl/photo-tools/issues/20
+.. _#30: https://github.com/RKrahl/photo-tools/issues/30
+.. _#31: https://github.com/RKrahl/photo-tools/issues/31
+.. _#32: https://github.com/RKrahl/photo-tools/issues/32
+.. _#35: https://github.com/RKrahl/photo-tools/issues/35
+.. _#36: https://github.com/RKrahl/photo-tools/issues/36
+.. _#37: https://github.com/RKrahl/photo-tools/issues/37
+
 
 0.7 (2017-12-31)
 ~~~~~~~~~~~~~~~~
@@ -174,9 +184,10 @@ Bug fixes and minor changes
 + `#28`_: use `pytest-dependency`_ to mark dependencies in the test
   suite.
 
-.. _#28: https://github.com/RKrahl/photo-tools/issues/28
-.. _#27: https://github.com/RKrahl/photo-tools/issues/27
 .. _#21: https://github.com/RKrahl/photo-tools/issues/21
+.. _#27: https://github.com/RKrahl/photo-tools/issues/27
+.. _#28: https://github.com/RKrahl/photo-tools/issues/28
+
 
 0.6 (2017-05-22)
 ~~~~~~~~~~~~~~~~
@@ -200,10 +211,11 @@ Bug fixes and minor changes
   it as the title of the :class:`~photo.qt.imageViewer.ImageViewer`
   window if set.
 
-.. _#26: https://github.com/RKrahl/photo-tools/issues/26
-.. _#25: https://github.com/RKrahl/photo-tools/issues/25
-.. _#24: https://github.com/RKrahl/photo-tools/issues/24
 .. _#22: https://github.com/RKrahl/photo-tools/issues/22
+.. _#24: https://github.com/RKrahl/photo-tools/issues/24
+.. _#25: https://github.com/RKrahl/photo-tools/issues/25
+.. _#26: https://github.com/RKrahl/photo-tools/issues/26
+
 
 0.5 (2016-08-22)
 ~~~~~~~~~~~~~~~~
@@ -226,9 +238,10 @@ Internal changes
 
 + Do not change directory when reading the image directory.
 
-.. _#19: https://github.com/RKrahl/photo-tools/issues/19
-.. _#18: https://github.com/RKrahl/photo-tools/issues/18
 .. _#17: https://github.com/RKrahl/photo-tools/issues/17
+.. _#18: https://github.com/RKrahl/photo-tools/issues/18
+.. _#19: https://github.com/RKrahl/photo-tools/issues/19
+
 
 0.4 (2016-04-12)
 ~~~~~~~~~~~~~~~~
@@ -239,7 +252,7 @@ New features
 + `#4`_: Add option to :ref:`photoidx` to add missing images to an
   index.
 
-+ `#10`_: Allow setting of new tags from :ref:`imageview`.
++ `#10`_: Allow setting of new tags in :ref:`imageview`.
 
 + `#11`_: :ref:`imageview` should be able to work without an index.
 
@@ -277,17 +290,18 @@ Bug fixes and minor changes
 
 + `#9`_: Sort the tags when writing the index to a file.
 
-.. _#15: https://github.com/RKrahl/photo-tools/issues/15
-.. _#13: https://github.com/RKrahl/photo-tools/issues/13
-.. _#12: https://github.com/RKrahl/photo-tools/issues/12
-.. _#11: https://github.com/RKrahl/photo-tools/issues/11
-.. _#10: https://github.com/RKrahl/photo-tools/issues/10
-.. _#9: https://github.com/RKrahl/photo-tools/issues/9
-.. _#6: https://github.com/RKrahl/photo-tools/issues/6
-.. _#5: https://github.com/RKrahl/photo-tools/issues/5
-.. _#4: https://github.com/RKrahl/photo-tools/issues/4
-.. _#3: https://github.com/RKrahl/photo-tools/issues/3
 .. _#1: https://github.com/RKrahl/photo-tools/issues/1
+.. _#3: https://github.com/RKrahl/photo-tools/issues/3
+.. _#4: https://github.com/RKrahl/photo-tools/issues/4
+.. _#5: https://github.com/RKrahl/photo-tools/issues/5
+.. _#6: https://github.com/RKrahl/photo-tools/issues/6
+.. _#9: https://github.com/RKrahl/photo-tools/issues/9
+.. _#10: https://github.com/RKrahl/photo-tools/issues/10
+.. _#11: https://github.com/RKrahl/photo-tools/issues/11
+.. _#12: https://github.com/RKrahl/photo-tools/issues/12
+.. _#13: https://github.com/RKrahl/photo-tools/issues/13
+.. _#15: https://github.com/RKrahl/photo-tools/issues/15
+
 
 0.3 (2016-01-02)
 ~~~~~~~~~~~~~~~~
@@ -306,6 +320,7 @@ New features
   exclamation mark to negate tags and allow specifying an empty tag
   list selecting only untagged images.
 
+
 0.2 (2015-10-21)
 ~~~~~~~~~~~~~~~~
 
@@ -314,10 +329,12 @@ New features
 
 + Add ``lstags`` sub command.
 
+
 0.1 (2015-09-19)
 ~~~~~~~~~~~~~~~~
 
 Initial version
+
 
 .. _exif: https://github.com/TNThieding/exif
 .. _setuptools_scm: https://github.com/pypa/setuptools_scm/

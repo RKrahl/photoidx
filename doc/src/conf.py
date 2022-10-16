@@ -6,17 +6,17 @@
 # full list see the documentation:
 # http://www.sphinx-doc.org/en/master/config
 
-import photo
+import _meta
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'photo-tools'
-copyright = '2015–2020, Rolf Krahl'
+copyright = '2015–2022, Rolf Krahl'
 author = 'Rolf Krahl'
 
 # The full version, including alpha/beta/rc tags
-release = photo.__version__
+release = _meta.__version__
 # The short X.Y version
 version = ".".join(release.split(".")[0:2])
 
