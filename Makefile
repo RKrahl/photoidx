@@ -19,6 +19,7 @@ distclean: clean
 	rm -f MANIFEST _meta.py
 	rm -f photo-tools/__init__.py
 	rm -rf dist
+	rm -rf tests/.pytest_cache
 
 meta:
 	$(PYTHON) setup.py meta
