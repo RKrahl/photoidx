@@ -1,3 +1,9 @@
+|gh-test|
+
+.. |gh-test| image:: https://img.shields.io/github/workflow/status/RKrahl/photo-tools/Run%20Test
+   :target: https://github.com/RKrahl/photo-tools/actions/workflows/run-tests.yaml
+   :alt: GitHub Workflow Status
+
 photo-tools - Tools for photo collections
 =========================================
 
@@ -58,36 +64,10 @@ Optional library packages:
   Only needed to run the test suite.
 
 
-Installation
-------------
-
-This package uses the distutils Python standard library package and
-follows its conventions of packaging source distributions.  See the
-documentation on `Installing Python Modules`_ for details or to
-customize the install process.
-
-1. Download the sources, unpack, and change into the source directory.
-
-2. Build::
-
-     $ python setup.py build
-
-3. Test (optional)::
-
-     $ python setup.py test
-
-4. Install::
-
-     $ python setup.py install
-
-The last step might require admin privileges in order to write into
-the site-packages directory of your Python installation.
-
-
 Copyright and License
 ---------------------
 
-Copyright 2015–2020 Rolf Krahl
+Copyright 2015–2022 Rolf Krahl
 
 Licensed under the `Apache License`_, Version 2.0 (the "License"); you
 may not use this file except in compliance with the License.
