@@ -19,6 +19,8 @@ Python:
 
 Required library packages:
 
++ `setuptools`_
+
 + `PyYAML`_
 
 + `exif`_ >= 0.8.3
@@ -97,6 +99,7 @@ implied.  See the License for the specific language governing
 permissions and limitations under the License.
 
 
+.. _setuptools: https://github.com/pypa/setuptools/
 .. _PyYAML: https://github.com/yaml/pyyaml
 .. _exif: https://github.com/TNThieding/exif
 .. _PySide: https://wiki.qt.io/PySide

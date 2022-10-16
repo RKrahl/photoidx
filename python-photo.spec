@@ -12,6 +12,7 @@ Source:		%{distname}-%{version}.tar.gz
 BuildRequires:	fdupes
 BuildRequires:	python3-PyYAML
 BuildRequires:	python3-devel >= 3.6
+BuildRequires:	python3-setuptools
 BuildRequires:	python3-exif >= 0.8.3
 %if %{with tests}
 BuildRequires:	python3-distutils-pytest
