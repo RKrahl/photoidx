@@ -12,9 +12,9 @@ from pathlib import Path
 import shutil
 import subprocess
 import pytest
-import photo.index
-import photo.idxfilter
-from photo.geo import GeoPosition
+import photoidx.index
+import photoidx.idxfilter
+from photoidx.geo import GeoPosition
 from conftest import tmpdir, gettestdata
 
 testimgs = {
@@ -40,7 +40,7 @@ def imgdir(tmpdir):
 def test_create(imgdir):
     """Create the index.
     """
-    with photo.index.Index(imgdir=imgdir) as idx:
+    with photoidx.index.Index(imgdir=imgdir) as idx:
         for k in ("Japan", "Quebec"):
             idx.extend_dir(imgdir / k)
         idx.write()
@@ -57,7 +57,7 @@ def test_checksum(imgdir, monkeypatch):
     if not Path(checkprog).is_file():
         pytest.skip("%s not found." % checkprog)
     fname = imgdir / hashalg
-    with photo.index.Index(idxfile=imgdir) as idx:
+    with photoidx.index.Index(idxfile=imgdir) as idx:
         with fname.open("wt") as f:
             for i in idx:
                 print("%s  %s" % (i.checksum[hashalg], i.filename), file=f)
@@ -71,18 +71,18 @@ def test_checksum(imgdir, monkeypatch):
 def test_tag(imgdir, monkeypatch):
     """Test tagging of images.
     """
-    with photo.index.Index(idxfile=imgdir) as idx:
+    with photoidx.index.Index(idxfile=imgdir) as idx:
         tokyo = GeoPosition("35.68 N, 139.77 E")
-        idxfilter = photo.idxfilter.IdxFilter(gpspos=tokyo, gpsradius=500.0)
+        idxfilter = photoidx.idxfilter.IdxFilter(gpspos=tokyo, gpsradius=500.0)
         for i in idxfilter.filter(idx):
             i.tags.add("Japan")
         quebec = GeoPosition("46.81 N, 71.22 W")
-        idxfilter = photo.idxfilter.IdxFilter(gpspos=quebec, gpsradius=500.0)
+        idxfilter = photoidx.idxfilter.IdxFilter(gpspos=quebec, gpsradius=500.0)
         for i in idxfilter.filter(idx):
             i.tags.add("Quebec")
         idx.write()
-    with photo.index.Index(idxfile=imgdir) as idx:
+    with photoidx.index.Index(idxfile=imgdir) as idx:
         for k in ("Japan", "Quebec"):
-            idxfilter = photo.idxfilter.IdxFilter(tags=k)
+            idxfilter = photoidx.idxfilter.IdxFilter(tags=k)
             fnames = [ i.filename for i in idxfilter.filter(idx) ]
             assert fnames == [ Path(k, f) for f in testimgs[k] ]

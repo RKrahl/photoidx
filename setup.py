@@ -99,7 +99,7 @@ with Path("README.rst").open("rt", encoding="utf8") as f:
     readme = f.read()
 
 setup(
-    name = "photo",
+    name = "photoidx",
     version = version,
     description = docstring.split("\n")[0],
     long_description = readme,
@@ -120,7 +120,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
-    packages = ["photo", "photo.qt"],
+    packages = ["photoidx", "photoidx.qt"],
     scripts = ["scripts/photo-idx.py", "scripts/imageview.py"],
     python_requires = ">=3.6",
     install_requires = ["PyYAML", "exif >= 0.8.3", "PySide"],

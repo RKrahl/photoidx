@@ -10,7 +10,7 @@ the solution might not be unique, e.g. more then one partition may
 exist for the same index.
 """
 
-import photo.index
+import photoidx.index
 
 
 def tag_index(idx):
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     argparser.add_argument('-d', '--directory', 
                            help="image directory", default=".")
     args = argparser.parse_args()
-    with photo.index.Index(idxfile=args.directory) as idx:
+    with photoidx.index.Index(idxfile=args.directory) as idx:
         partition = get_partition(idx)
         if partition:
             print("\n".join(partition))

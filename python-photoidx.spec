@@ -1,5 +1,5 @@
 %bcond_without tests
-%global distname photo
+%global distname photoidx
 
 Name:		python3-%{distname}
 Version:	$version
@@ -65,12 +65,12 @@ python3 setup.py test
 %doc README.rst CHANGES.rst
 %license LICENSE.txt
 %{python3_sitelib}/*
-%exclude %{python3_sitelib}/photo/qt
+%exclude %{python3_sitelib}/photoidx/qt
 %{_bindir}/photo-idx
 
 %files qt
 %defattr(-,root,root)
-%{python3_sitelib}/photo/qt
+%{python3_sitelib}/photoidx/qt
 %{_bindir}/imageview
 
 

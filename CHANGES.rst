@@ -78,7 +78,7 @@ Incompatible changes
 + Drop support for Python 2.  Require Python 3.4 or newer.
 
 + Use :class:`pathlib.Path` rather then :class:`str` in
-  :attr:`photo.idxitem.IdxItem.filename`.  Switch to :mod:`pathlib`
+  :attr:`photoidx.idxitem.IdxItem.filename`.  Switch to :mod:`pathlib`
   for most internal representation of filesystem paths.  As a side
   effect, the semantic of file paths may be taken somewhat more
   coherent and strict now at some places.
@@ -99,7 +99,7 @@ Bug fixes and minor changes
 ---------------------------
 
 + `#41`_: Setting filter options in
-  :class:`~photo.qt.imageViewer.ImageViewer` fails with
+  :class:`~photoidx.qt.imageViewer.ImageViewer` fails with
   :exc:`IndexError` if current filter selects no image.
 
 .. _#41: https://github.com/RKrahl/photo-tools/issues/41
@@ -124,7 +124,7 @@ New features
 ------------
 
 + `#31`_: Implement modifying the current filter in
-  :class:`~photo.qt.imageViewer.ImageViewer`.
+  :class:`~photoidx.qt.imageViewer.ImageViewer`.
 
 + `#30`_: Protect the index file against conflicting concurrent access
   using file system locking.
@@ -152,10 +152,10 @@ Bug fixes and minor changes
 + `#37`_: :exc:`AttributeError` is raised when calling :ref:`photo-idx`
   without arguments.
 
-+ Add method :meth:`photo.index.Index.extend_dir`.
++ Add method :meth:`photoidx.index.Index.extend_dir`.
 
-+ :meth:`photo.index.Index.index` now supports the full variant having
-  start and end index arguments.
++ :meth:`photoidx.index.Index.index` now supports the full variant
+  having start and end index arguments.
 
 .. _#20: https://github.com/RKrahl/photo-tools/issues/20
 .. _#30: https://github.com/RKrahl/photo-tools/issues/30
@@ -175,8 +175,8 @@ New features
 + `#21`_: Add more information to the info window.
 
 + `#27`_: Set default scale in
-  :class:`~photo.qt.imageViewer.ImageViewer` such that the first image
-  just fits the maximum window size.
+  :class:`~photoidx.qt.imageViewer.ImageViewer` such that the first
+  image just fits the maximum window size.
 
 Bug fixes and minor changes
 ---------------------------
@@ -200,15 +200,15 @@ New features
 Bug fixes and minor changes
 ---------------------------
 
-+ `#25`_: :class:`~photo.qt.imageViewer.ImageViewer` should remember
-  rotation.
++ `#25`_: :class:`~photoidx.qt.imageViewer.ImageViewer` should
+  remember rotation.
 
 + `#22`_: Unwanted unicode marker for tags in the index.
 
 + `#26`_: Get rid of :exc:`gi.PyGIWarning`.
 
-+ Add an optional attribute :attr:`photo.idxitem.IdxItem.name`.  Use
-  it as the title of the :class:`~photo.qt.imageViewer.ImageViewer`
++ Add an optional attribute :attr:`photoidx.idxitem.IdxItem.name`.  Use
+  it as the title of the :class:`~photoidx.qt.imageViewer.ImageViewer`
   window if set.
 
 .. _#22: https://github.com/RKrahl/photo-tools/issues/22

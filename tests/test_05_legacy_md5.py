@@ -9,7 +9,7 @@ to the new format.  This feature is tested in this module.
 import filecmp
 import shutil
 import pytest
-import photo.index
+import photoidx.index
 from conftest import tmpdir, gettestdata
 
 testimgs = [ 
@@ -27,6 +27,6 @@ def test_legacyconvert(tmpdir):
     idxfile = str(tmpdir / ".index.yaml")
     shutil.copy(legacyindex, idxfile)
     # reading and writing the index transparantly converts it.
-    with photo.index.Index(idxfile=tmpdir) as idx:
+    with photoidx.index.Index(idxfile=tmpdir) as idx:
         idx.write()
     assert filecmp.cmp(idxfile, refindex), "index file differs from reference"

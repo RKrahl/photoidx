@@ -8,7 +8,7 @@ import subprocess
 import sys
 import tempfile
 import pytest
-import photo
+import photoidx
 
 
 testdir = Path(__file__).parent
@@ -20,7 +20,7 @@ def gettestdata(fname):
 
 @pytest.fixture(scope="module")
 def tmpdir(request):
-    td = tempfile.mkdtemp(prefix="photo-test-")
+    td = tempfile.mkdtemp(prefix="photoidx-test-")
     yield Path(td)
     shutil.rmtree(td)
 
@@ -37,6 +37,6 @@ def callscript(scriptname, args, stdin=None, stdout=None, stderr=None):
 def pytest_report_header(config):
     """Add information on the package version used in the tests.
     """
-    modpath = Path(photo.__file__).resolve().parent
-    return [ "photo-tools: %s" % (photo.__version__),
+    modpath = Path(photoidx.__file__).resolve().parent
+    return [ "photo-tools: %s" % (photoidx.__version__),
              "             %s" % (modpath)]

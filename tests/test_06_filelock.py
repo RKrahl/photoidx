@@ -9,8 +9,8 @@ import filecmp
 from multiprocessing import Process, Queue
 import shutil
 import pytest
-import photo.index
-import photo.idxfilter
+import photoidx.index
+import photoidx.idxfilter
 from conftest import tmpdir, gettestdata
 
 testimgs = [ 
@@ -44,15 +44,15 @@ def imgdir(tmpdir):
 def ls_bytag(imgdir, tag, qres, qwait):
     """List files by tag.
     """
-    with photo.index.Index(idxfile=imgdir) as idx:
-        idxfilter = photo.idxfilter.IdxFilter(tags=tag)
+    with photoidx.index.Index(idxfile=imgdir) as idx:
+        idxfilter = photoidx.idxfilter.IdxFilter(tags=tag)
         qres.put((tag, [ str(i.filename) for i in idxfilter.filter(idx) ]))
         qwait.get()
 
 def add_tag(imgdir, tag, qres):
     """Add a tag to all items.
     """
-    with photo.index.Index(idxfile=imgdir) as idx:
+    with photoidx.index.Index(idxfile=imgdir) as idx:
         for i in idx:
             i.tags.add(tag)
         try:
@@ -114,7 +114,7 @@ def test_concurrent_read_write(imgdir):
     print("Writing process started.")
     # Verify that the writing process caught an AlreadyLockedError.
     r = qresw.get()
-    assert isinstance(r, photo.index.AlreadyLockedError)
+    assert isinstance(r, photoidx.index.AlreadyLockedError)
     print("Reply from writing process received.")
     # Now, allow the reading process to close the index file.
     qwait.put("done")

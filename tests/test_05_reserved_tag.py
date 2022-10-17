@@ -7,7 +7,7 @@ photo-tools.  It should be removed when reading an index file.
 import filecmp
 import shutil
 import pytest
-import photo.index
+import photoidx.index
 from conftest import tmpdir, gettestdata
 
 testimgs = [ 
@@ -26,6 +26,6 @@ def test_reserved_tags_convert(tmpdir):
     shutil.copy(invindex, idxfile)
     # reading and writing the index transparantly filters out tags
     # using the reserved prefix.
-    with photo.index.Index(idxfile=tmpdir) as idx:
+    with photoidx.index.Index(idxfile=tmpdir) as idx:
         idx.write()
     assert filecmp.cmp(idxfile, refindex), "index file differs from reference"
