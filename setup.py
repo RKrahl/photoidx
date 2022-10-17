@@ -121,7 +121,7 @@ setup(
         "Programming Language :: Python :: 3.11",
     ],
     packages = ["photo", "photo.qt"],
-    scripts = ["photoidx.py", "imageview.py"],
+    scripts = ["scripts/photo-idx.py", "scripts/imageview.py"],
     python_requires = ">=3.6",
     install_requires = ["PyYAML", "exif >= 0.8.3", "PySide"],
     cmdclass = dict(cmdclass, build_py=build_py, sdist=sdist, meta=meta),

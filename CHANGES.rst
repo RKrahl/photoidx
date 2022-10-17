@@ -138,7 +138,7 @@ Incompatible changes
 --------------------
 
 + `#35`_: Change the sematic of the ``--date`` command line option to
-  :ref:`photoidx` and :ref:`imageview`: when an interval is given as
+  :ref:`photo-idx` and :ref:`imageview`: when an interval is given as
   argument, the end time is taken exclusively.
   E.g. ``--date=2015-03-14--2015-03-15`` excludes images taken on
   March 15.
@@ -149,7 +149,7 @@ Bug fixes and minor changes
 + `#36`_: Opening the overview images fails with :exc:`IndexError` if
   no image is shown.
 
-+ `#37`_: :exc:`AttributeError` is raised when calling :ref:`photoidx`
++ `#37`_: :exc:`AttributeError` is raised when calling :ref:`photo-idx`
   without arguments.
 
 + Add method :meth:`photo.index.Index.extend_dir`.
@@ -249,7 +249,7 @@ Internal changes
 New features
 ------------
 
-+ `#4`_: Add option to :ref:`photoidx` to add missing images to an
++ `#4`_: Add option to :ref:`photo-idx` to add missing images to an
   index.
 
 + `#10`_: Allow setting of new tags in :ref:`imageview`.
@@ -264,7 +264,7 @@ New features
 Incompatible changes
 --------------------
 
-+ The index file format has changed.  :ref:`photoidx` and
++ The index file format has changed.  :ref:`photo-idx` and
   :ref:`imageview` are able to read the old format and convert the
   file silently to the new format when writing it back.  But the tools
   from earlier versions will not fully work with the new format files.
@@ -285,7 +285,7 @@ Bug fixes and minor changes
 + `#13`_: :ref:`imageview` fails with :exc:`RuntimeError` if
   ``--directory`` option is used.
 
-+ `#15`_: :ref:`photoidx` ``create`` raises :exc:`KeyError` if
++ `#15`_: :ref:`photo-idx` ``create`` raises :exc:`KeyError` if
   exiftags are not present in an image.
 
 + `#9`_: Sort the tags when writing the index to a file.

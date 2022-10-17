@@ -49,7 +49,7 @@ python3 setup.py build
 
 %install
 python3 setup.py install --optimize=1 --prefix=%{_prefix} --root=%{buildroot}
-%__mv %{buildroot}%{_bindir}/photoidx.py %{buildroot}%{_bindir}/photoidx
+%__mv %{buildroot}%{_bindir}/photo-idx.py %{buildroot}%{_bindir}/photo-idx
 %__mv %{buildroot}%{_bindir}/imageview.py %{buildroot}%{_bindir}/imageview
 %fdupes %{buildroot}
 
@@ -66,7 +66,7 @@ python3 setup.py test
 %license LICENSE.txt
 %{python3_sitelib}/*
 %exclude %{python3_sitelib}/photo/qt
-%{_bindir}/photoidx
+%{_bindir}/photo-idx
 
 %files qt
 %defattr(-,root,root)

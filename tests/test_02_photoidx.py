@@ -1,4 +1,4 @@
-"""Call the command line script photoidx.py.
+"""Call the command line script photo-idx.py.
 """
 
 import datetime
@@ -25,10 +25,10 @@ def imgdir(tmpdir):
     return tmpdir
 
 
-# Note: the default value for the "-d" option to photoidx is the
+# Note: the default value for the "-d" option to photo-idx is the
 # current working directory.  So changing to imgdir before calling
-# photoidx without the "-d" option should be equivalent to calling
-# "photoidx -d imgdir".  We more or less try both variants at random
+# photo-idx without the "-d" option should be equivalent to calling
+# "photo-idx -d imgdir".  We more or less try both variants at random
 # in the tests.
 
 @pytest.mark.dependency()
@@ -36,7 +36,7 @@ def test_create(imgdir, monkeypatch):
     """Create the index.
     """
     monkeypatch.chdir(str(imgdir))
-    callscript("photoidx.py", ["create"])
+    callscript("photo-idx.py", ["create"])
     idxfile = str(imgdir / ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
@@ -46,7 +46,7 @@ def test_ls_all(imgdir):
     """
     fname = imgdir / "out"
     with fname.open("wt") as f:
-        callscript("photoidx.py", ["-d", str(imgdir), "ls"], stdout=f)
+        callscript("photo-idx.py", ["-d", str(imgdir), "ls"], stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == testimgs
@@ -61,7 +61,7 @@ def test_ls_md5(imgdir, monkeypatch):
     monkeypatch.chdir(str(imgdir))
     fname = imgdir / "md5"
     with fname.open("wt") as f:
-        callscript("photoidx.py", ["ls", "--checksum=md5"], stdout=f)
+        callscript("photo-idx.py", ["ls", "--checksum=md5"], stdout=f)
     with fname.open("rt") as f:
         cmd = [md5sum, "-c"]
         print(">", *cmd)
@@ -72,11 +72,11 @@ def test_addtag_all(imgdir):
     """Tag all images.
     """
     args = ["-d", str(imgdir), "addtag", "all"]
-    callscript("photoidx.py", args)
+    callscript("photo-idx.py", args)
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", "--tags", "all"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == testimgs
@@ -86,11 +86,11 @@ def test_addtag_by_date(imgdir):
     """Select by date.
     """
     args = ["-d", str(imgdir), "addtag", "--date", "2016-03-05", "Hakone"]
-    callscript("photoidx.py", args)
+    callscript("photo-idx.py", args)
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", "--tags", "Hakone"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["dsc_4831.jpg"]
@@ -102,11 +102,11 @@ def test_addtag_by_gpspos(imgdir, monkeypatch):
     monkeypatch.chdir(str(imgdir))
     args = ["addtag", "--gpspos", "35.6883 N, 139.7544 E", 
             "--gpsradius", "20.0", "Tokyo"]
-    callscript("photoidx.py", args)
+    callscript("photo-idx.py", args)
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--tags", "Tokyo"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["dsc_4623.jpg", "dsc_4664.jpg"]
@@ -117,11 +117,11 @@ def test_addtag_by_files(imgdir, monkeypatch):
     """
     monkeypatch.chdir(str(imgdir))
     args = ["addtag", "Shinto_shrine", "dsc_4664.jpg", "dsc_4831.jpg"]
-    callscript("photoidx.py", args)
+    callscript("photo-idx.py", args)
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--tags", "Shinto_shrine"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["dsc_4664.jpg", "dsc_4831.jpg"]
@@ -135,13 +135,13 @@ def test_rmtag_by_tag(imgdir, monkeypatch):
     """
     monkeypatch.chdir(str(imgdir))
     args = ["rmtag", "--tags", "Tokyo", "all"]
-    callscript("photoidx.py", args)
+    callscript("photo-idx.py", args)
     args = ["rmtag", "--tags", "Hakone", "all"]
-    callscript("photoidx.py", args)
+    callscript("photo-idx.py", args)
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--tags", "all"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["dsc_5126.jpg", "dsc_5167.jpg"]
@@ -152,11 +152,11 @@ def test_rmtag_all(imgdir, monkeypatch):
     """
     monkeypatch.chdir(str(imgdir))
     args = ["-d", str(imgdir), "rmtag", "all"]
-    callscript("photoidx.py", args)
+    callscript("photo-idx.py", args)
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", "--tags", "all"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == []
@@ -168,7 +168,7 @@ def test_ls_by_single_tag(imgdir):
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", "--tags", "Shinto_shrine"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["dsc_4664.jpg", "dsc_4831.jpg"]
@@ -185,7 +185,7 @@ def test_ls_by_mult_tags(imgdir):
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", "--tags", "Tokyo,Shinto_shrine"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["dsc_4664.jpg"]
@@ -203,7 +203,7 @@ def test_ls_by_neg_tags(imgdir, monkeypatch):
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--tags", "Tokyo,!Shinto_shrine"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["dsc_4623.jpg"]
@@ -220,7 +220,7 @@ def test_ls_by_empty_tag(imgdir):
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", "--tags", ""]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["dsc_5126.jpg", "dsc_5167.jpg"]
@@ -236,7 +236,7 @@ def test_ls_by_date_and_tag(imgdir):
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "ls", 
                 "--tags", "Tokyo", "--date", "2016-02-28"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["dsc_4623.jpg"]
@@ -251,7 +251,7 @@ def test_lstags_all(imgdir):
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "lstags"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["Hakone", "Shinto_shrine", "Tokyo"]
@@ -266,7 +266,7 @@ def test_lstags_by_tags(imgdir, monkeypatch):
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["lstags", "--tags", "Tokyo"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["Shinto_shrine", "Tokyo"]
@@ -277,11 +277,11 @@ def test_select_by_files(imgdir, monkeypatch):
     """
     monkeypatch.chdir(str(imgdir))
     args = ["select", "dsc_5126.jpg"]
-    callscript("photoidx.py", args)
+    callscript("photo-idx.py", args)
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--selected"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["dsc_5126.jpg"]
@@ -294,11 +294,11 @@ def test_select_by_tag(imgdir, monkeypatch):
     """
     monkeypatch.chdir(str(imgdir))
     args = ["select", "--tags", "Shinto_shrine"]
-    callscript("photoidx.py", args)
+    callscript("photo-idx.py", args)
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--selected"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["dsc_4664.jpg", "dsc_4831.jpg", "dsc_5126.jpg"]
@@ -309,11 +309,11 @@ def test_deselect_by_files(imgdir, monkeypatch):
     """
     monkeypatch.chdir(str(imgdir))
     args = ["deselect", "dsc_4831.jpg"]
-    callscript("photoidx.py", args)
+    callscript("photo-idx.py", args)
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--selected"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         out = f.read().split()
     assert out == ["dsc_4664.jpg", "dsc_5126.jpg"]
@@ -328,7 +328,7 @@ def test_stats_all(imgdir):
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "stats"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         stats = yaml.safe_load(f)
     assert stats["Count"] == 5
@@ -357,7 +357,7 @@ def test_stats_filtered(imgdir):
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["-d", str(imgdir), "stats", "--tags", "Tokyo"]
-        callscript("photoidx.py", args, stdout=f)
+        callscript("photo-idx.py", args, stdout=f)
     with fname.open("rt") as f:
         stats = yaml.safe_load(f)
     assert stats["Count"] == 2
