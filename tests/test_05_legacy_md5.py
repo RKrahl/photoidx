@@ -1,9 +1,9 @@
 """Read legacy format index files.
 
 Since version 0.4 different checksum algorithms are supported (Issue
-#12).  As a consequence, the index file format is changed.
-photo-tools still reads legacy files and transparently converts them
-to the new format.  This feature is tested in this module.
+#12).  As a consequence, the index file format is changed.  photoidx
+still reads legacy files and transparently converts them to the new
+format.  This feature is tested in this module.
 """
 
 import filecmp

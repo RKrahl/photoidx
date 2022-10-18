@@ -1,7 +1,7 @@
 """Filter reserved tags on reading an index.
 
-The prefix 'pidx:' for tags is reserved for internal use in
-photo-tools.  It should be removed when reading an index file.
+The prefix 'pidx:' for tags is reserved for internal use in photoidx.
+It should be removed when reading an index file.
 """
 
 import filecmp

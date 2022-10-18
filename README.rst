@@ -4,8 +4,8 @@
    :target: https://github.com/RKrahl/photo-tools/actions/workflows/run-tests.yaml
    :alt: GitHub Workflow Status
 
-photo-tools - Tools for photo collections
-=========================================
+photoidx - Tools for photo collections
+======================================
 
 This package provides tools for the management of photo collections.
 It maintains an index of the photos in a text file.  All metadata is

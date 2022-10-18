@@ -38,5 +38,5 @@ def pytest_report_header(config):
     """Add information on the package version used in the tests.
     """
     modpath = Path(photoidx.__file__).resolve().parent
-    return [ "photo-tools: %s" % (photoidx.__version__),
-             "             %s" % (modpath)]
+    return [ "photoidx: %s" % (photoidx.__version__),
+             "          %s" % (modpath) ]
