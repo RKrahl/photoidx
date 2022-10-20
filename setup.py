@@ -103,7 +103,7 @@ setup(
     version = version,
     description = docstring.split("\n")[0],
     long_description = readme,
-    url = "https://github.com/RKrahl/photo-tools",
+    url = "https://github.com/RKrahl/photoidx",
     author = "Rolf Krahl",
     author_email = "rolf@rotkraut.de",
     license = "Apache-2.0",

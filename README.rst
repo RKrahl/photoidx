@@ -1,7 +1,7 @@
 |gh-test|
 
-.. |gh-test| image:: https://img.shields.io/github/workflow/status/RKrahl/photo-tools/Run%20Test
-   :target: https://github.com/RKrahl/photo-tools/actions/workflows/run-tests.yaml
+.. |gh-test| image:: https://img.shields.io/github/workflow/status/RKrahl/photoidx/Run%20Test
+   :target: https://github.com/RKrahl/photoidx/actions/workflows/run-tests.yaml
    :alt: GitHub Workflow Status
 
 photoidx - Tools for photo collections
