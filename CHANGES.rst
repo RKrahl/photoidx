@@ -28,6 +28,8 @@ Bug fixes and minor changes
 .. _#49: https://github.com/RKrahl/photoidx/pull/49
 .. _#50: https://github.com/RKrahl/photoidx/pull/50
 .. _#51: https://github.com/RKrahl/photoidx/pull/51
+.. _#52: https://github.com/RKrahl/photoidx/issues/52
+.. _#53: https://github.com/RKrahl/photoidx/pull/53
 
 
 0.9.3 (2020-05-03)
