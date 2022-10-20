@@ -2,8 +2,13 @@ Changelog
 =========
 
 
-0.9.4 (not yet released)
-~~~~~~~~~~~~~~~~~~~~~~~~
+0.10.0 (not yet released)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Incompatible changes
+--------------------
+
++ `#52`_, `#53`_: Rename the package from ``photo`` to ``photoidx``.
 
 Internal changes
 ----------------
