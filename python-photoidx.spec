@@ -1,5 +1,5 @@
 %bcond_without tests
-%global distname photo
+%global distname photoidx
 
 Name:		python3-%{distname}
 Version:	$version
@@ -25,8 +25,12 @@ BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-build
 
 %description
+This package maintains indices for photo collections.  The index is
+stored as a YAML file and contains metadata and tags describing the
+photos.  The photos are accessed read only.
+
 This package provides a Python library and a command line tool for
-maintaining tags in a collection of photos.
+creating and managing the index.
 
 
 %package qt
@@ -36,7 +40,11 @@ Requires:	python3-pyside
 Recommends:	python3-vignette >= 4.3.0
 
 %description qt
-This package provides an image viewer for collection of photos.
+This package maintains indices for photo collections.  The index is
+stored as a YAML file and contains metadata and tags describing the
+photos.  The photos are accessed read only.
+
+This package provides an image viewer.
 
 
 %prep
@@ -49,7 +57,7 @@ python3 setup.py build
 
 %install
 python3 setup.py install --optimize=1 --prefix=%{_prefix} --root=%{buildroot}
-%__mv %{buildroot}%{_bindir}/photoidx.py %{buildroot}%{_bindir}/photoidx
+%__mv %{buildroot}%{_bindir}/photo-idx.py %{buildroot}%{_bindir}/photo-idx
 %__mv %{buildroot}%{_bindir}/imageview.py %{buildroot}%{_bindir}/imageview
 %fdupes %{buildroot}
 
@@ -65,12 +73,12 @@ python3 setup.py test
 %doc README.rst CHANGES.rst
 %license LICENSE.txt
 %{python3_sitelib}/*
-%exclude %{python3_sitelib}/photo/qt
-%{_bindir}/photoidx
+%exclude %{python3_sitelib}/photoidx/qt
+%{_bindir}/photo-idx
 
 %files qt
 %defattr(-,root,root)
-%{python3_sitelib}/photo/qt
+%{python3_sitelib}/photoidx/qt
 %{_bindir}/imageview
 
 

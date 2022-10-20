@@ -3,8 +3,8 @@
 
 import datetime
 from PySide import QtCore, QtGui
-import photo.idxfilter
-from photo.geo import GeoPosition
+import photoidx.idxfilter
+from photoidx.geo import GeoPosition
 
 
 class GeoPosEdit(QtGui.QLineEdit):
@@ -108,7 +108,7 @@ class DateFilterOption(FilterOption):
                 datestr = "%s--%s" % (startdate, enddate)
             else:
                 datestr = startdate
-            return { 'date': photo.idxfilter.strpdate(datestr) }
+            return { 'date': photoidx.idxfilter.strpdate(datestr) }
         else:
             return {}
 
@@ -209,5 +209,5 @@ class FilterDialog(QtGui.QDialog):
         filterArgs.update(self.dateFilterOption.getOption())
         filterArgs.update(self.gpsFilterOption.getOption())
         filterArgs.update(self.filelistFilterOption.getOption())
-        self.imgFilter = photo.idxfilter.IdxFilter(**filterArgs)
+        self.imgFilter = photoidx.idxfilter.IdxFilter(**filterArgs)
         super().accept()

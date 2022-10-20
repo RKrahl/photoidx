@@ -2,7 +2,7 @@
 """
 
 from PySide import QtCore, QtGui
-from photo.exif import Exif
+from photoidx.exif import Exif
 
 
 class ImageInfoDialog(QtGui.QDialog):

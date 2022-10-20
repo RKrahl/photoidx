@@ -4,7 +4,7 @@
 import filecmp
 import shutil
 import pytest
-import photo.index
+import photoidx.index
 from conftest import tmpdir, gettestdata
 
 testimgs = [ 
@@ -18,11 +18,11 @@ refindex = gettestdata("index-create.yaml")
 def test_createupdate(tmpdir):
     for fname in testimgfiles[:3]:
         shutil.copy(fname, str(tmpdir))
-    with photo.index.Index(imgdir=tmpdir) as idx:
+    with photoidx.index.Index(imgdir=tmpdir) as idx:
         idx.write()
     for fname in testimgfiles[3:]:
         shutil.copy(fname, str(tmpdir))
-    with photo.index.Index(idxfile=tmpdir, imgdir=tmpdir) as idx:
+    with photoidx.index.Index(idxfile=tmpdir, imgdir=tmpdir) as idx:
         idx.write()
     idxfile = str(tmpdir / ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

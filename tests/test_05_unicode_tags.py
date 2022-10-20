@@ -7,7 +7,7 @@ marks them as `!!python/unicode 'tag'`.
 import filecmp
 import shutil
 import pytest
-import photo.index
+import photoidx.index
 from conftest import tmpdir, gettestdata
 
 testimgs = [ 
@@ -35,7 +35,7 @@ def imgdir(tmpdir):
     return tmpdir
 
 def test_tag_unicode(imgdir):
-    with photo.index.Index(imgdir=imgdir) as idx:
+    with photoidx.index.Index(imgdir=imgdir) as idx:
         for item in idx:
             for t in tags[str(item.filename)]:
                 item.tags.add(t)

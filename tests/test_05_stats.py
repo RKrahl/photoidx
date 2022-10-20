@@ -5,9 +5,9 @@ import datetime
 import shutil
 import pytest
 import yaml
-import photo.index
-import photo.idxfilter
-from photo.stats import Stats
+import photoidx.index
+import photoidx.idxfilter
+from photoidx.stats import Stats
 from conftest import tmpdir, gettestdata
 
 
@@ -28,7 +28,7 @@ def imgdir(tmpdir):
 def test_stats_all(imgdir):
     """Get statistics on all images.
     """
-    with photo.index.Index(idxfile=imgdir) as idx:
+    with photoidx.index.Index(idxfile=imgdir) as idx:
         stats = Stats(idx)
     assert stats.count == 5
     assert stats.selected == 2
@@ -50,7 +50,7 @@ def test_stats_all(imgdir):
 def test_stats_all_yaml(imgdir):
     """The string representation of a Stats object is YAML.
     """
-    with photo.index.Index(idxfile=imgdir) as idx:
+    with photoidx.index.Index(idxfile=imgdir) as idx:
         stats = yaml.safe_load(str(Stats(idx)))
     assert stats["Count"] == 5
     assert stats["Selected"] == 2
@@ -72,8 +72,8 @@ def test_stats_all_yaml(imgdir):
 def test_stats_filtered(imgdir):
     """Get statistics on a selection of images.
     """
-    with photo.index.Index(idxfile=imgdir) as idx:
-        idxfilter = photo.idxfilter.IdxFilter(tags="Tokyo")
+    with photoidx.index.Index(idxfile=imgdir) as idx:
+        idxfilter = photoidx.idxfilter.IdxFilter(tags="Tokyo")
         stats = Stats(idxfilter.filter(idx))
     assert stats.count == 2
     assert stats.selected == 1
