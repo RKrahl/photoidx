@@ -4,16 +4,15 @@
    :target: https://github.com/RKrahl/photoidx/actions/workflows/run-tests.yaml
    :alt: GitHub Workflow Status
 
-photoidx - Tools for photo collections
-======================================
+photoidx - Maintain indices for photo collections
+=================================================
 
-This package provides tools for the management of photo collections.
-It maintains an index of the photos in a text file.  All metadata is
-stored in this index file in YAML format, the photos are accessed read
-only.
+This package maintains indices for photo collections.  The index is
+stored as a YAML file and contains metadata and tags describing the
+photos.  The photos are accessed read only.
 
-The package provides a command line tool to manipulate the metadata
-and a graphical image viewer.
+The package provides a command line tool to create and manipulate the
+index and a graphical image viewer.
 
 
 System requirements

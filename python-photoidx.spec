@@ -25,8 +25,12 @@ BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-build
 
 %description
+This package maintains indices for photo collections.  The index is
+stored as a YAML file and contains metadata and tags describing the
+photos.  The photos are accessed read only.
+
 This package provides a Python library and a command line tool for
-maintaining tags in a collection of photos.
+creating and managing the index.
 
 
 %package qt
@@ -36,7 +40,11 @@ Requires:	python3-pyside
 Recommends:	python3-vignette >= 4.3.0
 
 %description qt
-This package provides an image viewer for collection of photos.
+This package maintains indices for photo collections.  The index is
+stored as a YAML file and contains metadata and tags describing the
+photos.  The photos are accessed read only.
+
+This package provides an image viewer.
 
 
 %prep
