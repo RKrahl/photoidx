@@ -19,6 +19,8 @@ BuildRequires:	python3-pytest-dependency
 BuildRequires:	python3-PyYAML
 BuildRequires:	python3-exif >= 0.8.3
 %endif
+Provides:	python3-photo = %{version}-%{release}
+Obsoletes:	python3-photo < %{version}-%{release}
 Requires:	python3-PyYAML
 Requires:	python3-exif >= 0.8.3
 BuildArch:	noarch
@@ -35,6 +37,8 @@ creating and managing the index.
 
 %package qt
 Summary:	Tools for managing photo collections
+Provides:	python3-photo-qt = %{version}-%{release}
+Obsoletes:	python3-photo-qt < %{version}-%{release}
 Requires:	python3-%{distname} = %{version}
 Requires:	python3-pyside
 Recommends:	python3-vignette >= 4.3.0
