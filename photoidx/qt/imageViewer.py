@@ -2,7 +2,7 @@
 """
 
 import sys
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 import photoidx.index
 from photoidx.listtools import LazyList
 from photoidx.qt.image import Image
@@ -12,7 +12,7 @@ from photoidx.qt.overviewWindow import OverviewWindow
 from photoidx.qt.tagSelectDialog import TagSelectDialog
 
 
-class ImageViewer(QtGui.QMainWindow):
+class ImageViewer(QtWidgets.QMainWindow):
 
     def __init__(self, images, imgFilter, 
                  scaleFactor=1.0, readOnly=False, dirty=False):
@@ -41,97 +41,115 @@ class ImageViewer(QtGui.QMainWindow):
 
         self.filterDialog = FilterDialog()
 
-        self.imageLabel = QtGui.QLabel()
-        self.imageLabel.setSizePolicy(QtGui.QSizePolicy.Ignored,
-                                      QtGui.QSizePolicy.Ignored)
+        self.imageLabel = QtWidgets.QLabel()
+        self.imageLabel.setSizePolicy(QtWidgets.QSizePolicy.Ignored,
+                                      QtWidgets.QSizePolicy.Ignored)
         self.imageLabel.setScaledContents(True)
 
-        self.scrollArea = QtGui.QScrollArea()
+        self.scrollArea = QtWidgets.QScrollArea()
         self.scrollArea.setBackgroundRole(QtGui.QPalette.Dark)
         self.scrollArea.setWidget(self.imageLabel)
         self.scrollArea.setAlignment(QtCore.Qt.AlignCenter)
         self.setCentralWidget(self.scrollArea)
 
-        maxSize = 0.95 * QtGui.QApplication.desktop().screenGeometry().size()
+        maxSize = 0.95 * QtWidgets.QApplication.desktop().screenGeometry().size()
         self.setMaximumSize(maxSize)
 
-        self.saveAct = QtGui.QAction("&Save index", self, 
-                shortcut="Ctrl+s", enabled=(not self.readOnly), 
-                triggered=self.saveIndex)
-        self.closeAct = QtGui.QAction("&Close", self, 
-                shortcut="q", triggered=self.close)
-        self.filterOptsAct = QtGui.QAction("Filter Options", self,
-                shortcut="Shift+Ctrl+f", triggered=self.filterOptions)
-        self.zoomInAct = QtGui.QAction("Zoom &In", self,
-                shortcut=">", triggered=self.zoomIn)
-        self.zoomOutAct = QtGui.QAction("Zoom &Out", self,
-                shortcut="<", triggered=self.zoomOut)
-        self.zoomFitHeightAct = QtGui.QAction("Zoom to Fit &Height", self,
-                triggered=self.zoomFitHeight)
-        self.zoomFitWidthAct = QtGui.QAction("Zoom to Fit &Width", self,
-                triggered=self.zoomFitWidth)
-        self.rotateLeftAct = QtGui.QAction("Rotate &Left", self,
-                shortcut="l", triggered=self.rotateLeft)
-        self.rotateRightAct = QtGui.QAction("Rotate &Right", self,
-                shortcut="r", triggered=self.rotateRight)
-        self.fullScreenAct = QtGui.QAction("Show &Full Screen", self,
-                shortcut="f", checkable=True, triggered=self.fullScreen)
-        self.imageInfoAct = QtGui.QAction("Image &Info", self,
-                shortcut="i", triggered=self.imageInfo)
-        self.overviewAct = QtGui.QAction("&Overview Window", self,
-                shortcut="o", triggered=self.overview)
-        self.prevImageAct = QtGui.QAction("&Previous Image", self,
-                shortcut="p", enabled=False, triggered=self.prevImage)
-        self.nextImageAct = QtGui.QAction("&Next Image", self,
-                shortcut="n", enabled=(self._haveNext()), 
-                triggered=self.nextImage)
-        self.selectImageAct = QtGui.QAction("&Select Image", self,
-                shortcut="s", enabled=(not self.readOnly), 
-                triggered=self.selectImage)
-        self.deselectImageAct = QtGui.QAction("&Deselect Image", self,
-                shortcut="d", enabled=(not self.readOnly), 
-                triggered=self.deselectImage)
-        self.pushForwardAct = QtGui.QAction("Push Image &Forward", self,
-                shortcut="Ctrl+f", enabled=(not self.readOnly), 
-                triggered=self.pushImageForward)
-        self.pushBackwardAct = QtGui.QAction("Push Image &Backward", self,
-                shortcut="Ctrl+b", enabled=(not self.readOnly), 
-                triggered=self.pushImageBackward)
-        self.tagSelectAct = QtGui.QAction("&Tags", self,
-                shortcut="t", enabled=(not self.readOnly), 
-                triggered=self.tagSelect)
+        self.saveAct = QtWidgets.QAction("&Save index", self)
+        self.saveAct.setShortcut("Ctrl+s")
+        self.saveAct.setEnabled(not self.readOnly)
+        self.saveAct.triggered.connect(self.saveIndex)
+        self.closeAct = QtWidgets.QAction("&Close", self)
+        self.closeAct.setShortcut("q")
+        self.closeAct.triggered.connect(self.close)
+        self.filterOptsAct = QtWidgets.QAction("Filter Options", self)
+        self.filterOptsAct.setShortcut("Shift+Ctrl+f")
+        self.filterOptsAct.triggered.connect(self.filterOptions)
+        self.zoomInAct = QtWidgets.QAction("Zoom &In", self)
+        self.zoomInAct.setShortcut(">")
+        self.zoomInAct.triggered.connect(self.zoomIn)
+        self.zoomOutAct = QtWidgets.QAction("Zoom &Out", self)
+        self.zoomOutAct.setShortcut("<")
+        self.zoomOutAct.triggered.connect(self.zoomOut)
+        self.zoomFitHeightAct = QtWidgets.QAction("Zoom to Fit &Height", self)
+        self.zoomFitHeightAct.triggered.connect(self.zoomFitHeight)
+        self.zoomFitWidthAct = QtWidgets.QAction("Zoom to Fit &Width", self)
+        self.zoomFitWidthAct.triggered.connect(self.zoomFitWidth)
+        self.rotateLeftAct = QtWidgets.QAction("Rotate &Left", self)
+        self.rotateLeftAct.setShortcut("l")
+        self.rotateLeftAct.triggered.connect(self.rotateLeft)
+        self.rotateRightAct = QtWidgets.QAction("Rotate &Right", self)
+        self.rotateRightAct.setShortcut("r")
+        self.rotateRightAct.triggered.connect(self.rotateRight)
+        self.fullScreenAct = QtWidgets.QAction("Show &Full Screen", self)
+        self.fullScreenAct.setShortcut("f")
+        self.fullScreenAct.setCheckable(True)
+        self.fullScreenAct.triggered.connect(self.fullScreen)
+        self.imageInfoAct = QtWidgets.QAction("Image &Info", self)
+        self.imageInfoAct.setShortcut("i")
+        self.imageInfoAct.triggered.connect(self.imageInfo)
+        self.overviewAct = QtWidgets.QAction("&Overview Window", self)
+        self.overviewAct.setShortcut("o")
+        self.overviewAct.triggered.connect(self.overview)
+        self.prevImageAct = QtWidgets.QAction("&Previous Image", self)
+        self.prevImageAct.setShortcut("p")
+        self.prevImageAct.setEnabled(False)
+        self.prevImageAct.triggered.connect(self.prevImage)
+        self.nextImageAct = QtWidgets.QAction("&Next Image", self)
+        self.nextImageAct.setShortcut("n")
+        self.nextImageAct.setEnabled(self._haveNext())
+        self.nextImageAct.triggered.connect(self.nextImage)
+        self.selectImageAct = QtWidgets.QAction("&Select Image", self)
+        self.selectImageAct.setShortcut("s")
+        self.selectImageAct.setEnabled(not self.readOnly)
+        self.selectImageAct.triggered.connect(self.selectImage)
+        self.deselectImageAct = QtWidgets.QAction("&Deselect Image", self)
+        self.deselectImageAct.setShortcut("d")
+        self.deselectImageAct.setEnabled(not self.readOnly)
+        self.deselectImageAct.triggered.connect(self.deselectImage)
+        self.pushForwardAct = QtWidgets.QAction("Push Image &Forward", self)
+        self.pushForwardAct.setShortcut("Ctrl+f")
+        self.pushForwardAct.setEnabled(not self.readOnly)
+        self.pushForwardAct.triggered.connect(self.pushImageForward)
+        self.pushBackwardAct = QtWidgets.QAction("Push Image &Backward", self)
+        self.pushBackwardAct.setShortcut("Ctrl+b")
+        self.pushBackwardAct.setEnabled(not self.readOnly)
+        self.pushBackwardAct.triggered.connect(self.pushImageBackward)
+        self.tagSelectAct = QtWidgets.QAction("&Tags", self)
+        self.tagSelectAct.setShortcut("t")
+        self.tagSelectAct.setEnabled(not self.readOnly)
+        self.tagSelectAct.triggered.connect(self.tagSelect)
 
-        self.fileMenu = QtGui.QMenu("&File", self)
-        self.fileMenu.addAction(self.saveAct)
-        self.fileMenu.addAction(self.closeAct)
-        self.fileMenu.addAction(self.filterOptsAct)
-        self.menuBar().addMenu(self.fileMenu)
+        menu = self.menuBar()
 
-        self.viewMenu = QtGui.QMenu("&View", self)
-        self.viewMenu.addAction(self.zoomInAct)
-        self.viewMenu.addAction(self.zoomOutAct)
-        self.viewMenu.addAction(self.zoomFitHeightAct)
-        self.viewMenu.addAction(self.zoomFitWidthAct)
-        self.viewMenu.addAction(self.rotateLeftAct)
-        self.viewMenu.addAction(self.rotateRightAct)
-        self.viewMenu.addSeparator()
-        self.viewMenu.addAction(self.fullScreenAct)
-        self.viewMenu.addSeparator()
-        self.viewMenu.addAction(self.imageInfoAct)
-        self.viewMenu.addAction(self.overviewAct)
-        self.menuBar().addMenu(self.viewMenu)
+        fileMenu = menu.addMenu("&File")
+        fileMenu.addAction(self.saveAct)
+        fileMenu.addAction(self.closeAct)
+        fileMenu.addAction(self.filterOptsAct)
 
-        self.imageMenu = QtGui.QMenu("&Image", self)
-        self.imageMenu.addAction(self.prevImageAct)
-        self.imageMenu.addAction(self.nextImageAct)
-        self.imageMenu.addAction(self.selectImageAct)
-        self.imageMenu.addAction(self.deselectImageAct)
-        self.imageMenu.addSeparator()
-        self.imageMenu.addAction(self.pushForwardAct)
-        self.imageMenu.addAction(self.pushBackwardAct)
-        self.imageMenu.addSeparator()
-        self.imageMenu.addAction(self.tagSelectAct)
-        self.menuBar().addMenu(self.imageMenu)
+        viewMenu = menu.addMenu("&View")
+        viewMenu.addAction(self.zoomInAct)
+        viewMenu.addAction(self.zoomOutAct)
+        viewMenu.addAction(self.zoomFitHeightAct)
+        viewMenu.addAction(self.zoomFitWidthAct)
+        viewMenu.addAction(self.rotateLeftAct)
+        viewMenu.addAction(self.rotateRightAct)
+        viewMenu.addSeparator()
+        viewMenu.addAction(self.fullScreenAct)
+        viewMenu.addSeparator()
+        viewMenu.addAction(self.imageInfoAct)
+        viewMenu.addAction(self.overviewAct)
+
+        imageMenu = menu.addMenu("&Image")
+        imageMenu.addAction(self.prevImageAct)
+        imageMenu.addAction(self.nextImageAct)
+        imageMenu.addAction(self.selectImageAct)
+        imageMenu.addAction(self.deselectImageAct)
+        imageMenu.addSeparator()
+        imageMenu.addAction(self.pushForwardAct)
+        imageMenu.addAction(self.pushBackwardAct)
+        imageMenu.addSeparator()
+        imageMenu.addAction(self.tagSelectAct)
 
         self.show()
         self._extraSize = self.size() - self.scrollArea.viewport().size()
@@ -143,33 +161,33 @@ class ImageViewer(QtGui.QMainWindow):
             self.images.write()
             self.dirty = False
         except photoidx.index.AlreadyLockedError:
-            msgBox = QtGui.QMessageBox()
+            msgBox = QtWidgets.QMessageBox()
             msgBox.setWindowTitle("Index is locked")
             msgBox.setText("Saving the image index failed!")
             msgBox.setInformativeText("Another process is currently "
                                       "accessing the file")
-            msgBox.setIcon(QtGui.QMessageBox.Critical)
+            msgBox.setIcon(QtWidgets.QMessageBox.Critical)
             msgBox.exec_()
 
     def close(self):
         if self.dirty:
-            msgBox = QtGui.QMessageBox()
+            msgBox = QtWidgets.QMessageBox()
             msgBox.setWindowTitle("Save index?")
             msgBox.setText("The image index been modified.")
             msgBox.setInformativeText("Save changes before closing?")
-            msgBox.setIcon(QtGui.QMessageBox.Question)
-            msgBox.setStandardButtons(QtGui.QMessageBox.Save | 
-                                      QtGui.QMessageBox.Discard | 
-                                      QtGui.QMessageBox.Cancel)
-            msgBox.setDefaultButton(QtGui.QMessageBox.Save)
+            msgBox.setIcon(QtWidgets.QMessageBox.Question)
+            msgBox.setStandardButtons(QtWidgets.QMessageBox.Save |
+                                      QtWidgets.QMessageBox.Discard |
+                                      QtWidgets.QMessageBox.Cancel)
+            msgBox.setDefaultButton(QtWidgets.QMessageBox.Save)
             ret = msgBox.exec_()
-            if ret == QtGui.QMessageBox.Save:
+            if ret == QtWidgets.QMessageBox.Save:
                 self.saveIndex()
                 if self.dirty:
                     return
-            elif ret == QtGui.QMessageBox.Discard:
+            elif ret == QtWidgets.QMessageBox.Discard:
                 pass
-            elif ret == QtGui.QMessageBox.Cancel:
+            elif ret == QtWidgets.QMessageBox.Cancel:
                 return
         if self.overviewwindow:
             self.overviewwindow.close()

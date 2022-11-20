@@ -3,10 +3,10 @@
 
 import sys
 import math
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtWidgets
 
 
-class ThumbnailWidget(QtGui.QLabel):
+class ThumbnailWidget(QtWidgets.QLabel):
 
     def __init__(self, image):
         super().__init__()
@@ -45,7 +45,7 @@ class ThumbnailWidget(QtGui.QLabel):
         self.setPalette(palette)
 
 
-class OverviewWindow(QtGui.QMainWindow):
+class OverviewWindow(QtWidgets.QMainWindow):
 
     def __init__(self, imageViewer):
         super().__init__()
@@ -54,22 +54,23 @@ class OverviewWindow(QtGui.QMainWindow):
         self.numcolumns = 4
 
         self.setWindowTitle("Overview")
-        self.mainLayout = QtGui.QGridLayout()
+        self.mainLayout = QtWidgets.QGridLayout()
         self._populate()
 
-        centralWidget = QtGui.QWidget()
+        centralWidget = QtWidgets.QWidget()
         centralWidget.setLayout(self.mainLayout)
-        scrollArea = QtGui.QScrollArea()
+        scrollArea = QtWidgets.QScrollArea()
         scrollArea.setWidget(centralWidget)
         scrollArea.setAlignment(QtCore.Qt.AlignCenter)
         self.setCentralWidget(scrollArea)
 
-        self.closeAct = QtGui.QAction("&Close", self, 
-                triggered=self.close)
+        self.closeAct = QtWidgets.QAction("&Close", self)
+        self.closeAct.triggered.connect(self.close)
 
-        self.fileMenu = QtGui.QMenu("&File", self)
+        menu = self.menuBar()
+
+        self.fileMenu = menu.addMenu("&File")
         self.fileMenu.addAction(self.closeAct)
-        self.menuBar().addMenu(self.fileMenu)
 
         # Set the width of the window such that the scrollArea just
         # fits.  We need to add 24 to the central widget, 20 for the

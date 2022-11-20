@@ -2,7 +2,7 @@
 
 import sys
 import argparse
-from PySide import QtGui
+from PySide2 import QtWidgets
 import photoidx.index
 import photoidx.idxfilter
 from photoidx.qt import ImageViewer
@@ -20,7 +20,7 @@ argparser.add_argument('--create',
 photoidx.idxfilter.addFilterArguments(argparser)
 args = argparser.parse_args()
 
-app = QtGui.QApplication([])
+app = QtWidgets.QApplication([])
 try:
     idx = photoidx.index.Index(idxfile=args.directory)
     readOnly = args.readOnly
