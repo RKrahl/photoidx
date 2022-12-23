@@ -1,12 +1,15 @@
 """Provide the class Image corresponding to an IdxItem.
 """
 
+import logging
 import re
 from PySide import QtCore, QtGui
 try:
     import vignette
 except ImportError:
     vignette = None
+
+log = logging.getLogger(__name__)
 
 # Limit the vignette thumbnailer backends to those dealing with images.
 if vignette:
@@ -23,6 +26,11 @@ if vignette:
             ]
         else:
             # vignette is too old to be usable
+            vignette = None
+    if vignette:
+        if not list(vignette.iter_thumbnail_backends()):
+            log.warning("Disabling vignette: "
+                        "no suitable thumbnailer backend available")
             vignette = None
 
 
