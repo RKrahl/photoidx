@@ -3,7 +3,7 @@
 
 import logging
 import re
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 try:
     import vignette
 except ImportError:

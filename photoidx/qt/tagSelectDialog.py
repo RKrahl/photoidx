@@ -2,31 +2,31 @@
 """
 
 import math
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtWidgets
 
 
-class TagSelectDialog(QtGui.QDialog):
+class TagSelectDialog(QtWidgets.QDialog):
 
     def __init__(self, taglist):
         super().__init__()
 
-        self.checkLayout = QtGui.QGridLayout()
+        self.checkLayout = QtWidgets.QGridLayout()
         self.settags(taglist)
 
-        self.entry = QtGui.QLineEdit()
+        self.entry = QtWidgets.QLineEdit()
         self.entry.returnPressed.connect(self.newtag)
-        entryLabel = QtGui.QLabel("New tag:")
+        entryLabel = QtWidgets.QLabel("New tag:")
         entryLabel.setBuddy(self.entry)
-        entryLayout = QtGui.QHBoxLayout()
+        entryLayout = QtWidgets.QHBoxLayout()
         entryLayout.addWidget(entryLabel)
         entryLayout.addWidget(self.entry)
 
-        buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | 
-                                           QtGui.QDialogButtonBox.Cancel)
+        btn = QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
+        buttonBox = QtWidgets.QDialogButtonBox(btn)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
 
-        mainLayout = QtGui.QVBoxLayout()
+        mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addLayout(self.checkLayout)
         mainLayout.addLayout(entryLayout)
         mainLayout.addWidget(buttonBox, alignment=QtCore.Qt.AlignHCenter)
@@ -55,7 +55,7 @@ class TagSelectDialog(QtGui.QDialog):
             c = 0
             for t in sorted(self.taglist):
                 if t not in self.tagCheck:
-                    self.tagCheck[t] = QtGui.QCheckBox(t)
+                    self.tagCheck[t] = QtWidgets.QCheckBox(t)
                 cb = self.tagCheck[t]
                 self.checkLayout.addWidget(cb, c % nrow, c // nrow)
                 c += 1

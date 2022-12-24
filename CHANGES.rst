@@ -13,6 +13,7 @@ Incompatible changes
 Internal changes
 ----------------
 
++ `#34`_, `#55`_: Upgrade to Pyside2.
 + `#48`_: Move from `gexiv2`_ to `exif`_.
 + `#51`_: Review build tool chain.
 + `#47`_, `#50`_: Use `setuptools_scm`_ to manage the version number.
@@ -24,6 +25,7 @@ Bug fixes and minor changes
 + `#49`_: Fix :exc:`DeprecationWarning` about importing the ABCs from
   :mod:`collections`.
 
+.. _#34: https://github.com/RKrahl/photoidx/issues/34
 .. _#47: https://github.com/RKrahl/photoidx/issues/47
 .. _#48: https://github.com/RKrahl/photoidx/issues/48
 .. _#49: https://github.com/RKrahl/photoidx/pull/49
@@ -32,6 +34,7 @@ Bug fixes and minor changes
 .. _#52: https://github.com/RKrahl/photoidx/issues/52
 .. _#53: https://github.com/RKrahl/photoidx/pull/53
 .. _#54: https://github.com/RKrahl/photoidx/pull/54
+.. _#55: https://github.com/RKrahl/photoidx/pull/55
 
 
 0.9.3 (2020-05-03)

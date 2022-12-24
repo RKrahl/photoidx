@@ -2,12 +2,12 @@
 """
 
 import datetime
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtWidgets
 import photoidx.idxfilter
 from photoidx.geo import GeoPosition
 
 
-class GeoPosEdit(QtGui.QLineEdit):
+class GeoPosEdit(QtWidgets.QLineEdit):
     """A QLineEdit with a suitable size for a GeoPosition.
     """
     def sizeHint(self):
@@ -21,7 +21,7 @@ class GeoPosEdit(QtGui.QLineEdit):
 class FilterOption(object):
 
     def __init__(self, criterion, parent):
-        self.groupbox = QtGui.QGroupBox("Filter by %s" % criterion)
+        self.groupbox = QtWidgets.QGroupBox("Filter by %s" % criterion)
         self.groupbox.setCheckable(True)
         parent.addWidget(self.groupbox)
 
@@ -35,10 +35,10 @@ class TagFilterOption(FilterOption):
 
     def __init__(self, parent):
         super().__init__("tags", parent)
-        self.entry = QtGui.QLineEdit()
-        label = QtGui.QLabel("Tags:")
+        self.entry = QtWidgets.QLineEdit()
+        label = QtWidgets.QLabel("Tags:")
         label.setBuddy(self.entry)
-        layout = QtGui.QHBoxLayout()
+        layout = QtWidgets.QHBoxLayout()
         layout.addWidget(label)
         layout.addWidget(self.entry)
         self.groupbox.setLayout(layout)
@@ -60,9 +60,9 @@ class SelectFilterOption(FilterOption):
 
     def __init__(self, parent):
         super().__init__("selection", parent)
-        self.buttonYes = QtGui.QRadioButton("selected")
-        self.buttonNo = QtGui.QRadioButton("not selected")
-        layout = QtGui.QHBoxLayout()
+        self.buttonYes = QtWidgets.QRadioButton("selected")
+        self.buttonNo = QtWidgets.QRadioButton("not selected")
+        layout = QtWidgets.QHBoxLayout()
         layout.addWidget(self.buttonYes)
         layout.addWidget(self.buttonNo)
         self.groupbox.setLayout(layout)
@@ -87,13 +87,13 @@ class DateFilterOption(FilterOption):
 
     def __init__(self, parent):
         super().__init__("date", parent)
-        self.startEntry = QtGui.QLineEdit()
-        startLabel = QtGui.QLabel("Start:")
+        self.startEntry = QtWidgets.QLineEdit()
+        startLabel = QtWidgets.QLabel("Start:")
         startLabel.setBuddy(self.startEntry)
-        self.endEntry = QtGui.QLineEdit()
-        endLabel = QtGui.QLabel("End:")
+        self.endEntry = QtWidgets.QLineEdit()
+        endLabel = QtWidgets.QLabel("End:")
         endLabel.setBuddy(self.endEntry)
-        layout = QtGui.QGridLayout()
+        layout = QtWidgets.QGridLayout()
         layout.addWidget(startLabel, 0, 0)
         layout.addWidget(self.startEntry, 0, 1)
         layout.addWidget(endLabel, 1, 0)
@@ -123,12 +123,12 @@ class GPSFilterOption(FilterOption):
     def __init__(self, parent):
         super().__init__("GPS position", parent)
         self.posEntry = GeoPosEdit()
-        posLabel = QtGui.QLabel("Position:")
+        posLabel = QtWidgets.QLabel("Position:")
         posLabel.setBuddy(self.posEntry)
-        self.radiusEntry = QtGui.QLineEdit()
-        radiusLabel = QtGui.QLabel("Radius:")
+        self.radiusEntry = QtWidgets.QLineEdit()
+        radiusLabel = QtWidgets.QLabel("Radius:")
         radiusLabel.setBuddy(self.radiusEntry)
-        layout = QtGui.QGridLayout()
+        layout = QtWidgets.QGridLayout()
         layout.addWidget(posLabel, 0, 0)
         layout.addWidget(self.posEntry, 0, 1)
         layout.addWidget(radiusLabel, 1, 0)
@@ -152,10 +152,10 @@ class ListFilterOption(FilterOption):
 
     def __init__(self, parent):
         super().__init__("explicit file names", parent)
-        self.entry = QtGui.QLineEdit()
-        label = QtGui.QLabel("Files:")
+        self.entry = QtWidgets.QLineEdit()
+        label = QtWidgets.QLabel("Files:")
         label.setBuddy(self.entry)
-        layout = QtGui.QHBoxLayout()
+        layout = QtWidgets.QHBoxLayout()
         layout.addWidget(label)
         layout.addWidget(self.entry)
         self.groupbox.setLayout(layout)
@@ -172,12 +172,12 @@ class ListFilterOption(FilterOption):
             self.entry.setText(" ".join(sorted(str(p) for p in filelist)))
 
 
-class FilterDialog(QtGui.QDialog):
+class FilterDialog(QtWidgets.QDialog):
 
     def __init__(self):
         super().__init__()
 
-        mainLayout = QtGui.QVBoxLayout()
+        mainLayout = QtWidgets.QVBoxLayout()
 
         self.tagFilterOption = TagFilterOption(mainLayout)
         self.selectFilterOption = SelectFilterOption(mainLayout)
@@ -185,8 +185,8 @@ class FilterDialog(QtGui.QDialog):
         self.gpsFilterOption = GPSFilterOption(mainLayout)
         self.filelistFilterOption = ListFilterOption(mainLayout)
 
-        buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | 
-                                           QtGui.QDialogButtonBox.Cancel)
+        btn = QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
+        buttonBox = QtWidgets.QDialogButtonBox(btn)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
         mainLayout.addWidget(buttonBox, alignment=QtCore.Qt.AlignHCenter)
