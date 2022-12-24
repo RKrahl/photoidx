@@ -1,6 +1,6 @@
 |gh-test|
 
-.. |gh-test| image:: https://img.shields.io/github/workflow/status/RKrahl/photoidx/Run%20Test
+.. |gh-test| image:: https://img.shields.io/github/actions/workflow/status/RKrahl/photoidx/run-tests.yaml?branch=develop
    :target: https://github.com/RKrahl/photoidx/actions/workflows/run-tests.yaml
    :alt: GitHub Workflow Status
 
