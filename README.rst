@@ -40,6 +40,10 @@ Optional library packages:
   vignette is not available, everything will still work, but
   displaying the overview window may be significantly slower.
 
++ vignette needs at least one thumbnail backend, either `Pillow`_ or
+  `PyQt5`_.  If no suitable backend is found, vignette will be
+  disabled in photoidx.
+
 + `setuptools_scm`_
 
   The version number is managed using this package.  All source
@@ -83,6 +87,8 @@ permissions and limitations under the License.
 .. _exif: https://github.com/TNThieding/exif
 .. _PySide: https://wiki.qt.io/PySide
 .. _vignette: https://github.com/hydrargyrum/vignette
+.. _Pillow: https://python-pillow.org/
+.. _PyQt5: https://www.riverbankcomputing.com/software/pyqt/
 .. _setuptools_scm: https://github.com/pypa/setuptools_scm/
 .. _pytest: https://pytest.org/
 .. _pytest-dependency: https://github.com/RKrahl/pytest-dependency
