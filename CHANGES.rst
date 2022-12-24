@@ -20,6 +20,7 @@ Internal changes
 Bug fixes and minor changes
 ---------------------------
 
++ `#54`_: Check whether vignette has any thumbnailer backend.
 + `#49`_: Fix :exc:`DeprecationWarning` about importing the ABCs from
   :mod:`collections`.
 
@@ -30,6 +31,7 @@ Bug fixes and minor changes
 .. _#51: https://github.com/RKrahl/photoidx/pull/51
 .. _#52: https://github.com/RKrahl/photoidx/issues/52
 .. _#53: https://github.com/RKrahl/photoidx/pull/53
+.. _#54: https://github.com/RKrahl/photoidx/pull/54
 
 
 0.9.3 (2020-05-03)
