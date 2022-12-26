@@ -302,6 +302,23 @@ class ImageViewer(QtWidgets.QMainWindow):
             self._loadImage()
             self._checkActions()
 
+    def get_visible_center(self):
+        """Get the center of the current visible area in image coordinates.
+        """
+        hscroll_pos = self.scrollArea.horizontalScrollBar().value()
+        vscroll_pos = self.scrollArea.verticalScrollBar().value()
+        scroll_pos = QtCore.QSize(hscroll_pos, vscroll_pos)
+        win_center = scroll_pos + self.scrollArea.viewport().size() / 2
+        return win_center / self.scaleFactor
+
+    def scroll_visible_center_to(self, pos):
+        """Move the scrollbars to center the position in the visible area.
+        """
+        win_center = self.scaleFactor * pos
+        scroll_pos = win_center - self.scrollArea.viewport().size() / 2
+        self.scrollArea.horizontalScrollBar().setValue(scroll_pos.width())
+        self.scrollArea.verticalScrollBar().setValue(scroll_pos.height())
+
     def zoomIn(self):
         self.scaleImage(1.6)
 
@@ -435,8 +452,10 @@ class ImageViewer(QtWidgets.QMainWindow):
             self.moveCurrentTo(cur)
 
     def scaleImage(self, factor):
+        center = self.get_visible_center()
         self.scaleFactor *= factor
         self._setSize()
+        self.scroll_visible_center_to(center)
 
     def pushImageForward(self):
         """Move the current image forward one position in the image order.
