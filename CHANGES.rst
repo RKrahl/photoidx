@@ -5,6 +5,12 @@ Changelog
 0.10.0 (not yet released)
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
+New features
+------------
+
++ `#43`_, `#57`_: Keep the center of current display stable, if
+  possible when zooming in or out in :ref:`imageview`.
+
 Incompatible changes
 --------------------
 
@@ -26,6 +32,7 @@ Bug fixes and minor changes
   :mod:`collections`.
 
 .. _#34: https://github.com/RKrahl/photoidx/issues/34
+.. _#43: https://github.com/RKrahl/photoidx/issues/43
 .. _#47: https://github.com/RKrahl/photoidx/issues/47
 .. _#48: https://github.com/RKrahl/photoidx/issues/48
 .. _#49: https://github.com/RKrahl/photoidx/pull/49
@@ -35,6 +42,7 @@ Bug fixes and minor changes
 .. _#53: https://github.com/RKrahl/photoidx/pull/53
 .. _#54: https://github.com/RKrahl/photoidx/pull/54
 .. _#55: https://github.com/RKrahl/photoidx/pull/55
+.. _#57: https://github.com/RKrahl/photoidx/pull/57
 
 
 0.9.3 (2020-05-03)
