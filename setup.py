@@ -125,6 +125,6 @@ setup(
     packages = ["photoidx", "photoidx.qt"],
     scripts = ["scripts/photo-idx.py", "scripts/imageview.py"],
     python_requires = ">=3.6",
-    install_requires = ["PyYAML", "exif >= 0.8.3"],
+    install_requires = ["PyYAML", "ExifRead >= 2.2.0"],
     cmdclass = dict(cmdclass, build_py=build_py, sdist=sdist, meta=meta),
 )
