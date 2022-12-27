@@ -2,7 +2,7 @@
   filename: dsc_4623.jpg
   gpsPosition:
     E: 139.76603333333333
-    N: 35.671189999999996
+    N: 35.67119
   md5: e08205e982f5649088ab0ef047d60706
   orientation: Rotate 90 CW
   tags: []
@@ -10,14 +10,14 @@
   filename: dsc_4664.jpg
   gpsPosition:
     E: 139.70024333333333
-    N: 35.675639999999994
+    N: 35.67564
   md5: bc8605c7394fbf818dbc694776db6534
   orientation: Horizontal (normal)
   tags: []
 - createdate: 2016-03-05 14:53:42
   filename: dsc_4831.jpg
   gpsPosition:
-    E: 139.02553666666668
+    E: 139.02553666666665
     N: 35.20459666666667
   md5: 8753a712e0f426a7ac8b9c47368b7528
   orientation: Horizontal (normal)
