@@ -4,7 +4,7 @@
 import datetime
 import fractions
 import warnings
-import exif
+import exifread
 
 # Some helper classes for exif attributes, having customized string
 # representations.
@@ -48,13 +48,13 @@ class Exif(object):
 
     def __init__(self, path):
         with path.open("rb") as f:
-            self._exif = exif.Image(f)
+            self._tags = exifread.process_file(f)
 
     @property
     def createDate(self):
         """Time and date the image was taken."""
         try:
-            dt = self._exif.datetime_original
+            dt = self._tags['Image DateTime'].values
         except (AttributeError, KeyError):
             return None
         else:
@@ -64,7 +64,7 @@ class Exif(object):
     def orientation(self):
         """Orientation of the camera relative to the scene."""
         try:
-            orientation = self._exif.orientation
+            orientation = self._tags['Image Orientation'].values[0]
         except (AttributeError, KeyError):
             return None
         else:
@@ -74,22 +74,22 @@ class Exif(object):
     def gpsPosition(self):
         """GPS coordinates."""
         try:
-            lat_tuple = self._exif.gps_latitude
-            lon_tuple = self._exif.gps_longitude
-            latref = self._exif.gps_latitude_ref
-            lonref = self._exif.gps_longitude_ref
+            lat_tuple = self._tags['GPS GPSLatitude'].values
+            lon_tuple = self._tags['GPS GPSLongitude'].values
+            latref = self._tags['GPS GPSLatitudeRef'].values
+            lonref = self._tags['GPS GPSLongitudeRef'].values
         except (AttributeError, KeyError):
             return None
         else:
             lat = lat_tuple[0] + lat_tuple[1]/60 + lat_tuple[2]/3600
             lon = lon_tuple[0] + lon_tuple[1]/60 + lon_tuple[2]/3600
-            return { latref:lat, lonref:lon }
+            return { latref:float(lat), lonref:float(lon) }
 
     @property
     def cameraModel(self):
         """Camera Model."""
         try:
-            return self._exif.model
+            return self._tags['Image Model'].values
         except (AttributeError, KeyError):
             return None
 
@@ -97,17 +97,17 @@ class Exif(object):
     def exposureTime(self):
         """Exposure time."""
         try:
-            et = self._exif.exposure_time
+            et = self._tags['EXIF ExposureTime'].values[0]
         except (AttributeError, KeyError):
             return None
         else:
-            return ExposureTime(fractions.Fraction(et).limit_denominator())
+            return ExposureTime(et)
 
     @property
     def aperture(self):
         """Aperture."""
         try:
-            f = self._exif.f_number
+            f = self._tags['EXIF FNumber'].values[0]
         except (AttributeError, KeyError):
             return None
         else:
@@ -117,7 +117,7 @@ class Exif(object):
     def iso(self):
         """ISO speed rating."""
         try:
-            return self._exif.photographic_sensitivity
+            return self._tags['EXIF ISOSpeedRatings'].values[0]
         except (AttributeError, KeyError):
             return None
 
@@ -125,7 +125,7 @@ class Exif(object):
     def focalLength(self):
         """Lens focal length."""
         try:
-            fl = self._exif.focal_length
+            fl = self._tags['EXIF FocalLength'].values[0]
         except (AttributeError, KeyError):
             return None
         else:
