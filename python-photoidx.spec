@@ -17,12 +17,12 @@ BuildRequires:	python3-pytest
 BuildRequires:	python3-distutils-pytest
 BuildRequires:	python3-pytest-dependency
 BuildRequires:	python3-PyYAML
-BuildRequires:	python3-exif >= 0.8.3
+BuildRequires:	python3-ExifRead >= 2.2.0
 %endif
 Provides:	python3-photo = %{version}-%{release}
 Obsoletes:	python3-photo < %{version}-%{release}
 Requires:	python3-PyYAML
-Requires:	python3-exif >= 0.8.3
+Requires:	python3-ExifRead >= 2.2.0
 BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-build
 

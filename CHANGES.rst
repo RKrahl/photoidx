@@ -20,7 +20,7 @@ Internal changes
 ----------------
 
 + `#34`_, `#55`_: Upgrade to Pyside2.
-+ `#48`_: Move from `gexiv2`_ to `exif`_.
++ `#48`_, `#56`_, `58`_: Move from `gexiv2`_ to `ExifRead`_.
 + `#51`_: Review build tool chain.
 + `#47`_, `#50`_: Use `setuptools_scm`_ to manage the version number.
 
@@ -42,7 +42,9 @@ Bug fixes and minor changes
 .. _#53: https://github.com/RKrahl/photoidx/pull/53
 .. _#54: https://github.com/RKrahl/photoidx/pull/54
 .. _#55: https://github.com/RKrahl/photoidx/pull/55
+.. _#56: https://github.com/RKrahl/photoidx/issues/56
 .. _#57: https://github.com/RKrahl/photoidx/pull/57
+.. _#58: https://github.com/RKrahl/photoidx/pull/58
 
 
 0.9.3 (2020-05-03)
@@ -356,7 +358,7 @@ New features
 Initial version
 
 
-.. _exif: https://github.com/TNThieding/exif
+.. _ExifRead: https://github.com/ianare/exif-py
 .. _setuptools_scm: https://github.com/pypa/setuptools_scm/
 .. _vignette: https://github.com/hydrargyrum/vignette
 .. _pytest-dependency: https://github.com/RKrahl/pytest-dependency

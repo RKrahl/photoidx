@@ -28,7 +28,7 @@ Required library packages:
 
 + `PyYAML`_
 
-+ `exif`_ >= 0.8.3
++ `ExifRead`_ >= 2.2.0
 
 + `PySide`_
 
@@ -84,7 +84,7 @@ permissions and limitations under the License.
 
 .. _setuptools: https://github.com/pypa/setuptools/
 .. _PyYAML: https://github.com/yaml/pyyaml
-.. _exif: https://github.com/TNThieding/exif
+.. _ExifRead: https://github.com/ianare/exif-py
 .. _PySide: https://wiki.qt.io/PySide
 .. _vignette: https://github.com/hydrargyrum/vignette
 .. _Pillow: https://python-pillow.org/
