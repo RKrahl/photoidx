@@ -30,7 +30,7 @@ Required library packages:
 
 + `ExifRead`_ >= 2.2.0
 
-+ `PySide`_
++ `PySide2`_
 
 Optional library packages:
 
@@ -67,6 +67,60 @@ Optional library packages:
   Only needed to run the test suite.
 
 
+Install instructions
+--------------------
+
+Note that the GUI of photoidx requires PySide2, but the installation
+of PySide2 using pip seem to be thoroughly broken.  That is why that
+dependency is deliberately omitted in the setup script of photoidx.
+You need to install PySide2 independently before installing photoidx.
+It is advisable to install PySide2 using the package manager of your
+operation system rather than from PyPI.
+
+Furthermore, you may want to install vignette along with a thumbnail
+backend to enable cached thumbnails in the overview window.  This also
+needs to be installed independently.
+
+Release packages of photoidx are published in the `Python Package
+Index (PyPI)`__.
+
+.. __: `PyPI site`_
+
+Installation using pip
+......................
+
+You can install photoidx from PyPI using pip::
+
+  $ pip install photoidx
+
+Installation from the source distribution
+.........................................
+
+Steps to manually build from the source distribution:
+
+1. Download the sources, unpack, and change into the source directory.
+
+2. Build::
+
+     $ python setup.py build
+
+3. Test (optional)::
+
+     $ python setup.py test
+
+4. Install::
+
+     $ python setup.py install
+
+The last step might require admin privileges in order to write into
+the site-packages directory of your Python installation.
+
+Note that this still requires a release version of the source
+distribution.  The development sources that you may clone from the
+source repository on GitHub is missing some files that are dynamically
+created during the release.
+
+
 Copyright and License
 ---------------------
 
@@ -85,7 +139,7 @@ permissions and limitations under the License.
 .. _setuptools: https://github.com/pypa/setuptools/
 .. _PyYAML: https://github.com/yaml/pyyaml
 .. _ExifRead: https://github.com/ianare/exif-py
-.. _PySide: https://wiki.qt.io/PySide
+.. _PySide2: https://www.pyside.org/
 .. _vignette: https://github.com/hydrargyrum/vignette
 .. _Pillow: https://python-pillow.org/
 .. _PyQt5: https://www.riverbankcomputing.com/software/pyqt/
@@ -93,5 +147,5 @@ permissions and limitations under the License.
 .. _pytest: https://pytest.org/
 .. _pytest-dependency: https://github.com/RKrahl/pytest-dependency
 .. _distutils-pytest: https://github.com/RKrahl/distutils-pytest
-.. _Installing Python Modules: https://docs.python.org/3/install/
+.. _PyPI site: https://pypi.org/project/photoidx/
 .. _Apache License: https://www.apache.org/licenses/LICENSE-2.0
