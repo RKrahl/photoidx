@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-0.10.0 (not yet released)
-~~~~~~~~~~~~~~~~~~~~~~~~~
+0.10.0 (2022-12-29)
+~~~~~~~~~~~~~~~~~~~
 
 New features
 ------------
@@ -20,7 +20,7 @@ Internal changes
 ----------------
 
 + `#34`_, `#55`_: Upgrade to Pyside2.
-+ `#48`_, `#56`_, `58`_: Move from `gexiv2`_ to `ExifRead`_.
++ `#48`_, `#56`_, `#58`_: Move from `gexiv2`_ to `ExifRead`_.
 + `#51`_: Review build tool chain.
 + `#47`_, `#50`_: Use `setuptools_scm`_ to manage the version number.
 
