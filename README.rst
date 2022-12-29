@@ -1,8 +1,12 @@
-|gh-test|
+|gh-test| |pypi|
 
 .. |gh-test| image:: https://img.shields.io/github/actions/workflow/status/RKrahl/photoidx/run-tests.yaml?branch=develop
    :target: https://github.com/RKrahl/photoidx/actions/workflows/run-tests.yaml
    :alt: GitHub Workflow Status
+
+.. |pypi| image:: https://img.shields.io/pypi/v/photoidx
+   :target: https://pypi.org/project/photoidx/
+   :alt: PyPI version
 
 photoidx - Maintain indices for photo collections
 =================================================
