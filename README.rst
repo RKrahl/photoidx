@@ -79,7 +79,7 @@ of PySide2 using pip seem to be thoroughly broken.  That is why that
 dependency is deliberately omitted in the setup script of photoidx.
 You need to install PySide2 independently before installing photoidx.
 It is advisable to install PySide2 using the package manager of your
-operation system rather than from PyPI.
+operating system rather than from PyPI.
 
 Furthermore, you may want to install vignette along with a thumbnail
 backend to enable cached thumbnails in the overview window.  This also
