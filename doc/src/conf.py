@@ -11,7 +11,7 @@ import _meta
 
 # -- Project information -----------------------------------------------------
 
-project = 'photo-tools'
+project = 'photoidx'
 copyright = '2015–2022, Rolf Krahl'
 author = 'Rolf Krahl'
 

@@ -4,7 +4,7 @@
 import filecmp
 import shutil
 import pytest
-import photo.index
+import photoidx.index
 from conftest import tmpdir, gettestdata
 
 refindex = gettestdata("index-name.yaml")
@@ -17,7 +17,7 @@ def imgdir(tmpdir):
 def test_readwrite(imgdir):
     """Read the index file and write it out again.
     """
-    with photo.index.Index(idxfile=imgdir) as idx:
+    with photoidx.index.Index(idxfile=imgdir) as idx:
         assert idx[0].name == "ginza.jpg"
         assert idx[1].name is None
         assert idx[3].name == "geisha.jpg"

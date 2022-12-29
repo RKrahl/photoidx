@@ -4,7 +4,7 @@
 import filecmp
 import shutil
 import pytest
-import photo.index
+import photoidx.index
 from conftest import tmpdir, gettestdata
 
 testimgs = [ 
@@ -25,7 +25,7 @@ def test_create_curdir(imgdir, monkeypatch):
     """Create a new index in the current directory adding all images.
     """
     monkeypatch.chdir(str(imgdir))
-    with photo.index.Index(imgdir=".") as idx:
+    with photoidx.index.Index(imgdir=".") as idx:
         idx.write()
     idxfile = ".index.yaml"
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
@@ -34,7 +34,7 @@ def test_create_curdir(imgdir, monkeypatch):
 def test_create(imgdir):
     """Create a new index adding all images in the imgdir.
     """
-    with photo.index.Index(imgdir=imgdir) as idx:
+    with photoidx.index.Index(imgdir=imgdir) as idx:
         idx.write()
     idxfile = str(imgdir / ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
@@ -43,7 +43,7 @@ def test_create(imgdir):
 def test_read(imgdir):
     """Read the index file and write it out again.
     """
-    with photo.index.Index(idxfile=imgdir) as idx:
+    with photoidx.index.Index(idxfile=imgdir) as idx:
         idx.write()
     idxfile = str(imgdir / ".index.yaml")
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

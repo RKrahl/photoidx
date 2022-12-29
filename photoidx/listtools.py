@@ -1,11 +1,11 @@
 """Useful list classes.
 
 .. note::
-   This module might be useful independently of photo-tools.  It is
-   included here because photo-tools uses it internally, but it is not
+   This module might be useful independently of photoidx.  It is
+   included here because photoidx uses it internally, but it is not
    considered to be part of the API.  Changes in this module are not
-   considered API changes of photo-tools.  It may even be removed from
-   future versions of the photo-tools distribution without further
+   considered API changes of photoidx.  It may even be removed from
+   future versions of the photoidx distribution without further
    notice.
 """
 

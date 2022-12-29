@@ -8,7 +8,7 @@ some exif tags are missing.
 
 import shutil
 import pytest
-import photo.index
+import photoidx.index
 from conftest import tmpdir, gettestdata
 
 testimgs = [ 
@@ -24,5 +24,5 @@ def imgdir(tmpdir):
     return tmpdir
 
 def test_create(imgdir):
-    with photo.index.Index(imgdir=imgdir) as idx:
+    with photoidx.index.Index(imgdir=imgdir) as idx:
         idx.write()

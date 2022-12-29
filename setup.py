@@ -1,6 +1,8 @@
-"""Tools for photo collections.
+"""Maintain indices for photo collections
 
-This package provides tools for managing photo collections.
+This package maintains indices for photo collections.  The index is
+stored as a YAML file and contains metadata and tags describing the
+photos.  The photos are accessed read only.
 """
 
 import setuptools
@@ -99,11 +101,11 @@ with Path("README.rst").open("rt", encoding="utf8") as f:
     readme = f.read()
 
 setup(
-    name = "photo",
+    name = "photoidx",
     version = version,
     description = docstring.split("\n")[0],
     long_description = readme,
-    url = "https://github.com/RKrahl/photo-tools",
+    url = "https://github.com/RKrahl/photoidx",
     author = "Rolf Krahl",
     author_email = "rolf@rotkraut.de",
     license = "Apache-2.0",
@@ -120,9 +122,9 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
-    packages = ["photo", "photo.qt"],
-    scripts = ["photoidx.py", "imageview.py"],
+    packages = ["photoidx", "photoidx.qt"],
+    scripts = ["scripts/photo-idx.py", "scripts/imageview.py"],
     python_requires = ">=3.6",
-    install_requires = ["PyYAML", "exif >= 0.8.3", "PySide"],
+    install_requires = ["PyYAML", "ExifRead >= 2.2.0"],
     cmdclass = dict(cmdclass, build_py=build_py, sdist=sdist, meta=meta),
 )
