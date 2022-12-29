@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import pytest
+import photoidx
 
 
 testdir = Path(__file__).parent
@@ -17,23 +18,11 @@ def gettestdata(fname):
     assert fname.is_file()
     return str(fname)
 
-class TmpDir(object):
-    """Provide a temporary directory.
-    """
-    def __init__(self):
-        self.dir = Path(tempfile.mkdtemp(prefix="photo-test-"))
-    def __del__(self):
-        self.cleanup()
-    def cleanup(self):
-        if self.dir:
-            shutil.rmtree(str(self.dir))
-        self.dir = None
-
 @pytest.fixture(scope="module")
 def tmpdir(request):
-    td = TmpDir()
-    request.addfinalizer(td.cleanup)
-    return td.dir
+    td = tempfile.mkdtemp(prefix="photoidx-test-")
+    yield Path(td)
+    shutil.rmtree(td)
 
 def callscript(scriptname, args, stdin=None, stdout=None, stderr=None):
     try:
@@ -44,3 +33,10 @@ def callscript(scriptname, args, stdin=None, stdout=None, stderr=None):
     cmd = [sys.executable, str(script)] + args
     print("\n>", *cmd)
     subprocess.check_call(cmd, stdin=stdin, stdout=stdout, stderr=stderr)
+
+def pytest_report_header(config):
+    """Add information on the package version used in the tests.
+    """
+    modpath = Path(photoidx.__file__).resolve().parent
+    return [ "photoidx: %s" % (photoidx.__version__),
+             "          %s" % (modpath) ]

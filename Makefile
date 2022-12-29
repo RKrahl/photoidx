@@ -1,4 +1,5 @@
 PYTHON   = python3
+BUILDLIB = $(CURDIR)/build/lib
 
 
 build:
@@ -11,15 +12,17 @@ sdist:
 	$(PYTHON) setup.py sdist
 
 clean:
-	rm -f *~ photo/*~ photo/qt/*~ tests/*~
 	rm -rf build
+	rm -rf __pycache__
 
 distclean: clean
-	rm -f MANIFEST
-	rm -f photo/*.pyc photo/qt/*.pyc tests/*.pyc
-	rm -rf .cache
-	rm -rf photo/__pycache__ photo/qt/__pycache__ tests/__pycache__
+	rm -f MANIFEST _meta.py
+	rm -f photoidx/__init__.py
 	rm -rf dist
+	rm -rf tests/.pytest_cache
+
+meta:
+	$(PYTHON) setup.py meta
 
 
-.PHONY: build test sdist clean distclean
+.PHONY: build test sdist clean distclean meta

@@ -1,14 +1,14 @@
 """Provide the class Index which represents an index of photos.
 """
 
-from collections import MutableSequence
+from collections.abc import MutableSequence
 import errno
 import fcntl
 import os
 from pathlib import Path
 import yaml
-from photo.idxitem import IdxItem
-from photo.listtools import LazyList
+from photoidx.idxitem import IdxItem
+from photoidx.listtools import LazyList
 
 
 class AlreadyLockedError(OSError):

@@ -2,11 +2,10 @@
 """
 
 import argparse
-import collections
 import datetime
 from pathlib import Path
 import re
-from photo.geo import GeoPosition
+from photoidx.geo import GeoPosition
 
 
 _datere = re.compile(r'''^

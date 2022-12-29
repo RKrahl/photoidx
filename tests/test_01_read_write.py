@@ -4,7 +4,7 @@
 import filecmp
 import shutil
 import pytest
-import photo.index
+import photoidx.index
 from conftest import tmpdir, gettestdata
 
 testimgs = [ 
@@ -26,7 +26,7 @@ def test_read_non_existent(imgdir):
     """Try to read an index file that does not exist.
     """
     with pytest.raises(OSError):
-        with photo.index.Index(idxfile=imgdir) as idx:
+        with photoidx.index.Index(idxfile=imgdir) as idx:
             pass
 
 def test_read_write(imgdir):
@@ -34,7 +34,7 @@ def test_read_write(imgdir):
     """
     idxfile = str(imgdir / ".index.yaml")
     shutil.copy(refindex, idxfile)
-    with photo.index.Index(idxfile=imgdir) as idx:
+    with photoidx.index.Index(idxfile=imgdir) as idx:
         idx.write()
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
@@ -43,6 +43,6 @@ def test_read_write_unicode(imgdir):
     """
     idxfile = str(imgdir / ".index.yaml")
     shutil.copy(refindexu, idxfile)
-    with photo.index.Index(idxfile=imgdir) as idx:
+    with photoidx.index.Index(idxfile=imgdir) as idx:
         idx.write()
     assert filecmp.cmp(refindexu, idxfile), "index file differs from reference"
