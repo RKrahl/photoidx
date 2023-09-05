@@ -44,9 +44,10 @@ Optional library packages:
   vignette is not available, everything will still work, but
   displaying the overview window may be significantly slower.
 
-+ vignette needs at least one thumbnail backend, either `Pillow`_ or
-  `PyQt5`_.  If no suitable backend is found, vignette will be
-  disabled in photoidx.
++ vignette needs at least one thumbnail backend, for instance
+  `Pillow`_ >= 6.0 or `PyQt5`_, see the vignette documentation for
+  details.  If no suitable backend is found, vignette will be disabled
+  in photoidx.
 
 + `setuptools_scm`_
 
