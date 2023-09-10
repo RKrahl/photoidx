@@ -38,6 +38,19 @@ class ImageNotFoundError(Exception):
     pass
 
 
+class _OrientationTransform(QtGui.QMatrix):
+    Rotations = {
+        3: 180,
+        6: 90,
+        8: 270,
+    }
+    def __new__(cls, orientation):
+        transform = QtGui.QMatrix()
+        if orientation in cls.Rotations:
+            transform.rotate(cls.Rotations[orientation])
+        return transform
+
+
 class Image(object):
 
     ThumbnailSize = QtCore.QSize(128, 128)
@@ -46,11 +59,7 @@ class Image(object):
         self.item = item
         self.fileName = basedir / item.filename
         self.name = item.name or self.fileName.name
-        self.transform = QtGui.QMatrix()
-        if self.item.orientation:
-            m = re.match(r"Rotate (\d+) CW", str(self.item.orientation))
-            if m:
-                self.rotate(int(m.group(1)))
+        self.transform = _OrientationTransform(self.item.orientation)
 
     def getPixmap(self):
         image = QtGui.QImage(str(self.fileName))
