@@ -77,7 +77,7 @@ class ImageInfoDialog(QtWidgets.QDialog):
         else:
             self.createDate.setText(None)
         if item.orientation:
-            self.orientation.setText(item.orientation)
+            self.orientation.setText(str(item.orientation))
         else:
             self.orientation.setText(None)
         pos = item.gpsPosition

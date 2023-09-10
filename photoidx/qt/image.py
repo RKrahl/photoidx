@@ -48,7 +48,7 @@ class Image(object):
         self.name = item.name or self.fileName.name
         self.transform = QtGui.QMatrix()
         if self.item.orientation:
-            m = re.match(r"Rotate (\d+) CW", self.item.orientation)
+            m = re.match(r"Rotate (\d+) CW", str(self.item.orientation))
             if m:
                 self.rotate(int(m.group(1)))
 
