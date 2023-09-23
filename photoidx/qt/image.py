@@ -42,14 +42,30 @@ class ImageNotFoundError(Exception):
 
 
 _OrientationTransform = {
-    1: (1, 0, 0, 1),
-    2: (-1, 0, 0, 1),
-    3: (-1, 0, 0, -1),
-    4: (1, 0, 0, -1),
-    5: (0, 1, 1, 0),
-    6: (0, 1, -1, 0),
-    7: (0, -1, -1, 0),
-    8: (0, -1, 1, 0),
+    # 1: 'Horizontal (normal)'
+    1: ( 1,  0,
+         0,  1 ),
+    # 2: 'Mirror horizontal'
+    2: (-1,  0,
+         0,  1 ),
+    # 3: 'Rotate 180'
+    3: (-1,  0,
+         0, -1),
+    # 4: 'Mirror vertical'
+    4: ( 1,  0,
+         0, -1 ),
+    # 5: 'Mirror horizontal and rotate 270 CW'
+    5: ( 0,  1,
+         1,  0 ),
+    # 6: 'Rotate 90 CW'
+    6: ( 0,  1,
+        -1,  0 ),
+    # 7: 'Mirror horizontal and rotate 90 CW'
+    7: ( 0, -1,
+        -1,  0 ),
+    # 8: 'Rotate 270 CW'
+    8: ( 0, -1,
+         1,  0 ),
 }
 def _get_transform(orientation):
     if orientation is not None:
