@@ -2,6 +2,18 @@ Changelog
 =========
 
 
+0.10.1 (not yet released)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Internal changes
+----------------
+
++ `#60`_: Review the internal representation of the `Orientation` EXIF
+  tag.
+
+.. _#60: https://github.com/RKrahl/photoidx/pull/60
+
+
 0.10.0 (2022-12-29)
 ~~~~~~~~~~~~~~~~~~~
 
