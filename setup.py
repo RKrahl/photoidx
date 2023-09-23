@@ -123,6 +123,10 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
     ],
+    project_urls = dict(
+        Source="https://github.com/RKrahl/photoidx",
+        Download="https://github.com/RKrahl/photoidx/releases/latest"
+    ),
     packages = ["photoidx", "photoidx.qt"],
     scripts = ["scripts/photo-idx.py", "scripts/imageview.py"],
     python_requires = ">=3.6",
