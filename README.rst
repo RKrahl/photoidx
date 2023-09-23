@@ -30,6 +30,8 @@ Required library packages:
 
 + `setuptools`_
 
++ `packaging`_
+
 + `PyYAML`_
 
 + `ExifRead`_ >= 2.2.0
@@ -142,6 +144,7 @@ permissions and limitations under the License.
 
 
 .. _setuptools: https://github.com/pypa/setuptools/
+.. _packaging: https://github.com/pypa/packaging/
 .. _PyYAML: https://github.com/yaml/pyyaml
 .. _ExifRead: https://github.com/ianare/exif-py
 .. _PySide2: https://www.pyside.org/
