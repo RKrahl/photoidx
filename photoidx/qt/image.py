@@ -3,6 +3,7 @@
 
 import logging
 import re
+from packaging.version import Version
 from PySide2 import QtCore, QtGui, QtWidgets
 try:
     import vignette
@@ -33,6 +34,8 @@ if vignette:
                         "no suitable thumbnailer backend available")
             vignette = None
 
+_thumbs_oriented = (vignette and
+                    Version(vignette.__version__) >= Version('5.0.0'))
 
 class ImageNotFoundError(Exception):
     pass
@@ -63,7 +66,12 @@ class Image(object):
         self.item = item
         self.fileName = basedir / item.filename
         self.name = item.name or self.fileName.name
-        self.transform = _get_transform(self.item.orientation)
+        self.init_transform = _get_transform(self.item.orientation)
+        self.post_transform = QtGui.QMatrix()
+
+    @property
+    def transform(self):
+        return self.post_transform * self.init_transform
 
     def getPixmap(self):
         image = QtGui.QImage(str(self.fileName))
@@ -86,8 +94,12 @@ class Image(object):
             pixmap = pixmap.scaled(self.ThumbnailSize, 
                                    QtCore.Qt.KeepAspectRatio, 
                                    QtCore.Qt.SmoothTransformation)
-        pixmap = pixmap.transformed(self.transform)
+        if _thumbs_oriented:
+            transform = self.post_transform
+        else:
+            transform = self.transform
+        pixmap = pixmap.transformed(transform)
         return pixmap
 
     def rotate(self, a):
-        self.transform.rotate(a)
+        self.post_transform.rotate(a)
