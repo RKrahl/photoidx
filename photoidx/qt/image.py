@@ -63,7 +63,12 @@ class Image(object):
         self.item = item
         self.fileName = basedir / item.filename
         self.name = item.name or self.fileName.name
-        self.transform = _get_transform(self.item.orientation)
+        self.init_transform = _get_transform(self.item.orientation)
+        self.post_transform = QtGui.QMatrix()
+
+    @property
+    def transform(self):
+        return self.post_transform * self.init_transform
 
     def getPixmap(self):
         image = QtGui.QImage(str(self.fileName))
@@ -90,4 +95,4 @@ class Image(object):
         return pixmap
 
     def rotate(self, a):
-        self.transform.rotate(a)
+        self.post_transform.rotate(a)
