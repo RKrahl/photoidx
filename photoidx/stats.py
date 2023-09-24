@@ -2,6 +2,7 @@
 """
 
 import datetime
+from photoidx.geo import GeoPosition
 
 
 class Stats(object):
@@ -13,6 +14,7 @@ class Stats(object):
         self.newest = datetime.datetime.min
         self.by_date = {}
         self.by_tag = {}
+        gpsPositions = []
         for i in items:
             self.count += 1
             if i.selected:
@@ -25,9 +27,23 @@ class Stats(object):
                 date = i.createDate.toordinal()
                 self.by_date.setdefault(date, 0)
                 self.by_date[date] += 1
+            if i.gpsPosition:
+                gpsPositions.append(i.gpsPosition)
             for tag in i.tags:
                 self.by_tag.setdefault(tag, 0)
                 self.by_tag[tag] += 1
+        try:
+            centroid = GeoPosition.centroid(gpsPositions)
+        except ValueError:
+            self.gpsCenter = None
+            self.gpsRadius = None
+        else:
+            radius = 0.0
+            for pos in gpsPositions:
+                dist = centroid - pos
+                radius = max(radius, dist)
+            self.gpsCenter = centroid
+            self.gpsRadius = radius
 
     def __bool__(self):
         return bool(self.count)
@@ -37,6 +53,10 @@ class Stats(object):
         if self.newest >= self.oldest:
             s += "Oldest: %s\n" % str(self.oldest)
             s += "Newest: %s\n" % str(self.newest)
+        if self.gpsCenter:
+            s += "GPS center: %s\n" % str(self.gpsCenter)
+            s += "            (%s)\n" % self.gpsCenter.as_osmurl(zoom=8)
+            s += "GPS radius: %.2f km\n" % self.gpsRadius
         if self.by_date:
             s += "By date:\n"
             for d in sorted(self.by_date.keys()):
