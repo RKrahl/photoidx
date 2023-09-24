@@ -3,7 +3,7 @@
 
 import re
 import math
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 
 
 _geopos_pattern = (r"^\s*(?P<lat>\d+(?:\.\d*))\s*(?P<latref>N|S),\s*"
@@ -71,6 +71,14 @@ class GeoPosition(object):
                 self.lon = lon(lonsign*float(m.group('lon')))
             else:
                 raise ValueError("invalid Geo position '%s'." % pos)
+        elif isinstance(pos, Sequence):
+            if len(pos) == 2:
+                self.lat = lat(pos[0])
+                self.lon = lon(pos[1])
+            else:
+                raise ValueError("invalid Geo position %s: "
+                                 "must have two elements."
+                                 % str(pos))
         else:
             raise TypeError("invalid type '%s'" % type(pos))
 
