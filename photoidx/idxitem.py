@@ -3,7 +3,7 @@
 
 import hashlib
 from pathlib import Path
-from photoidx.exif import Exif
+from photoidx.exif import Orientation, Exif
 from photoidx.geo import GeoPosition
 
 
@@ -40,7 +40,7 @@ class IdxItem(object):
                 # legacy: 'createDate' used to be 'createdate' in old
                 # index file format.
                 self.createDate = data['createdate']
-            self.orientation = data.get('orientation')
+            self.orientation = Orientation(data.get('orientation'))
             self.gpsPosition = data.get('gpsPosition')
             tags = data.get('tags', [])
             self.tags = set(filter(lambda t: not t.startswith('pidx:'), tags))
@@ -69,7 +69,7 @@ class IdxItem(object):
             'filename': str(self.filename),
             'checksum': self.checksum,
             'createDate': self.createDate,
-            'orientation': self.orientation,
+            'orientation': str(self.orientation) if self.orientation else None,
             'gpsPosition': self.gpsPosition,
             'tags': sorted(tags),
         }

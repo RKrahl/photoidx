@@ -3,6 +3,7 @@
 
 import logging
 import re
+from packaging.version import Version
 from PySide2 import QtCore, QtGui, QtWidgets
 try:
     import vignette
@@ -33,9 +34,44 @@ if vignette:
                         "no suitable thumbnailer backend available")
             vignette = None
 
+_thumbs_oriented = (vignette and
+                    Version(vignette.__version__) >= Version('5.0.0'))
 
 class ImageNotFoundError(Exception):
     pass
+
+
+_OrientationTransform = {
+    # 1: 'Horizontal (normal)'
+    1: ( 1,  0,
+         0,  1 ),
+    # 2: 'Mirror horizontal'
+    2: (-1,  0,
+         0,  1 ),
+    # 3: 'Rotate 180'
+    3: (-1,  0,
+         0, -1),
+    # 4: 'Mirror vertical'
+    4: ( 1,  0,
+         0, -1 ),
+    # 5: 'Mirror horizontal and rotate 270 CW'
+    5: ( 0,  1,
+         1,  0 ),
+    # 6: 'Rotate 90 CW'
+    6: ( 0,  1,
+        -1,  0 ),
+    # 7: 'Mirror horizontal and rotate 90 CW'
+    7: ( 0, -1,
+        -1,  0 ),
+    # 8: 'Rotate 270 CW'
+    8: ( 0, -1,
+         1,  0 ),
+}
+def _get_transform(orientation):
+    if orientation is not None:
+        return QtGui.QMatrix(*_OrientationTransform[orientation], 0, 0)
+    else:
+        return QtGui.QMatrix()
 
 
 class Image(object):
@@ -46,11 +82,12 @@ class Image(object):
         self.item = item
         self.fileName = basedir / item.filename
         self.name = item.name or self.fileName.name
-        self.transform = QtGui.QMatrix()
-        if self.item.orientation:
-            m = re.match(r"Rotate (\d+) CW", self.item.orientation)
-            if m:
-                self.rotate(int(m.group(1)))
+        self.init_transform = _get_transform(self.item.orientation)
+        self.post_transform = QtGui.QMatrix()
+
+    @property
+    def transform(self):
+        return self.post_transform * self.init_transform
 
     def getPixmap(self):
         image = QtGui.QImage(str(self.fileName))
@@ -73,8 +110,12 @@ class Image(object):
             pixmap = pixmap.scaled(self.ThumbnailSize, 
                                    QtCore.Qt.KeepAspectRatio, 
                                    QtCore.Qt.SmoothTransformation)
-        pixmap = pixmap.transformed(self.transform)
+        if _thumbs_oriented:
+            transform = self.post_transform
+        else:
+            transform = self.transform
+        pixmap = pixmap.transformed(transform)
         return pixmap
 
     def rotate(self, a):
-        self.transform.rotate(a)
+        self.post_transform.rotate(a)

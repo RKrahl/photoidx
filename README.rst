@@ -30,6 +30,8 @@ Required library packages:
 
 + `setuptools`_
 
++ `packaging`_
+
 + `PyYAML`_
 
 + `ExifRead`_ >= 2.2.0
@@ -44,9 +46,10 @@ Optional library packages:
   vignette is not available, everything will still work, but
   displaying the overview window may be significantly slower.
 
-+ vignette needs at least one thumbnail backend, either `Pillow`_ or
-  `PyQt5`_.  If no suitable backend is found, vignette will be
-  disabled in photoidx.
++ vignette needs at least one thumbnail backend, for instance
+  `Pillow`_ >= 6.0 or `PyQt5`_, see the vignette documentation for
+  details.  If no suitable backend is found, vignette will be disabled
+  in photoidx.
 
 + `setuptools_scm`_
 
@@ -128,7 +131,7 @@ created during the release.
 Copyright and License
 ---------------------
 
-Copyright 2015–2022 Rolf Krahl
+Copyright 2015–2023 Rolf Krahl
 
 Licensed under the `Apache License`_, Version 2.0 (the "License"); you
 may not use this package except in compliance with the License.
@@ -141,6 +144,7 @@ permissions and limitations under the License.
 
 
 .. _setuptools: https://github.com/pypa/setuptools/
+.. _packaging: https://github.com/pypa/packaging/
 .. _PyYAML: https://github.com/yaml/pyyaml
 .. _ExifRead: https://github.com/ianare/exif-py
 .. _PySide2: https://www.pyside.org/
