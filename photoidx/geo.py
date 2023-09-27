@@ -97,8 +97,13 @@ class GeoPosition(object):
             self.lon.ref(): float(abs(self.lon))
         }
 
-    def as_osmurl(self, zoom=16):
+    def as_osmurl(self, zoom=None, radius=None):
         """Return an URL to OpenStreetMap displaying this position."""
+        if not zoom:
+            if radius:
+                zoom = int(-1.35 * math.log(max(radius, 0.05)) + 14.5)
+            else:
+                zoom = 16
         template = "http://www.openstreetmap.org/?mlat=%f&mlon=%f&zoom=%d"
         return template % (self.lat, self.lon, zoom)
 

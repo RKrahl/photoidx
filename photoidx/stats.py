@@ -54,8 +54,9 @@ class Stats(object):
             s += "Oldest: %s\n" % str(self.oldest)
             s += "Newest: %s\n" % str(self.newest)
         if self.gpsCenter:
+            osmurl = self.gpsCenter.as_osmurl(radius=self.gpsRadius)
             s += "GPS center: %s\n" % str(self.gpsCenter)
-            s += "            (%s)\n" % self.gpsCenter.as_osmurl(zoom=8)
+            s += "            (%s)\n" % osmurl
             s += "GPS radius: %.2f km\n" % self.gpsRadius
         if self.by_date:
             s += "By date:\n"
