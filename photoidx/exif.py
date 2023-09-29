@@ -9,6 +9,36 @@ import exifread
 # Some helper classes for exif attributes, having customized string
 # representations.
 
+class Orientation(int):
+    """EXIF orientation value.
+    Supports int and str representation.
+    """
+    OrientationLabels = {
+        1: 'Horizontal (normal)',
+        2: 'Mirror horizontal',
+        3: 'Rotate 180',
+        4: 'Mirror vertical',
+        5: 'Mirror horizontal and rotate 270 CW',
+        6: 'Rotate 90 CW',
+        7: 'Mirror horizontal and rotate 90 CW',
+        8: 'Rotate 270 CW',
+    }
+    def __new__(cls, o):
+        if o is None:
+            return None
+        elif isinstance(o, str):
+            for i, l in cls.OrientationLabels.items():
+                if o == l:
+                    o = i
+                    break
+            else:
+                raise ValueError("invalid Orientation value %r" % o)
+        elif int(o) not in cls.OrientationLabels:
+            raise ValueError("invalid Orientation value %r" % o)
+        return super().__new__(cls, o)
+    def __str__(self):
+        return self.OrientationLabels[self]
+
 class ExposureTime(fractions.Fraction):
     def __str__(self):
         if self.denominator == 1:
@@ -35,17 +65,6 @@ class FocalLength(float):
 
 class Exif(object):
 
-    OrientationXlate = {
-        1: 'Horizontal (normal)',
-        2: 'Mirror horizontal',
-        3: 'Rotate 180',
-        4: 'Mirror vertical',
-        5: 'Mirror horizontal and rotate 270 CW',
-        6: 'Rotate 90 CW',
-        7: 'Mirror horizontal and rotate 90 CW',
-        8: 'Rotate 270 CW',
-    }
-
     def __init__(self, path):
         with path.open("rb") as f:
             self._tags = exifread.process_file(f)
@@ -68,7 +87,7 @@ class Exif(object):
         except (AttributeError, KeyError):
             return None
         else:
-            return self.OrientationXlate[int(orientation)]
+            return Orientation(int(orientation))
 
     @property
     def gpsPosition(self):

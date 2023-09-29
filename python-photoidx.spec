@@ -40,6 +40,7 @@ Summary:	Tools for managing photo collections
 Provides:	python3-photo-qt = %{version}-%{release}
 Obsoletes:	python3-photo-qt < %{version}-%{release}
 Requires:	python3-%{distname} = %{version}
+Requires:	python3-packaging
 Requires:	python3-pyside2
 Recommends:	python3-vignette >= 4.3.0
 

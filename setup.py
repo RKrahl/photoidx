@@ -121,10 +121,15 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
     ],
+    project_urls = dict(
+        Source="https://github.com/RKrahl/photoidx",
+        Download="https://github.com/RKrahl/photoidx/releases/latest"
+    ),
     packages = ["photoidx", "photoidx.qt"],
     scripts = ["scripts/photo-idx.py", "scripts/imageview.py"],
     python_requires = ">=3.6",
-    install_requires = ["PyYAML", "ExifRead >= 2.2.0"],
+    install_requires = ["packaging", "PyYAML", "ExifRead >= 2.2.0"],
     cmdclass = dict(cmdclass, build_py=build_py, sdist=sdist, meta=meta),
 )

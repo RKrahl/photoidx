@@ -2,6 +2,39 @@ Changelog
 =========
 
 
+0.11.0 (not yet released)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+New features
+------------
+
++ `#38`_, `#62`_: Add geo information to the output of the `stats`
+  subcommand in :ref:`photo-idx`.
+
+.. _#38: https://github.com/RKrahl/photoidx/issues/38
+.. _#62: https://github.com/RKrahl/photoidx/pull/62
+
+
+0.10.1 (2023-09-24)
+~~~~~~~~~~~~~~~~~~~
+
+Internal changes
+----------------
+
++ `#60`_: Review the internal representation of the `Orientation` EXIF
+  tag.
+
+Bug fixes and minor changes
+---------------------------
+
++ `#59`_, `#61`_: Fix wrong orientation of thumbnails in the overview
+  window with vignette 5.0 and newer.
+
+.. _#59: https://github.com/RKrahl/photoidx/issues/59
+.. _#60: https://github.com/RKrahl/photoidx/pull/60
+.. _#61: https://github.com/RKrahl/photoidx/pull/61
+
+
 0.10.0 (2022-12-29)
 ~~~~~~~~~~~~~~~~~~~
 

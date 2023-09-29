@@ -3,7 +3,7 @@
 
 import re
 import math
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 
 
 _geopos_pattern = (r"^\s*(?P<lat>\d+(?:\.\d*))\s*(?P<latref>N|S),\s*"
@@ -71,6 +71,14 @@ class GeoPosition(object):
                 self.lon = lon(lonsign*float(m.group('lon')))
             else:
                 raise ValueError("invalid Geo position '%s'." % pos)
+        elif isinstance(pos, Sequence):
+            if len(pos) == 2:
+                self.lat = lat(pos[0])
+                self.lon = lon(pos[1])
+            else:
+                raise ValueError("invalid Geo position %s: "
+                                 "must have two elements."
+                                 % str(pos))
         else:
             raise TypeError("invalid type '%s'" % type(pos))
 
@@ -89,8 +97,13 @@ class GeoPosition(object):
             self.lon.ref(): float(abs(self.lon))
         }
 
-    def as_osmurl(self, zoom=16):
+    def as_osmurl(self, zoom=None, radius=None):
         """Return an URL to OpenStreetMap displaying this position."""
+        if not zoom:
+            if radius:
+                zoom = int(-1.35 * math.log(max(radius, 0.05)) + 14.5)
+            else:
+                zoom = 16
         template = "http://www.openstreetmap.org/?mlat=%f&mlon=%f&zoom=%d"
         return template % (self.lat, self.lon, zoom)
 
@@ -113,3 +126,36 @@ class GeoPosition(object):
             return self.earthRadius * sigma
         else:
             return NotImplemented
+
+    @classmethod
+    def centroid(cls, positions):
+        """Return the centroid of GeoPositions.
+        """
+        x = y = z = 0.0
+        n = 0
+
+        for pos in positions:
+            lat = math.pi * pos.lat / 180.0
+            lon = math.pi * pos.lon / 180.0
+            x += math.cos(lat) * math.cos(lon)
+            y += math.cos(lat) * math.sin(lon)
+            z += math.sin(lat)
+            n += 1
+        if not n:
+            raise ValueError("positions must not be empty")
+        x /= n
+        y /= n
+        z /= n
+
+        clen = math.sqrt(x * x + y * y + z * z)
+        if clen < 1e-03:
+            # The centroid is too close to the earth center, the
+            # projection to earth's surface is not well defined.
+            # Prefer to raise an error rather than returning an
+            # arbitrary result.
+            raise ValueError("singularity error: centroid is too close "
+                             "to earth center (%e)" % clen)
+
+        lat = 180.0 * math.atan2(z, math.sqrt(x * x + y * y)) / math.pi
+        lon = 180.0 * math.atan2(y, x) / math.pi
+        return cls((lat, lon))
