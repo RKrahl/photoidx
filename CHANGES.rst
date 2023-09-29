@@ -2,6 +2,19 @@ Changelog
 =========
 
 
+0.10.0 (not yet released)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+New features
+------------
+
++ `#38`_, `#62`_: Add geo information to the output of the `stats`
+  subcommand in :ref:`photo-idx`.
+
+.. _#38: https://github.com/RKrahl/photoidx/issues/38
+.. _#62: https://github.com/RKrahl/photoidx/pull/62
+
+
 0.10.1 (2023-09-24)
 ~~~~~~~~~~~~~~~~~~~
 
