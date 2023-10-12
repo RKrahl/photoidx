@@ -72,3 +72,7 @@ def test_geo_str(pos):
     assert m.group('latref') == pos.latref
     assert int(m.group('lon')) == int(abs(pos.lon))
     assert m.group('lonref') == pos.lonref
+    # The value of floatstr() should be usable as argument to create a
+    # new GeoPosition instance
+    p1 = GeoPosition(p.floatstr())
+    assert (p1.lat, p1.lon) == pytest.approx((p.lat, p.lon))
