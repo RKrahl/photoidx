@@ -19,8 +19,9 @@ class PositionData:
         self.lonref = 'E' if lon >= 0 else 'W'
         self.name = name
 
-    def as_pytest_param(self):
-        return pytest.param(self, id=self.name)
+    @staticmethod
+    def as_pytest_param(*args):
+        return pytest.param(*args, id="-".join(a.name for a in args))
 
 # Example geo positions.  We want example points for all quarters of
 # the earth sphere: N/E, N/W, S/E, S/W
@@ -35,10 +36,10 @@ pos_spree3 = PositionData(50.98752, 14.60632, "spree3")
 
 
 @pytest.mark.parametrize("pos", [
-    pos_berlin.as_pytest_param(),
-    pos_philly.as_pytest_param(),
-    pos_vfalls.as_pytest_param(),
-    pos_sirius.as_pytest_param(),
+    PositionData.as_pytest_param(pos_berlin),
+    PositionData.as_pytest_param(pos_philly),
+    PositionData.as_pytest_param(pos_vfalls),
+    PositionData.as_pytest_param(pos_sirius),
 ])
 def test_geo_init(pos):
     """Test different options to initialize GeoPosition objects.
@@ -52,10 +53,10 @@ def test_geo_init(pos):
     assert (p_b.lat, p_b.lon) == pytest.approx((p_c.lat, p_c.lon))
 
 @pytest.mark.parametrize("pos", [
-    pos_berlin.as_pytest_param(),
-    pos_philly.as_pytest_param(),
-    pos_vfalls.as_pytest_param(),
-    pos_sirius.as_pytest_param(),
+    PositionData.as_pytest_param(pos_berlin),
+    PositionData.as_pytest_param(pos_philly),
+    PositionData.as_pytest_param(pos_vfalls),
+    PositionData.as_pytest_param(pos_sirius),
 ])
 def test_geo_str(pos):
     """Test string representations of GeoPosition objects.
@@ -82,18 +83,12 @@ def test_geo_str(pos):
     assert (p1.lat, p1.lon) == pytest.approx((p.lat, p.lon))
 
 @pytest.mark.parametrize("pos1, pos2", [
-    pytest.param(pos_berlin, pos_vfalls,
-                 id="%s-%s" % (pos_berlin.name, pos_vfalls.name)),
-    pytest.param(pos_vfalls, pos_philly,
-                 id="%s-%s" % (pos_vfalls.name, pos_philly.name)),
-    pytest.param(pos_philly, pos_berlin,
-                 id="%s-%s" % (pos_philly.name, pos_berlin.name)),
-    pytest.param(pos_berlin, pos_spree1,
-                 id="%s-%s" % (pos_berlin.name, pos_spree1.name)),
-    pytest.param(pos_spree1, pos_spree2,
-                 id="%s-%s" % (pos_spree1.name, pos_spree2.name)),
-    pytest.param(pos_spree2, pos_spree3,
-                 id="%s-%s" % (pos_spree2.name, pos_spree3.name)),
+    PositionData.as_pytest_param(pos_berlin, pos_vfalls),
+    PositionData.as_pytest_param(pos_vfalls, pos_philly),
+    PositionData.as_pytest_param(pos_philly, pos_berlin),
+    PositionData.as_pytest_param(pos_berlin, pos_spree1),
+    PositionData.as_pytest_param(pos_spree1, pos_spree2),
+    PositionData.as_pytest_param(pos_spree2, pos_spree3),
 ])
 def test_geo_center_dist(pos1, pos2):
     """Simple test for distance and centroid for GeoPosition objects.
@@ -109,9 +104,7 @@ def test_geo_center_dist(pos1, pos2):
     assert (p2 - c) == pytest.approx(d)
 
 @pytest.mark.parametrize("pos1, pos2, pos3", [
-    pytest.param(pos_spree1, pos_spree2, pos_spree3,
-                 id=("%s-%s-%s"
-                     % (pos_spree1.name, pos_spree2.name, pos_spree3.name))),
+    PositionData.as_pytest_param(pos_spree1, pos_spree2, pos_spree3),
 ])
 def test_geo_triangle_centroid(pos1, pos2, pos3):
     """A complex triangle centroid test.
