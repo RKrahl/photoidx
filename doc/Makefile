@@ -1,6 +1,6 @@
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = photo-tools
+SPHINXPROJ    = photoidx
 SOURCEDIR     = src
 BUILDDIR      = .
 BUILDERS      = html dirhtml singlehtml htmlhelp qthelp devhelp epub	\
