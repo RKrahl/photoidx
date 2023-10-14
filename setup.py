@@ -54,9 +54,11 @@ __version__ = "%(version)s"
                 self.package_dir[name] = convert_path(path)
 
     def run(self):
+        version = self.distribution.get_version()
+        log.info("version: %s", version)
         values = {
-            'version': self.distribution.get_version(),
-            'doc': docstring
+            'version': version,
+            'doc': docstring,
         }
         try:
             pkgname = self.distribution.packages[0]
@@ -105,6 +107,7 @@ setup(
     version = version,
     description = docstring.split("\n")[0],
     long_description = readme,
+    long_description_content_type = "text/x-rst",
     url = "https://github.com/RKrahl/photoidx",
     author = "Rolf Krahl",
     author_email = "rolf@rotkraut.de",
