@@ -21,8 +21,8 @@ about these photos.  The leading design goals are:
   using simple keyboard commands wherever possible.
 
 It is assumed that the photo collection resides in one directory.
-`photoidx` places a file ``.index.yaml`` in this directory to store
-the metadata.  The format of this file is `YAML`_ which is a well
+photoidx places a file ``.index.yaml`` in this directory to store the
+metadata.  The format of this file is `YAML`_ which is a well
 standardized, human-readable data serialization language.  The package
 provides a command line tool and a graphical image viewer to create
 and to manipulate this index.
