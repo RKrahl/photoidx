@@ -11,6 +11,7 @@ Content of the documentation
    :maxdepth: 2
 
    about
+   install
 
 Unsorted stuff
 ~~~~~~~~~~~~~~
