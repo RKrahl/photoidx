@@ -4,11 +4,19 @@ photoidx --- Maintain indices for photo collections
 Note that there is no comprehensive documentation by now.  This is
 just a stub of what should eventually become a documentation.
 
-Misc
-~~~~
+Content of the documentation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. toctree::
    :maxdepth: 2
+
+   about
+
+Unsorted stuff
+~~~~~~~~~~~~~~
+
+.. toctree::
+   :maxdepth: 1
 
    cli.selectopts
    changelog
@@ -17,7 +25,7 @@ Module reference
 ~~~~~~~~~~~~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    photoidx.exif
    photoidx.geo
