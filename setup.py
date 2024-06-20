@@ -127,8 +127,10 @@ setup(
         "Programming Language :: Python :: 3.12",
     ],
     project_urls = dict(
+        #Documentation="https://photoidx.readthedocs.io/",
         Source="https://github.com/RKrahl/photoidx",
         Download="https://github.com/RKrahl/photoidx/releases/latest"
+        #Changes="https://photoidx.readthedocs.io/en/latest/changelog.html",
     ),
     packages = ["photoidx", "photoidx.qt"],
     scripts = ["scripts/photo-idx.py", "scripts/imageview.py"],
