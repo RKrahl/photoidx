@@ -3,8 +3,8 @@
 
 import hashlib
 from pathlib import Path
-from photoidx.exif import Orientation, Exif
-from photoidx.geo import GeoPosition
+from .exif import Orientation, Exif
+from .geo import GeoPosition
 
 
 def _checksum(fname, hashalg):

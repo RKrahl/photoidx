@@ -3,13 +3,13 @@
 
 import sys
 from PySide2 import QtCore, QtGui, QtWidgets
-import photoidx.index
-from photoidx.listtools import LazyList
-from photoidx.qt.image import Image
-from photoidx.qt.filterDialog import FilterDialog
-from photoidx.qt.imageInfoDialog import ImageInfoDialog
-from photoidx.qt.overviewWindow import OverviewWindow
-from photoidx.qt.tagSelectDialog import TagSelectDialog
+from ..index import AlreadyLockedError
+from ..listtools import LazyList
+from .image import Image
+from .filterDialog import FilterDialog
+from .imageInfoDialog import ImageInfoDialog
+from .overviewWindow import OverviewWindow
+from .tagSelectDialog import TagSelectDialog
 
 
 class ImageViewer(QtWidgets.QMainWindow):
@@ -160,7 +160,7 @@ class ImageViewer(QtWidgets.QMainWindow):
         try:
             self.images.write()
             self.dirty = False
-        except photoidx.index.AlreadyLockedError:
+        except AlreadyLockedError:
             msgBox = QtWidgets.QMessageBox()
             msgBox.setWindowTitle("Index is locked")
             msgBox.setText("Saving the image index failed!")

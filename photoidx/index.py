@@ -7,8 +7,8 @@ import fcntl
 import os
 from pathlib import Path
 import yaml
-from photoidx.idxitem import IdxItem
-from photoidx.listtools import LazyList
+from .idxitem import IdxItem
+from .listtools import LazyList
 
 
 class AlreadyLockedError(OSError):

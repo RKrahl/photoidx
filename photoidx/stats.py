@@ -2,7 +2,7 @@
 """
 
 import datetime
-from photoidx.geo import GeoPosition
+from .geo import GeoPosition
 
 
 class Stats(object):

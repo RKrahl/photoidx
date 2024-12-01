@@ -5,7 +5,7 @@ import argparse
 import datetime
 from pathlib import Path
 import re
-from photoidx.geo import GeoPosition
+from .geo import GeoPosition
 
 
 _datere = re.compile(r'''^
