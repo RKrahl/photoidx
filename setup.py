@@ -11,7 +11,6 @@ import setuptools.command.build_py
 import distutils.command.sdist
 import distutils.dist
 from distutils import log
-from glob import glob
 from pathlib import Path
 import string
 try:
@@ -82,8 +81,8 @@ class sdist(distutils.command.sdist.sdist):
             "description": docstring.split("\n")[0],
             "long_description": docstring.split("\n", maxsplit=2)[2].strip(),
         }
-        for spec in glob("*.spec"):
-            with Path(spec).open('rt') as inf:
+        for spec in Path().glob("*.spec"):
+            with spec.open('rt') as inf:
                 with Path(self.dist_dir, spec).open('wt') as outf:
                     outf.write(string.Template(inf.read()).substitute(subst))
 

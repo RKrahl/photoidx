@@ -1,5 +1,4 @@
 PYTHON   = python3
-BUILDLIB = $(CURDIR)/build/lib
 
 
 build:
