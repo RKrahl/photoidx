@@ -19,15 +19,16 @@ try:
 except (ImportError, AttributeError):
     cmdclass = dict()
 try:
-    import setuptools_scm
-    version = setuptools_scm.get_version()
+    import gitprops
+    release = gitprops.get_last_release()
+    release = release and str(release)
+    version = str(gitprops.get_version())
 except (ImportError, LookupError):
     try:
-        import _meta
-        version = _meta.version
+        from _meta import release, version
     except ImportError:
         log.warn("warning: cannot determine version number")
-        version = "UNKNOWN"
+        release = version = "UNKNOWN"
 
 docstring = __doc__
 
@@ -37,7 +38,8 @@ class meta(setuptools.Command):
     description = "generate meta files"
     user_options = []
     meta_template = '''
-version = "%(version)s"
+release = %(release)r
+version = %(version)r
 '''
 
     def initialize_options(self):
@@ -50,6 +52,7 @@ version = "%(version)s"
         version = self.distribution.get_version()
         log.info("version: %s", version)
         values = {
+            'release': release,
             'version': version,
         }
         with Path("_meta.py").open("wt") as f:
@@ -113,12 +116,15 @@ setup(
     ],
     project_urls = dict(
         Source="https://github.com/RKrahl/photoidx",
-        Download="https://github.com/RKrahl/photoidx/releases/latest"
+        Download=("https://github.com/RKrahl/photoidx/releases/%s/" % release),
     ),
     packages = ["photoidx", "photoidx.qt"],
     package_dir = {"": "src"},
     scripts = ["scripts/photo-idx.py", "scripts/imageview.py"],
     python_requires = ">=3.6",
-    install_requires = ["packaging", "PyYAML", "ExifRead >= 2.2.0", "PySide2"],
+    install_requires = [
+        "setuptools", "packaging",
+        "PyYAML >=5.4", "ExifRead >=2.2.0", "PySide2",
+    ],
     cmdclass = dict(cmdclass, build_py=build_py, sdist=sdist, meta=meta),
 )
