@@ -105,6 +105,19 @@ class Exif(object):
             return { latref:float(lat), lonref:float(lon) }
 
     @property
+    def gpsDateTime(self):
+        """GPS Date/Time."""
+        try:
+            d = (int(v) for v in self._tags['GPS GPSDate'].values.split(':'))
+            t = (int(v) for v in self._tags['GPS GPSTimeStamp'].values)
+        except (AttributeError, KeyError):
+            return None
+        else:
+            d = datetime.date(*d)
+            t = datetime.time(*t)
+            return datetime.datetime.combine(d, t)
+
+    @property
     def cameraModel(self):
         """Camera Model."""
         try:
