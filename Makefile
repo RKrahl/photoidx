@@ -1,5 +1,4 @@
 PYTHON   = python3
-BUILDLIB = $(CURDIR)/build/lib
 
 
 build:
@@ -17,7 +16,6 @@ clean:
 
 distclean: clean
 	rm -f MANIFEST _meta.py
-	rm -f photoidx/__init__.py
 	rm -rf dist
 	rm -rf tests/.pytest_cache
 

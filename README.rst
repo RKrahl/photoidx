@@ -51,13 +51,13 @@ Optional library packages:
   details.  If no suitable backend is found, vignette will be disabled
   in photoidx.
 
-+ `setuptools_scm`_
++ `git-props`_
 
-  The version number is managed using this package.  All source
-  distributions add a static text file with the version number and
-  fall back using that if `setuptools_scm` is not available.  So this
-  package is only needed to build out of the plain development source
-  tree as cloned from GitHub.
+  This package is used to extract some metadata such as the version
+  number out of git, the version control system.  All releases embed
+  that metadata in the distribution.  So this package is only needed
+  to build out of the plain development source tree as cloned from
+  GitHub, but not to build a release distribution.
 
 + `pytest`_ >= 3.0.0
 
@@ -151,7 +151,7 @@ permissions and limitations under the License.
 .. _vignette: https://github.com/hydrargyrum/vignette
 .. _Pillow: https://python-pillow.org/
 .. _PyQt5: https://www.riverbankcomputing.com/software/pyqt/
-.. _setuptools_scm: https://github.com/pypa/setuptools_scm/
+.. _git-props: https://github.com/RKrahl/git-props
 .. _pytest: https://pytest.org/
 .. _pytest-dependency: https://github.com/RKrahl/pytest-dependency
 .. _distutils-pytest: https://github.com/RKrahl/distutils-pytest

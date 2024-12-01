@@ -11,8 +11,14 @@ New features
 + `#38`_, `#62`_: Add geo information to the output of the `stats`
   subcommand in :ref:`photo-idx`.
 
+Internal changes
+----------------
+
++ `#66`_: Review build tool chain.
+
 .. _#38: https://github.com/RKrahl/photoidx/issues/38
 .. _#62: https://github.com/RKrahl/photoidx/pull/62
+.. _#66: https://github.com/RKrahl/photoidx/pull/66
 
 
 0.10.1 (2023-09-24)
