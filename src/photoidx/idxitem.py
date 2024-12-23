@@ -25,6 +25,13 @@ def _checksum(fname, hashalg):
     return { h: m[h].hexdigest() for h in hashalg }
 
 
+def _round_to_minute(offs):
+    """Round a timedelta object to whole minutes.
+    """
+    minutes = round(offs.total_seconds()/60)
+    return datetime.timedelta(minutes=minutes)
+
+
 class IdxItem(object):
 
     def __init__(self, data=None, filename=None, basedir=None,
@@ -79,7 +86,7 @@ class IdxItem(object):
             # Assume gpsDateTime to be UTC and use the offset between
             # createDate and gpsDateTime to generate time zone info.
             offs = self.createDate - self.exifdata.gpsDateTime
-            return datetime.timezone(offs)
+            return datetime.timezone(_round_to_minute(offs))
         # No luck, return fallback.
         return fallback
 
