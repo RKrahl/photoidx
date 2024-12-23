@@ -27,7 +27,8 @@ def _checksum(fname, hashalg):
 
 class IdxItem(object):
 
-    def __init__(self, data=None, filename=None, basedir=None, hashalg=['md5']):
+    def __init__(self, data=None, filename=None, basedir=None,
+                 hashalg=['md5'], default_tz=None):
         self.exifdata = None
         if data is not None:
             self.filename = Path(data.get('filename'))
@@ -58,6 +59,8 @@ class IdxItem(object):
             self.createDate = self.exifdata.createDate
             self.orientation = self.exifdata.orientation
             self.gpsPosition = self.exifdata.gpsPosition
+            tzinfo = self.get_createDate_tzinfo(fallback=default_tz)
+            self.createDate = self.createDate.replace(tzinfo=tzinfo)
             self.tags = set()
             self.selected = False
         if self.gpsPosition:
