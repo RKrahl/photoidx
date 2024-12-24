@@ -1,6 +1,7 @@
 #! /usr/bin/python
 
 import argparse
+from photoidx.datetools import local_time_zone
 import photoidx.index
 import photoidx.idxfilter
 from photoidx.stats import Stats
@@ -9,8 +10,9 @@ from photoidx.stats import Stats
 def create(args):
     idxfile = args.directory if args.update else None
     hashalg = args.checksums.split(',') if args.checksums else []
+    default_tz = local_time_zone()
     with photoidx.index.Index(idxfile=idxfile, imgdir=args.directory,
-                              hashalg=hashalg) as idx:
+                              default_tz=default_tz, hashalg=hashalg) as idx:
         idx.write()
 
 def ls(args):

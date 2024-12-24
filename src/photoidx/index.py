@@ -16,18 +16,20 @@ class AlreadyLockedError(OSError):
         super().__init__(*args)
 
 
-def _readdir(imgdir, basedir, hashalg, known=set()):
+def _readdir(imgdir, basedir, hashalg, default_tz, known=set()):
     for f in sorted(imgdir.iterdir()):
         rel = f.relative_to(basedir)
         if f.is_file() and f.suffix == '.jpg' and rel not in known:
-            yield IdxItem(filename=rel, basedir=basedir, hashalg=hashalg)
+            yield IdxItem(filename=rel, basedir=basedir,
+                          hashalg=hashalg, default_tz=default_tz)
 
 
 class Index(MutableSequence):
 
     defIdxFilename = Path(".index.yaml")
 
-    def __init__(self, idxfile=None, imgdir=None, hashalg=['md5']):
+    def __init__(self, idxfile=None, imgdir=None,
+                 hashalg=['md5'], default_tz=None):
         super().__init__()
         self.directory = None
         self.idxfile = None
@@ -39,15 +41,17 @@ class Index(MutableSequence):
             if not self.directory:
                 self.directory = imgdir
             if idxfile:
-                self.extend_dir(imgdir, hashalg)
+                self.extend_dir(imgdir, hashalg, default_tz)
             else:
-                newitems = _readdir(imgdir, self.directory, hashalg)
+                newitems = _readdir(imgdir, self.directory,
+                                    hashalg, default_tz)
                 self.items = LazyList(newitems)
 
-    def extend_dir(self, imgdir, hashalg=['md5']):
+    def extend_dir(self, imgdir, hashalg=['md5'], default_tz=None):
         imgdir = Path(imgdir).resolve()
         known = { i.filename for i in self.items }
-        newitems = _readdir(imgdir, self.directory, hashalg, known)
+        newitems = _readdir(imgdir, self.directory,
+                            hashalg, default_tz, known)
         self.items.extend(newitems)
 
     def close(self):
