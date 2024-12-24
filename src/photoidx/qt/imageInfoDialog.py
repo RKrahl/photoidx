@@ -73,7 +73,7 @@ class ImageInfoDialog(QtWidgets.QDialog):
         self.cameraModel.setText(str(exifdata.cameraModel))
         self.filename.setText(str(item.filename))
         if item.createDate:
-            self.createDate.setText(item.createDate.strftime("%a, %x %X"))
+            self.createDate.setText(item.createDate.strftime("%a, %x %X %z"))
         else:
             self.createDate.setText(None)
         if item.orientation:
