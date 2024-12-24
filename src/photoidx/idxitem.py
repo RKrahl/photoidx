@@ -4,6 +4,7 @@
 import datetime
 import hashlib
 from pathlib import Path
+from .datetools import timedelta_round_to_minute
 from .exif import Orientation, Exif
 from .geo import GeoPosition
 
@@ -23,13 +24,6 @@ def _checksum(fname, hashalg):
             for h in hashalg:
                 m[h].update(chunk)
     return { h: m[h].hexdigest() for h in hashalg }
-
-
-def _round_to_minute(offs):
-    """Round a timedelta object to whole minutes.
-    """
-    minutes = round(offs.total_seconds()/60)
-    return datetime.timedelta(minutes=minutes)
 
 
 class IdxItem(object):
@@ -86,7 +80,7 @@ class IdxItem(object):
             # Assume gpsDateTime to be UTC and use the offset between
             # createDate and gpsDateTime to generate time zone info.
             offs = self.createDate - self.exifdata.gpsDateTime
-            return datetime.timezone(_round_to_minute(offs))
+            return datetime.timezone(timedelta_round_to_minute(offs))
         # No luck, return fallback.
         return fallback
 
