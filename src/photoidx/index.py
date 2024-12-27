@@ -2,10 +2,12 @@
 """
 
 from collections.abc import MutableSequence
+import datetime
 import errno
 import fcntl
 import os
 from pathlib import Path
+from packaging.version import Version
 import yaml
 from .idxitem import IdxItem
 from .listtools import LazyList
@@ -18,6 +20,7 @@ class AlreadyLockedError(OSError):
 
 class Index(MutableSequence):
 
+    idxFileVersion = "2.0"
     defIdxFilename = Path(".index.yaml")
 
     def _readdir(self, imgdir, hashalg, known=set()):
@@ -28,6 +31,7 @@ class Index(MutableSequence):
 
     def __init__(self, idxfile=None, imgdir=None, hashalg=['md5']):
         super().__init__()
+        self.head = dict()
         self.directory = None
         self.idxfile = None
         self.items = []
@@ -42,6 +46,24 @@ class Index(MutableSequence):
             else:
                 newitems = self._readdir(imgdir, hashalg)
                 self.items = LazyList(newitems)
+
+    @property
+    def version(self):
+        v = self.head.get("Version")
+        if v is not None:
+            return Version(v)
+
+    @property
+    def date(self):
+        return self.head.get("Date")
+
+    @property
+    def comment(self):
+        return self.head.get("Comment")
+
+    @property
+    def timeZone(self):
+        return self.head.get("TimeZone")
 
     def extend_dir(self, imgdir, hashalg=['md5']):
         imgdir = Path(imgdir).resolve()
@@ -112,16 +134,35 @@ class Index(MutableSequence):
         """
         self._get_idxfile(idxfile, os.O_RDWR)
         self._lockf()
-        self.items = [ IdxItem(self, data=i)
-                       for i in yaml.safe_load(self.idxfile) ]
+        docs = yaml.safe_load_all(self.idxfile)
+        head = next(docs)
+        try:
+            items = next(docs)
+        except StopIteration:
+            # Legacy index file
+            items = head
+            head = dict(Version="1.0", Date=None, TimeZone=None)
+        self.head = head
+        self.items = [ IdxItem(self, data=i) for i in items ]
 
     def write(self, idxfile=None):
         """Write the index to a file.
         """
+        head = {
+            'Version': self.idxFileVersion,
+            'Date': datetime.datetime.now(tz=self.timeZone),
+            'TimeZone': self.timeZone,
+        }
+        if self.comment:
+            head['Comment'] = self.comment
         items = [ i.as_dict() for i in self.items ]
         self._get_idxfile(idxfile, os.O_RDWR|os.O_CREAT)
         self._lockf(mode=fcntl.LOCK_EX)
-        yaml.dump(items, self.idxfile, default_flow_style=False)
+        self.idxfile.write("%YAML 1.1\n")
+        yaml.dump(head, self.idxfile,
+                  default_flow_style=False, explicit_start=True)
+        yaml.dump(items, self.idxfile,
+                  default_flow_style=False, explicit_start=True)
         self.idxfile.truncate()
         self.idxfile.flush()
         self._lockf()
