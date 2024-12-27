@@ -26,7 +26,7 @@ def _checksum(fname, checksums):
 
 class IdxItem(object):
 
-    def __init__(self, index, data=None, filename=None, checksums=['md5']):
+    def __init__(self, index, data=None, filename=None):
         if data is not None:
             self.filename = Path(data.get('filename'))
             self.name = data.get('name', None)
@@ -51,7 +51,7 @@ class IdxItem(object):
             self.name = None
             if index.directory is not None:
                 filename = index.directory / filename
-            self.checksum = _checksum(filename, checksums)
+            self.checksum = _checksum(filename, index.checksums)
             exifdata = Exif(filename)
             self.createDate = exifdata.createDate
             self.orientation = exifdata.orientation

@@ -23,16 +23,25 @@ class Index(MutableSequence):
     idxFileVersion = "2.0"
     defIdxFilename = Path(".index.yaml")
 
-    def _readdir(self, imgdir, checksums, known=set()):
+    def _readdir(self, imgdir, known=set()):
         for f in sorted(imgdir.iterdir()):
             rel = f.relative_to(self.directory)
             if f.is_file() and f.suffix == '.jpg' and rel not in known:
-                yield IdxItem(self, filename=rel, checksums=checksums)
+                yield IdxItem(self, filename=rel)
+
+    def _get_common_checksums(self):
+        if len(self.items):
+            checksums = set(self.items[0].checksum.keys())
+            for i in self.items:
+                checksums.intersection(i.checksum.keys())
+            return list(checksums)
+        else:
+            return self.checksums
 
     def __init__(self, idxfile=None, imgdir=None,
                  checksums=['md5'], comment=None):
         super().__init__()
-        self.head = dict()
+        self.head = dict(Checksums=checksums)
         self.directory = None
         self.idxfile = None
         self.items = []
@@ -45,9 +54,9 @@ class Index(MutableSequence):
             if not self.directory:
                 self.directory = imgdir
             if idxfile:
-                self.extend_dir(imgdir, checksums)
+                self.extend_dir(imgdir)
             else:
-                newitems = self._readdir(imgdir, checksums)
+                newitems = self._readdir(imgdir)
                 self.items = LazyList(newitems)
 
     @property
@@ -68,10 +77,14 @@ class Index(MutableSequence):
     def timeZone(self):
         return self.head.get("TimeZone")
 
-    def extend_dir(self, imgdir, checksums=['md5']):
+    @property
+    def checksums(self):
+        return self.head.get("Checksums")
+
+    def extend_dir(self, imgdir):
         imgdir = Path(imgdir).resolve()
         known = { i.filename for i in self.items }
-        newitems = self._readdir(imgdir, checksums, known)
+        newitems = self._readdir(imgdir, known)
         self.items.extend(newitems)
 
     def close(self):
@@ -143,10 +156,16 @@ class Index(MutableSequence):
             items = next(docs)
         except StopIteration:
             # Legacy index file
-            items = head
-            head = dict(Version="1.0", Date=None, TimeZone=None)
-        self.head = head
-        self.items = [ IdxItem(self, data=i) for i in items ]
+            self.items = [ IdxItem(self, data=i) for i in head ]
+            self.head = {
+                'Version': "1.0",
+                'Date': None,
+                'TimeZone': None,
+                'Checksums': self._get_common_checksums(),
+            }
+        else:
+            self.head = head
+            self.items = [ IdxItem(self, data=i) for i in items ]
 
     def write(self, idxfile=None):
         """Write the index to a file.
@@ -155,6 +174,7 @@ class Index(MutableSequence):
             'Version': self.idxFileVersion,
             'Date': datetime.datetime.now(tz=self.timeZone),
             'TimeZone': self.timeZone,
+            'Checksums': self.checksums,
         }
         if self.comment:
             head['Comment'] = self.comment
