@@ -24,8 +24,7 @@ class Index(MutableSequence):
         for f in sorted(imgdir.iterdir()):
             rel = f.relative_to(self.directory)
             if f.is_file() and f.suffix == '.jpg' and rel not in known:
-                yield IdxItem(filename=rel, basedir=self.directory,
-                              hashalg=hashalg)
+                yield IdxItem(self, filename=rel, hashalg=hashalg)
 
     def __init__(self, idxfile=None, imgdir=None, hashalg=['md5']):
         super().__init__()
@@ -113,7 +112,8 @@ class Index(MutableSequence):
         """
         self._get_idxfile(idxfile, os.O_RDWR)
         self._lockf()
-        self.items = [ IdxItem(data=i) for i in yaml.safe_load(self.idxfile) ]
+        self.items = [ IdxItem(self, data=i)
+                       for i in yaml.safe_load(self.idxfile) ]
 
     def write(self, idxfile=None):
         """Write the index to a file.
