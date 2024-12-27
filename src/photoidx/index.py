@@ -29,7 +29,8 @@ class Index(MutableSequence):
             if f.is_file() and f.suffix == '.jpg' and rel not in known:
                 yield IdxItem(self, filename=rel, hashalg=hashalg)
 
-    def __init__(self, idxfile=None, imgdir=None, hashalg=['md5']):
+    def __init__(self, idxfile=None, imgdir=None,
+                 hashalg=['md5'], comment=None):
         super().__init__()
         self.head = dict()
         self.directory = None
@@ -37,6 +38,8 @@ class Index(MutableSequence):
         self.items = []
         if idxfile:
             self.read(idxfile)
+        if comment:
+            self.head['Comment'] = comment
         if imgdir:
             imgdir = Path(imgdir).resolve()
             if not self.directory:

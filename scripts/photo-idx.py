@@ -10,7 +10,7 @@ def create(args):
     idxfile = args.directory if args.update else None
     hashalg = args.checksums.split(',') if args.checksums else []
     with photoidx.index.Index(idxfile=idxfile, imgdir=args.directory,
-                              hashalg=hashalg) as idx:
+                              hashalg=hashalg, comment=args.comment) as idx:
         idx.write()
 
 def ls(args):
@@ -76,6 +76,7 @@ argparser.add_argument('-d', '--directory',
 subparsers = argparser.add_subparsers(title='subcommands')
 
 create_parser = subparsers.add_parser('create', help="create the index")
+create_parser.add_argument('--comment', help="Comment text")
 create_parser.add_argument('--checksums', default="md5", 
                            help=("comma separated list of "
                                  "hash algorithms to calculate checksums"))
