@@ -8,9 +8,9 @@ from photoidx.stats import Stats
 
 def create(args):
     idxfile = args.directory if args.update else None
-    hashalg = args.checksums.split(',') if args.checksums else []
+    checksums = args.checksums.split(',') if args.checksums else []
     with photoidx.index.Index(idxfile=idxfile, imgdir=args.directory,
-                              hashalg=hashalg, comment=args.comment) as idx:
+                              checksums=checksums, comment=args.comment) as idx:
         idx.write()
 
 def ls(args):

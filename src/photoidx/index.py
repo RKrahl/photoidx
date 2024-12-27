@@ -23,14 +23,14 @@ class Index(MutableSequence):
     idxFileVersion = "2.0"
     defIdxFilename = Path(".index.yaml")
 
-    def _readdir(self, imgdir, hashalg, known=set()):
+    def _readdir(self, imgdir, checksums, known=set()):
         for f in sorted(imgdir.iterdir()):
             rel = f.relative_to(self.directory)
             if f.is_file() and f.suffix == '.jpg' and rel not in known:
-                yield IdxItem(self, filename=rel, hashalg=hashalg)
+                yield IdxItem(self, filename=rel, checksums=checksums)
 
     def __init__(self, idxfile=None, imgdir=None,
-                 hashalg=['md5'], comment=None):
+                 checksums=['md5'], comment=None):
         super().__init__()
         self.head = dict()
         self.directory = None
@@ -45,9 +45,9 @@ class Index(MutableSequence):
             if not self.directory:
                 self.directory = imgdir
             if idxfile:
-                self.extend_dir(imgdir, hashalg)
+                self.extend_dir(imgdir, checksums)
             else:
-                newitems = self._readdir(imgdir, hashalg)
+                newitems = self._readdir(imgdir, checksums)
                 self.items = LazyList(newitems)
 
     @property
@@ -68,10 +68,10 @@ class Index(MutableSequence):
     def timeZone(self):
         return self.head.get("TimeZone")
 
-    def extend_dir(self, imgdir, hashalg=['md5']):
+    def extend_dir(self, imgdir, checksums=['md5']):
         imgdir = Path(imgdir).resolve()
         known = { i.filename for i in self.items }
-        newitems = self._readdir(imgdir, hashalg, known)
+        newitems = self._readdir(imgdir, checksums, known)
         self.items.extend(newitems)
 
     def close(self):
