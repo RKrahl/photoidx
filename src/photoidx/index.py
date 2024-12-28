@@ -20,7 +20,7 @@ class AlreadyLockedError(OSError):
 
 class Index(MutableSequence):
 
-    idxFileVersion = "2.0"
+    idxFileVersion = "1.0"
     defIdxFilename = Path(".index.yaml")
 
     def _readdir(self, imgdir, known=set()):
@@ -157,8 +157,9 @@ class Index(MutableSequence):
         except StopIteration:
             # Legacy index file
             self.items = [ IdxItem(self, data=i) for i in head ]
+            version = "0.1" if len(head) > 0 and 'md5' in head[0] else "0.4"
             self.head = {
-                'Version': "1.0",
+                'Version': version,
                 'Date': None,
                 'TimeZone': None,
                 'Checksums': self._get_common_checksums(),
