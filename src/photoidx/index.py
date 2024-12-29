@@ -33,8 +33,8 @@ class Index(MutableSequence):
         if len(self.items):
             checksums = set(self.items[0].checksum.keys())
             for i in self.items:
-                checksums.intersection(i.checksum.keys())
-            return list(checksums)
+                checksums.intersection_update(i.checksum.keys())
+            return sorted(checksums)
         else:
             return self.checksums
 

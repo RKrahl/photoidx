@@ -31,6 +31,8 @@ refindex = gettestdata("index-nocomment.yaml")
 
 @pytest.mark.parametrize("version", legacyindex.keys())
 def test_legacyconvert(tmpdir, version):
+    """Read different legacy files and convert them to the current version.
+    """
     workdir = tmpdir / version
     workdir.mkdir()
     for fname in testimgfiles:
@@ -42,3 +44,19 @@ def test_legacyconvert(tmpdir, version):
         assert idx.version == Version(version)
         idx.write()
     assert index_cmp(idxfile, refindex), "index file differs from reference"
+
+
+def test_legacy_mix_checksums(tmpdir):
+    """Pathologic case of a legacy index having inconsistent hash algorithms.
+
+    The file reader selects the common set of hash algorithms present
+    in all index items for the Checksums header upon conversion.
+    """
+    workdir = tmpdir / "checksums"
+    workdir.mkdir()
+    for fname in testimgfiles:
+        shutil.copy(fname, workdir)
+    idxfile = workdir / ".index.yaml"
+    shutil.copy(gettestdata("index-legacy-checksums.yaml"), idxfile)
+    with photoidx.index.Index(idxfile=workdir) as idx:
+        assert set(idx.checksums) == {"sha1", "sha256"}
