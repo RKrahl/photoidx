@@ -2,7 +2,7 @@
 ---
 Checksums:
 - md5
-Date: 2024-12-29 16:24:17.195751
+Date: 2024-12-28 22:40:05.408704
 TimeZone: null
 Version: '1.0'
 ---
@@ -12,8 +12,7 @@ Version: '1.0'
   filename: dsc_4623.jpg
   gpsPosition:
     E: 139.76603333333333
-    N: 35.671189999999996
-  name: ginza.jpg
+    N: 35.67119
   orientation: Rotate 90 CW
   tags: []
 - checksum:
@@ -22,7 +21,7 @@ Version: '1.0'
   filename: dsc_4664.jpg
   gpsPosition:
     E: 139.70024333333333
-    N: 35.675639999999994
+    N: 35.67564
   orientation: Horizontal (normal)
   tags: []
 - checksum:
@@ -30,7 +29,7 @@ Version: '1.0'
   createDate: 2016-03-05 14:53:42
   filename: dsc_4831.jpg
   gpsPosition:
-    E: 139.02553666666668
+    E: 139.02553666666665
     N: 35.20459666666667
   orientation: Horizontal (normal)
   tags: []
@@ -39,7 +38,6 @@ Version: '1.0'
   createDate: 2016-03-08 15:44:32
   filename: dsc_5126.jpg
   gpsPosition: null
-  name: geisha.jpg
   orientation: Horizontal (normal)
   tags: []
 - checksum:

@@ -4,11 +4,10 @@ The prefix 'pidx:' for tags is reserved for internal use in photoidx.
 It should be removed when reading an index file.
 """
 
-import filecmp
 import shutil
 import pytest
 import photoidx.index
-from conftest import tmpdir, gettestdata
+from conftest import tmpdir, gettestdata, index_cmp
 
 testimgs = [ 
     "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", 
@@ -28,4 +27,4 @@ def test_reserved_tags_convert(tmpdir):
     # using the reserved prefix.
     with photoidx.index.Index(idxfile=tmpdir) as idx:
         idx.write()
-    assert filecmp.cmp(idxfile, refindex), "index file differs from reference"
+    assert index_cmp(idxfile, refindex), "index file differs from reference"

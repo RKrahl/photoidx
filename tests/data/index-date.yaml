@@ -1,3 +1,11 @@
+%YAML 1.1
+---
+Checksums:
+- md5
+Date: 2024-12-29 16:23:26.616941
+TimeZone: null
+Version: '1.0'
+---
 - checksum:
     md5: c0343c6facd49934c157e42a6f9b345a
   createDate: 2016-02-28 00:01:10

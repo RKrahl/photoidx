@@ -2,13 +2,12 @@
 """
 
 import datetime
-import filecmp
 from pathlib import Path
 import shutil
 import subprocess
 import pytest
 import yaml
-from conftest import tmpdir, gettestdata, callscript
+from conftest import tmpdir, gettestdata, callscript, index_cmp
 
 testimgs = [ 
     "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", 
@@ -16,7 +15,7 @@ testimgs = [
 ]
 testimgfiles = [ gettestdata(i) for i in testimgs ]
 
-refindex = gettestdata("index-create.yaml")
+refindex = gettestdata("index.yaml")
 
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
@@ -36,9 +35,9 @@ def test_create(imgdir, monkeypatch):
     """Create the index.
     """
     monkeypatch.chdir(imgdir)
-    callscript("photo-idx.py", ["create"])
+    callscript("photo-idx.py", ["create", "--comment", "Japan 2016"])
     idxfile = imgdir / ".index.yaml"
-    assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
+    assert index_cmp(idxfile, refindex), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_create"])
 def test_ls_all(imgdir):
