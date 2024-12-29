@@ -19,7 +19,7 @@ refindexu = gettestdata("index-unicode-tags.yaml")
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, str(tmpdir))
+        shutil.copy(fname, tmpdir)
     return tmpdir
 
 def test_read_non_existent(imgdir):
@@ -32,7 +32,7 @@ def test_read_non_existent(imgdir):
 def test_read_write(imgdir):
     """Read the index file and write it out again.
     """
-    idxfile = str(imgdir / ".index.yaml")
+    idxfile = imgdir / ".index.yaml"
     shutil.copy(refindex, idxfile)
     with photoidx.index.Index(idxfile=imgdir) as idx:
         idx.write()
@@ -41,7 +41,7 @@ def test_read_write(imgdir):
 def test_read_write_unicode(imgdir):
     """Same test as above but with non-ASCII characters in the tags.
     """
-    idxfile = str(imgdir / ".index.yaml")
+    idxfile = imgdir / ".index.yaml"
     shutil.copy(refindexu, idxfile)
     with photoidx.index.Index(idxfile=imgdir) as idx:
         idx.write()

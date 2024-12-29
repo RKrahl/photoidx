@@ -33,7 +33,7 @@ def imgdir(tmpdir):
         d = tmpdir / k
         d.mkdir()
         for f in testimgs[k]:
-            shutil.copy(gettestdata(f), str(d / f))
+            shutil.copy(gettestdata(f), d / f)
     return tmpdir
 
 @pytest.mark.dependency()
@@ -44,7 +44,7 @@ def test_create(imgdir):
         for k in ("Japan", "Quebec"):
             idx.extend_dir(imgdir / k)
         idx.write()
-    idxfile = str(imgdir / ".index.yaml")
+    idxfile = imgdir / ".index.yaml"
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_create"])
@@ -61,7 +61,7 @@ def test_checksum(imgdir, monkeypatch):
         with fname.open("wt") as f:
             for i in idx:
                 print("%s  %s" % (i.checksum[hashalg], i.filename), file=f)
-    monkeypatch.chdir(str(imgdir))
+    monkeypatch.chdir(imgdir)
     with fname.open("rt") as f:
         cmd = [checkprog, "-c"]
         print(">", *cmd)

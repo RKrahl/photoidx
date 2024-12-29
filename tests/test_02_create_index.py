@@ -18,13 +18,13 @@ refindex = gettestdata("index-create.yaml")
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, str(tmpdir))
+        shutil.copy(fname, tmpdir)
     return tmpdir
 
 def test_create_curdir(imgdir, monkeypatch):
     """Create a new index in the current directory adding all images.
     """
-    monkeypatch.chdir(str(imgdir))
+    monkeypatch.chdir(imgdir)
     with photoidx.index.Index(imgdir=".") as idx:
         idx.write()
     idxfile = ".index.yaml"
@@ -36,7 +36,7 @@ def test_create(imgdir):
     """
     with photoidx.index.Index(imgdir=imgdir) as idx:
         idx.write()
-    idxfile = str(imgdir / ".index.yaml")
+    idxfile = imgdir / ".index.yaml"
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_create"])
@@ -45,5 +45,5 @@ def test_read(imgdir):
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
         idx.write()
-    idxfile = str(imgdir / ".index.yaml")
+    idxfile = imgdir / ".index.yaml"
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

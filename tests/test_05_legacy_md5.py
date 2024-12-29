@@ -23,8 +23,8 @@ refindex = gettestdata("index-create.yaml")
 
 def test_legacyconvert(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, str(tmpdir))
-    idxfile = str(tmpdir / ".index.yaml")
+        shutil.copy(fname, tmpdir)
+    idxfile = tmpdir / ".index.yaml"
     shutil.copy(legacyindex, idxfile)
     # reading and writing the index transparantly converts it.
     with photoidx.index.Index(idxfile=tmpdir) as idx:
