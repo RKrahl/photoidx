@@ -11,7 +11,7 @@ refindex = gettestdata("index-name.yaml")
 
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
-    shutil.copy(refindex, str(tmpdir / ".index.yaml"))
+    shutil.copy(refindex, tmpdir / ".index.yaml")
     return tmpdir
 
 def test_readwrite(imgdir):
@@ -22,5 +22,5 @@ def test_readwrite(imgdir):
         assert idx[1].name is None
         assert idx[3].name == "geisha.jpg"
         idx.write()
-    idxfile = str(imgdir / ".index.yaml")
+    idxfile = imgdir / ".index.yaml"
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
