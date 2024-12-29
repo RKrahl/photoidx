@@ -8,12 +8,11 @@ equal unless there is a significant difference in the content.  That
 is why the tags should have a well defined order in the index file.
 """
 
-import filecmp
 import shutil
 import pytest
 import photoidx.index
 import photoidx.idxfilter
-from conftest import tmpdir, gettestdata
+from conftest import tmpdir, gettestdata, index_cmp
 
 testimgs = [ 
     "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", 
@@ -76,7 +75,7 @@ def test_tag_shuffle(imgdir):
             for i in idxfilter.filter(idx):
                 i.tags.add(t)
         idx.write()
-    assert filecmp.cmp(idxfname, reffname), "index file differs from reference"
+    assert index_cmp(idxfname, reffname), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_tag_ref"])
 def test_tag_remove(imgdir):
@@ -96,7 +95,7 @@ def test_tag_remove(imgdir):
                 if str(i.filename) not in tags[t]:
                     i.tags.remove(t)
         idx.write()
-    assert filecmp.cmp(idxfname, reffname), "index file differs from reference"
+    assert index_cmp(idxfname, reffname), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_tag_ref"])
 def test_tag_extra(imgdir):
@@ -117,4 +116,4 @@ def test_tag_extra(imgdir):
         for i in idx:
             i.tags.remove("extra")
         idx.write()
-    assert filecmp.cmp(idxfname, reffname), "index file differs from reference"
+    assert index_cmp(idxfname, reffname), "index file differs from reference"

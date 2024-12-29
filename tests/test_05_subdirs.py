@@ -6,7 +6,6 @@ All the tooling around does not use this feature for the time being,
 though.
 """
 
-import filecmp
 import os
 from pathlib import Path
 import shutil
@@ -15,7 +14,7 @@ import pytest
 import photoidx.index
 import photoidx.idxfilter
 from photoidx.geo import GeoPosition
-from conftest import tmpdir, gettestdata
+from conftest import tmpdir, gettestdata, index_cmp
 
 testimgs = {
     "Japan": [ "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", "dsc_5167.jpg" ],
@@ -45,7 +44,7 @@ def test_create(imgdir):
             idx.extend_dir(imgdir / k)
         idx.write()
     idxfile = imgdir / ".index.yaml"
-    assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
+    assert index_cmp(idxfile, refindex), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_create"])
 def test_checksum(imgdir, monkeypatch):

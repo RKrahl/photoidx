@@ -6,11 +6,10 @@ still reads legacy files and transparently converts them to the new
 format.  This feature is tested in this module.
 """
 
-import filecmp
 import shutil
 import pytest
 import photoidx.index
-from conftest import tmpdir, gettestdata
+from conftest import tmpdir, gettestdata, index_cmp
 
 testimgs = [ 
     "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", 
@@ -29,4 +28,4 @@ def test_legacyconvert(tmpdir):
     # reading and writing the index transparantly converts it.
     with photoidx.index.Index(idxfile=tmpdir) as idx:
         idx.write()
-    assert filecmp.cmp(idxfile, refindex), "index file differs from reference"
+    assert index_cmp(idxfile, refindex), "index file differs from reference"

@@ -2,7 +2,6 @@
 """
 
 import datetime
-import filecmp
 import shutil
 import pytest
 import photoidx.index

@@ -1,11 +1,10 @@
 """Add images to an index.
 """
 
-import filecmp
 import shutil
 import pytest
 import photoidx.index
-from conftest import tmpdir, gettestdata
+from conftest import tmpdir, gettestdata, index_cmp
 
 testimgs = [ 
     "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", 
@@ -25,4 +24,4 @@ def test_createupdate(tmpdir):
     with photoidx.index.Index(idxfile=tmpdir, imgdir=tmpdir) as idx:
         idx.write()
     idxfile = tmpdir / ".index.yaml"
-    assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
+    assert index_cmp(idxfile, refindex), "index file differs from reference"

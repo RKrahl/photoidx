@@ -2,13 +2,12 @@
 """
 
 import datetime
-import filecmp
 from pathlib import Path
 import shutil
 import subprocess
 import pytest
 import yaml
-from conftest import tmpdir, gettestdata, callscript
+from conftest import tmpdir, gettestdata, callscript, index_cmp
 
 testimgs = [ 
     "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", 
@@ -38,7 +37,7 @@ def test_create(imgdir, monkeypatch):
     monkeypatch.chdir(imgdir)
     callscript("photo-idx.py", ["create"])
     idxfile = imgdir / ".index.yaml"
-    assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
+    assert index_cmp(idxfile, refindex), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_create"])
 def test_ls_all(imgdir):
