@@ -27,7 +27,8 @@ hashalg = {
 def test_create_checksum(tmpdir):
     for fname in testimgfiles:
         shutil.copy(fname, tmpdir)
-    with photoidx.index.Index(imgdir=tmpdir, checksums=hashalg.keys()) as idx:
+    checksums = list(hashalg.keys())
+    with photoidx.index.Index(imgdir=tmpdir, checksums=checksums) as idx:
         idx.write()
 
 @pytest.mark.dependency(depends=["test_create_checksum"])
