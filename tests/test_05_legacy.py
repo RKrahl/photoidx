@@ -27,7 +27,7 @@ legacyindex = {
     "0.1": gettestdata("index-legacy-0_1.yaml"),
     "0.4": gettestdata("index-legacy-0_4.yaml"),
 }
-refindex = gettestdata("index-create.yaml")
+refindex = gettestdata("index-nocomment.yaml")
 
 @pytest.mark.parametrize("version", legacyindex.keys())
 def test_legacyconvert(tmpdir, version):

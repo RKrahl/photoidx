@@ -15,7 +15,7 @@ testimgs = [
 ]
 testimgfiles = [ gettestdata(i) for i in testimgs ]
 
-refindex = gettestdata("index-create.yaml")
+refindex = gettestdata("index.yaml")
 
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
@@ -35,7 +35,7 @@ def test_create(imgdir, monkeypatch):
     """Create the index.
     """
     monkeypatch.chdir(imgdir)
-    callscript("photo-idx.py", ["create"])
+    callscript("photo-idx.py", ["create", "--comment", "Japan 2016"])
     idxfile = imgdir / ".index.yaml"
     assert index_cmp(idxfile, refindex), "index file differs from reference"
 

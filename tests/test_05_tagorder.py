@@ -49,7 +49,7 @@ tags = {
 def test_tag_ref(imgdir):
     idxfname = imgdir / ".index.yaml"
     reffname = imgdir / "index-ref.yaml"
-    shutil.copy(gettestdata("index-create.yaml"), idxfname)
+    shutil.copy(gettestdata("index.yaml"), idxfname)
     with photoidx.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Japan", "Tokyo", "Hakone", "Kyoto", 
                     "Ginza", "Shinto_shrine", "Geisha", "Ryoan-ji" ]
@@ -66,7 +66,7 @@ def test_tag_shuffle(imgdir):
     """
     idxfname = imgdir / ".index.yaml"
     reffname = imgdir / "index-ref.yaml"
-    shutil.copy(gettestdata("index-create.yaml"), idxfname)
+    shutil.copy(gettestdata("index.yaml"), idxfname)
     with photoidx.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Ginza", "Hakone", "Japan", "Geisha", 
                     "Shinto_shrine", "Tokyo", "Kyoto", "Ryoan-ji" ]
@@ -83,7 +83,7 @@ def test_tag_remove(imgdir):
     """
     idxfname = imgdir / ".index.yaml"
     reffname = imgdir / "index-ref.yaml"
-    shutil.copy(gettestdata("index-create.yaml"), idxfname)
+    shutil.copy(gettestdata("index.yaml"), idxfname)
     with photoidx.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Tokyo", "Shinto_shrine", "Ginza", "Geisha", 
                     "Japan", "Ryoan-ji", "Hakone", "Kyoto" ]
@@ -103,7 +103,7 @@ def test_tag_extra(imgdir):
     """
     idxfname = imgdir / ".index.yaml"
     reffname = imgdir / "index-ref.yaml"
-    shutil.copy(gettestdata("index-create.yaml"), idxfname)
+    shutil.copy(gettestdata("index.yaml"), idxfname)
     with photoidx.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Japan", "Tokyo", "Hakone", "Kyoto", 
                     "Ginza", "Shinto_shrine", "Geisha", "Ryoan-ji" ]

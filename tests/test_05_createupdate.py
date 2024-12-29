@@ -12,16 +12,39 @@ testimgs = [
 ]
 testimgfiles = [ gettestdata(i) for i in testimgs ]
 
-refindex = gettestdata("index-create.yaml")
+refindex = gettestdata("index.yaml")
 
 def test_createupdate(tmpdir):
+    """Create an index and then update it, adding a few more images.
+    """
+    workdir = tmpdir / "t1"
+    workdir.mkdir()
     for fname in testimgfiles[:3]:
-        shutil.copy(fname, tmpdir)
-    with photoidx.index.Index(imgdir=tmpdir) as idx:
+        shutil.copy(fname, workdir)
+    with photoidx.index.Index(imgdir=workdir,
+                              comment="Japan 2016") as idx:
         idx.write()
     for fname in testimgfiles[3:]:
-        shutil.copy(fname, tmpdir)
-    with photoidx.index.Index(idxfile=tmpdir, imgdir=tmpdir) as idx:
+        shutil.copy(fname, workdir)
+    with photoidx.index.Index(idxfile=workdir, imgdir=workdir) as idx:
         idx.write()
-    idxfile = tmpdir / ".index.yaml"
+    idxfile = workdir / ".index.yaml"
+    assert index_cmp(idxfile, refindex), "index file differs from reference"
+
+def test_createupdate_change_comment(tmpdir):
+    """Same as last test, but also change the comment in the update.
+    """
+    workdir = tmpdir / "t2"
+    workdir.mkdir()
+    for fname in testimgfiles[:3]:
+        shutil.copy(fname, workdir)
+    with photoidx.index.Index(imgdir=workdir,
+                              comment="Japan 2016 first round") as idx:
+        idx.write()
+    for fname in testimgfiles[3:]:
+        shutil.copy(fname, workdir)
+    with photoidx.index.Index(idxfile=workdir, imgdir=workdir,
+                              comment="Japan 2016") as idx:
+        idx.write()
+    idxfile = workdir / ".index.yaml"
     assert index_cmp(idxfile, refindex), "index file differs from reference"
