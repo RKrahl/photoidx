@@ -16,12 +16,12 @@ testdir = Path(__file__).parent
 def gettestdata(fname):
     fname = testdir / "data" / fname
     assert fname.is_file()
-    return str(fname)
+    return fname
 
 @pytest.fixture(scope="module")
 def tmpdir(request):
-    td = tempfile.mkdtemp(prefix="photoidx-test-")
-    yield Path(td)
+    td = Path(tempfile.mkdtemp(prefix="photoidx-test-"))
+    yield td
     shutil.rmtree(td)
 
 def callscript(scriptname, args, stdin=None, stdout=None, stderr=None):

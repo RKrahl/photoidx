@@ -15,10 +15,12 @@ Internal changes
 ----------------
 
 + `#66`_: Review build tool chain.
++ `#69`_: Refactor test suite.
 
 .. _#38: https://github.com/RKrahl/photoidx/issues/38
 .. _#62: https://github.com/RKrahl/photoidx/pull/62
 .. _#66: https://github.com/RKrahl/photoidx/pull/66
+.. _#69: https://github.com/RKrahl/photoidx/pull/69
 
 
 0.10.1 (2023-09-24)
@@ -52,6 +54,8 @@ New features
 
 Incompatible changes
 --------------------
+
++ Require Python 3.6 or newer.
 
 + `#52`_, `#53`_: Rename the package from ``photo`` to ``photoidx``.
 

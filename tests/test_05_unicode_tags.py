@@ -30,8 +30,8 @@ tags = {
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, str(tmpdir))
-    shutil.copy(baseindex, str(tmpdir / ".index.yaml"))
+        shutil.copy(fname, tmpdir)
+    shutil.copy(baseindex, tmpdir / ".index.yaml")
     return tmpdir
 
 def test_tag_unicode(imgdir):
@@ -40,5 +40,5 @@ def test_tag_unicode(imgdir):
             for t in tags[str(item.filename)]:
                 item.tags.add(t)
         idx.write()
-    idxfile = str(imgdir / ".index.yaml")
+    idxfile = imgdir / ".index.yaml"
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"

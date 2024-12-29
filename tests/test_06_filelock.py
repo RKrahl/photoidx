@@ -29,8 +29,8 @@ tags = {
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, str(tmpdir))
-    shutil.copy(refindex, str(tmpdir / ".index.yaml"))
+        shutil.copy(fname, tmpdir)
+    shutil.copy(refindex, tmpdir / ".index.yaml")
     return tmpdir
 
 # --------------------------------------------------------------------
@@ -123,5 +123,5 @@ def test_concurrent_read_write(imgdir):
         p.join()
     # Finally, verify that the index is still unchanged, so the
     # writing did not succeed.
-    idxfile = str(imgdir / ".index.yaml")
+    idxfile = imgdir / ".index.yaml"
     assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
