@@ -8,18 +8,25 @@ from photoidx.stats import Stats
 
 
 def create(args):
-    checksums = args.checksums.split(',') if args.checksums else []
-    default_tz = local_time_zone()
-    with photoidx.index.Index(idxfile=None, imgdir=args.directory,
-                              default_tz=default_tz, checksums=checksums,
-                              comment=args.comment) as idx:
+    kwargs = dict(
+        idxfile = None,
+        imgdir = args.directory,
+        checksums = args.checksums.split(',') if args.checksums else [],
+        comment = args.comment,
+        default_tz = local_time_zone(),
+    )
+    with photoidx.index.Index(**kwargs) as idx:
         idx.write()
 
 def update(args):
-    default_tz = local_time_zone()
-    with photoidx.index.Index(idxfile=args.directory, imgdir=args.directory,
-                              default_tz=default_tz, checksums=None,
-                              comment=args.comment) as idx:
+    kwargs = dict(
+        idxfile = args.directory,
+        imgdir = args.directory,
+        checksums = None,
+        comment = args.comment,
+        default_tz = local_time_zone(),
+    )
+    with photoidx.index.Index(**kwargs) as idx:
         idx.write()
 
 def ls(args):
