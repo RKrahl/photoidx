@@ -8,17 +8,31 @@ Changelog
 New features
 ------------
 
++ `#68`_, `#70`_: Extend the index file format to store attributes of
+  the index itself.
 + `#38`_, `#62`_: Add geo information to the output of the `stats`
   subcommand in :ref:`photo-idx`.
+
+Incompatible changes
+--------------------
+
++ The index file format has changed.  :ref:`photo-idx` and
+  :ref:`imageview` are able to read the old format and convert the
+  file silently to the new format when writing it back.  But the tools
+  from earlier versions will not be able to read the new format.
 
 Internal changes
 ----------------
 
 + `#66`_: Review build tool chain.
++ `#69`_: Refactor test suite.
 
 .. _#38: https://github.com/RKrahl/photoidx/issues/38
 .. _#62: https://github.com/RKrahl/photoidx/pull/62
 .. _#66: https://github.com/RKrahl/photoidx/pull/66
+.. _#68: https://github.com/RKrahl/photoidx/issues/68
+.. _#69: https://github.com/RKrahl/photoidx/pull/69
+.. _#70: https://github.com/RKrahl/photoidx/pull/70
 
 
 0.10.1 (2023-09-24)
@@ -52,6 +66,8 @@ New features
 
 Incompatible changes
 --------------------
+
++ Require Python 3.6 or newer.
 
 + `#52`_, `#53`_: Rename the package from ``photo`` to ``photoidx``.
 

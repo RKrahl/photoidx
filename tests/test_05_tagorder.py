@@ -8,12 +8,11 @@ equal unless there is a significant difference in the content.  That
 is why the tags should have a well defined order in the index file.
 """
 
-import filecmp
 import shutil
 import pytest
 import photoidx.index
 import photoidx.idxfilter
-from conftest import tmpdir, gettestdata
+from conftest import tmpdir, gettestdata, index_cmp
 
 testimgs = [ 
     "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", 
@@ -24,7 +23,7 @@ testimgfiles = [ gettestdata(i) for i in testimgs ]
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, str(tmpdir))
+        shutil.copy(fname, tmpdir)
     return tmpdir
 
 # Each test ends up adding the same set of tags to each image.  But
@@ -48,9 +47,9 @@ tags = {
 
 @pytest.mark.dependency()
 def test_tag_ref(imgdir):
-    idxfname = str(imgdir / ".index.yaml")
-    reffname = str(imgdir / "index-ref.yaml")
-    shutil.copy(gettestdata("index-create.yaml"), idxfname)
+    idxfname = imgdir / ".index.yaml"
+    reffname = imgdir / "index-ref.yaml"
+    shutil.copy(gettestdata("index.yaml"), idxfname)
     with photoidx.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Japan", "Tokyo", "Hakone", "Kyoto", 
                     "Ginza", "Shinto_shrine", "Geisha", "Ryoan-ji" ]
@@ -65,9 +64,9 @@ def test_tag_ref(imgdir):
 def test_tag_shuffle(imgdir):
     """Same as test_tag_ref(), only the order of setting the tags differ.
     """
-    idxfname = str(imgdir / ".index.yaml")
-    reffname = str(imgdir / "index-ref.yaml")
-    shutil.copy(gettestdata("index-create.yaml"), idxfname)
+    idxfname = imgdir / ".index.yaml"
+    reffname = imgdir / "index-ref.yaml"
+    shutil.copy(gettestdata("index.yaml"), idxfname)
     with photoidx.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Ginza", "Hakone", "Japan", "Geisha", 
                     "Shinto_shrine", "Tokyo", "Kyoto", "Ryoan-ji" ]
@@ -76,15 +75,15 @@ def test_tag_shuffle(imgdir):
             for i in idxfilter.filter(idx):
                 i.tags.add(t)
         idx.write()
-    assert filecmp.cmp(idxfname, reffname), "index file differs from reference"
+    assert index_cmp(idxfname, reffname), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_tag_ref"])
 def test_tag_remove(imgdir):
     """First set all tags on all images, then remove the wrong ones.
     """
-    idxfname = str(imgdir / ".index.yaml")
-    reffname = str(imgdir / "index-ref.yaml")
-    shutil.copy(gettestdata("index-create.yaml"), idxfname)
+    idxfname = imgdir / ".index.yaml"
+    reffname = imgdir / "index-ref.yaml"
+    shutil.copy(gettestdata("index.yaml"), idxfname)
     with photoidx.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Tokyo", "Shinto_shrine", "Ginza", "Geisha", 
                     "Japan", "Ryoan-ji", "Hakone", "Kyoto" ]
@@ -96,15 +95,15 @@ def test_tag_remove(imgdir):
                 if str(i.filename) not in tags[t]:
                     i.tags.remove(t)
         idx.write()
-    assert filecmp.cmp(idxfname, reffname), "index file differs from reference"
+    assert index_cmp(idxfname, reffname), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_tag_ref"])
 def test_tag_extra(imgdir):
     """Add a spurious extra tag first and remove it later.
     """
-    idxfname = str(imgdir / ".index.yaml")
-    reffname = str(imgdir / "index-ref.yaml")
-    shutil.copy(gettestdata("index-create.yaml"), idxfname)
+    idxfname = imgdir / ".index.yaml"
+    reffname = imgdir / "index-ref.yaml"
+    shutil.copy(gettestdata("index.yaml"), idxfname)
     with photoidx.index.Index(idxfile=imgdir) as idx:
         taglist = [ "Japan", "Tokyo", "Hakone", "Kyoto", 
                     "Ginza", "Shinto_shrine", "Geisha", "Ryoan-ji" ]
@@ -117,4 +116,4 @@ def test_tag_extra(imgdir):
         for i in idx:
             i.tags.remove("extra")
         idx.write()
-    assert filecmp.cmp(idxfname, reffname), "index file differs from reference"
+    assert index_cmp(idxfname, reffname), "index file differs from reference"

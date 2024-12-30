@@ -3,6 +3,7 @@
 
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -16,12 +17,12 @@ testdir = Path(__file__).parent
 def gettestdata(fname):
     fname = testdir / "data" / fname
     assert fname.is_file()
-    return str(fname)
+    return fname
 
 @pytest.fixture(scope="module")
 def tmpdir(request):
-    td = tempfile.mkdtemp(prefix="photoidx-test-")
-    yield Path(td)
+    td = Path(tempfile.mkdtemp(prefix="photoidx-test-"))
+    yield td
     shutil.rmtree(td)
 
 def callscript(scriptname, args, stdin=None, stdout=None, stderr=None):
@@ -33,6 +34,22 @@ def callscript(scriptname, args, stdin=None, stdout=None, stderr=None):
     cmd = [sys.executable, str(script)] + args
     print("\n>", *cmd)
     subprocess.check_call(cmd, stdin=stdin, stdout=stdout, stderr=stderr)
+
+_idx_cmp_ignore_re = re.compile(r"^Date:\s")
+
+def index_cmp(p1, p2):
+    """Compare two index files, ignoring the 'Date:' line in the header.
+    """
+    with p1.open("rt") as f1, p2.open("rt") as f2:
+        while True:
+            l1 = f1.readline()
+            l2 = f2.readline()
+            if not(l1) and not(l2):
+                return True
+            if _idx_cmp_ignore_re.match(l1) and _idx_cmp_ignore_re.match(l2):
+                continue
+            if l1 != l2:
+                return False
 
 def pytest_report_header(config):
     """Add information on the package version used in the tests.

@@ -59,7 +59,7 @@ Optional library packages:
   to build out of the plain development source tree as cloned from
   GitHub, but not to build a release distribution.
 
-+ `pytest`_ >= 3.0.0
++ `pytest`_ >= 3.1.0
 
   Only needed to run the test suite.
 

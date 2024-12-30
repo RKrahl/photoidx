@@ -5,13 +5,12 @@ conflicts in concurrent file access using file system locking.
 We will need multiple processes to test this.
 """
 
-import filecmp
 from multiprocessing import Process, Queue
 import shutil
 import pytest
 import photoidx.index
 import photoidx.idxfilter
-from conftest import tmpdir, gettestdata
+from conftest import tmpdir, gettestdata, index_cmp
 
 testimgs = [ 
     "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", 
@@ -29,8 +28,8 @@ tags = {
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, str(tmpdir))
-    shutil.copy(refindex, str(tmpdir / ".index.yaml"))
+        shutil.copy(fname, tmpdir)
+    shutil.copy(refindex, tmpdir / ".index.yaml")
     return tmpdir
 
 # --------------------------------------------------------------------
@@ -123,5 +122,5 @@ def test_concurrent_read_write(imgdir):
         p.join()
     # Finally, verify that the index is still unchanged, so the
     # writing did not succeed.
-    idxfile = str(imgdir / ".index.yaml")
-    assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
+    idxfile = imgdir / ".index.yaml"
+    assert index_cmp(idxfile, refindex), "index file differs from reference"

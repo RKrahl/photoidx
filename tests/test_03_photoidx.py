@@ -2,13 +2,12 @@
 """
 
 import datetime
-import filecmp
 from pathlib import Path
 import shutil
 import subprocess
 import pytest
 import yaml
-from conftest import tmpdir, gettestdata, callscript
+from conftest import tmpdir, gettestdata, callscript, index_cmp
 
 testimgs = [ 
     "dsc_4623.jpg", "dsc_4664.jpg", "dsc_4831.jpg", 
@@ -16,12 +15,12 @@ testimgs = [
 ]
 testimgfiles = [ gettestdata(i) for i in testimgs ]
 
-refindex = gettestdata("index-create.yaml")
+refindex = gettestdata("index.yaml")
 
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, str(tmpdir))
+        shutil.copy(fname, tmpdir)
     return tmpdir
 
 
@@ -35,10 +34,10 @@ def imgdir(tmpdir):
 def test_create(imgdir, monkeypatch):
     """Create the index.
     """
-    monkeypatch.chdir(str(imgdir))
-    callscript("photo-idx.py", ["create"])
-    idxfile = str(imgdir / ".index.yaml")
-    assert filecmp.cmp(refindex, idxfile), "index file differs from reference"
+    monkeypatch.chdir(imgdir)
+    callscript("photo-idx.py", ["create", "--comment", "Japan 2016"])
+    idxfile = imgdir / ".index.yaml"
+    assert index_cmp(idxfile, refindex), "index file differs from reference"
 
 @pytest.mark.dependency(depends=["test_create"])
 def test_ls_all(imgdir):
@@ -58,7 +57,7 @@ def test_ls_md5(imgdir, monkeypatch):
     md5sum = "/usr/bin/md5sum"
     if not Path(md5sum).is_file():
         pytest.skip("md5sum not found.")
-    monkeypatch.chdir(str(imgdir))
+    monkeypatch.chdir(imgdir)
     fname = imgdir / "md5"
     with fname.open("wt") as f:
         callscript("photo-idx.py", ["ls", "--checksum=md5"], stdout=f)
@@ -99,7 +98,7 @@ def test_addtag_by_date(imgdir):
 def test_addtag_by_gpspos(imgdir, monkeypatch):
     """Select by GPS position.
     """
-    monkeypatch.chdir(str(imgdir))
+    monkeypatch.chdir(imgdir)
     args = ["addtag", "--gpspos", "35.6883 N, 139.7544 E", 
             "--gpsradius", "20.0", "Tokyo"]
     callscript("photo-idx.py", args)
@@ -115,7 +114,7 @@ def test_addtag_by_gpspos(imgdir, monkeypatch):
 def test_addtag_by_files(imgdir, monkeypatch):
     """Select by file names.
     """
-    monkeypatch.chdir(str(imgdir))
+    monkeypatch.chdir(imgdir)
     args = ["addtag", "Shinto_shrine", "dsc_4664.jpg", "dsc_4831.jpg"]
     callscript("photo-idx.py", args)
     fname = imgdir / "out"
@@ -133,7 +132,7 @@ def test_addtag_by_files(imgdir, monkeypatch):
 def test_rmtag_by_tag(imgdir, monkeypatch):
     """Remove a tag from images selected by tags.
     """
-    monkeypatch.chdir(str(imgdir))
+    monkeypatch.chdir(imgdir)
     args = ["rmtag", "--tags", "Tokyo", "all"]
     callscript("photo-idx.py", args)
     args = ["rmtag", "--tags", "Hakone", "all"]
@@ -150,7 +149,7 @@ def test_rmtag_by_tag(imgdir, monkeypatch):
 def test_rmtag_all(imgdir, monkeypatch):
     """Remove a tag from all images.
     """
-    monkeypatch.chdir(str(imgdir))
+    monkeypatch.chdir(imgdir)
     args = ["-d", str(imgdir), "rmtag", "all"]
     callscript("photo-idx.py", args)
     fname = imgdir / "out"
@@ -199,7 +198,7 @@ def test_ls_by_neg_tags(imgdir, monkeypatch):
     Prepending a tag by an exclamation mark selects the images having
     the tag not set.
     """
-    monkeypatch.chdir(str(imgdir))
+    monkeypatch.chdir(imgdir)
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["ls", "--tags", "Tokyo,!Shinto_shrine"]
@@ -262,7 +261,7 @@ def test_lstags_all(imgdir):
 def test_lstags_by_tags(imgdir, monkeypatch):
     """List tags selected by tags.
     """
-    monkeypatch.chdir(str(imgdir))
+    monkeypatch.chdir(imgdir)
     fname = imgdir / "out"
     with fname.open("wt") as f:
         args = ["lstags", "--tags", "Tokyo"]
@@ -275,7 +274,7 @@ def test_lstags_by_tags(imgdir, monkeypatch):
 def test_select_by_files(imgdir, monkeypatch):
     """Select by file names.
     """
-    monkeypatch.chdir(str(imgdir))
+    monkeypatch.chdir(imgdir)
     args = ["select", "dsc_5126.jpg"]
     callscript("photo-idx.py", args)
     fname = imgdir / "out"
@@ -292,7 +291,7 @@ def test_select_by_files(imgdir, monkeypatch):
 def test_select_by_tag(imgdir, monkeypatch):
     """Select by tag.
     """
-    monkeypatch.chdir(str(imgdir))
+    monkeypatch.chdir(imgdir)
     args = ["select", "--tags", "Shinto_shrine"]
     callscript("photo-idx.py", args)
     fname = imgdir / "out"
@@ -307,7 +306,7 @@ def test_select_by_tag(imgdir, monkeypatch):
 def test_deselect_by_files(imgdir, monkeypatch):
     """Deselect by file names.
     """
-    monkeypatch.chdir(str(imgdir))
+    monkeypatch.chdir(imgdir)
     args = ["deselect", "dsc_4831.jpg"]
     callscript("photo-idx.py", args)
     fname = imgdir / "out"

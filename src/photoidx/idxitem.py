@@ -9,27 +9,26 @@ from .exif import Orientation, Exif
 from .geo import GeoPosition
 
 
-def _checksum(fname, hashalg):
+def _checksum(fname, checksums):
     """Calculate hashes for a file.
     """
-    if not hashalg:
+    if not checksums:
         return {}
-    m = { h:hashlib.new(h) for h in hashalg }
+    m = { h:hashlib.new(h) for h in checksums }
     chunksize = 8192
     with fname.open('rb') as f:
         while True:
             chunk = f.read(chunksize)
             if not chunk:
                 break
-            for h in hashalg:
+            for h in checksums:
                 m[h].update(chunk)
-    return { h: m[h].hexdigest() for h in hashalg }
+    return { h: m[h].hexdigest() for h in checksums }
 
 
 class IdxItem(object):
 
-    def __init__(self, data=None, filename=None, basedir=None,
-                 hashalg=['md5'], default_tz=None):
+    def __init__(self, index, data=None, filename=None, default_tz=None):
         self.exifdata = None
         if data is not None:
             self.filename = Path(data.get('filename'))
@@ -53,9 +52,9 @@ class IdxItem(object):
             filename = Path(filename)
             self.filename = filename
             self.name = None
-            if basedir is not None:
-                filename = Path(basedir) / filename
-            self.checksum = _checksum(filename, hashalg)
+            if index.directory is not None:
+                filename = index.directory / filename
+            self.checksum = _checksum(filename, index.checksums)
             self.exifdata = Exif(filename)
             self.createDate = self.exifdata.createDate
             self.orientation = self.exifdata.orientation

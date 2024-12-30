@@ -26,8 +26,9 @@ hashalg = {
 @pytest.mark.dependency()
 def test_create_checksum(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, str(tmpdir))
-    with photoidx.index.Index(imgdir=tmpdir, hashalg=hashalg.keys()) as idx:
+        shutil.copy(fname, tmpdir)
+    checksums = list(hashalg.keys())
+    with photoidx.index.Index(imgdir=tmpdir, checksums=checksums) as idx:
         idx.write()
 
 @pytest.mark.dependency(depends=["test_create_checksum"])
@@ -40,14 +41,14 @@ def test_check_checksum(tmpdir, monkeypatch, alg):
     with photoidx.index.Index(idxfile=tmpdir) as idx, fname.open("wt") as f:
         for i in idx:
             print("%s  %s" % (i.checksum[alg], i.filename), file=f)
-    monkeypatch.chdir(str(tmpdir))
+    monkeypatch.chdir(tmpdir)
     with fname.open("rt") as f:
         cmd = [checkprog, "-c"]
         print(">", *cmd)
         subprocess.check_call(cmd, stdin=f)
 
 def test_no_checksum(tmpdir):
-    with photoidx.index.Index(imgdir=tmpdir, hashalg=[]) as idx:
+    with photoidx.index.Index(imgdir=tmpdir, checksums=[]) as idx:
         idx.write()
     with photoidx.index.Index(idxfile=tmpdir) as idx:
         for i in idx:

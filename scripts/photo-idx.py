@@ -8,11 +8,18 @@ from photoidx.stats import Stats
 
 
 def create(args):
-    idxfile = args.directory if args.update else None
-    hashalg = args.checksums.split(',') if args.checksums else []
+    checksums = args.checksums.split(',') if args.checksums else []
     default_tz = local_time_zone()
-    with photoidx.index.Index(idxfile=idxfile, imgdir=args.directory,
-                              default_tz=default_tz, hashalg=hashalg) as idx:
+    with photoidx.index.Index(idxfile=None, imgdir=args.directory,
+                              default_tz=default_tz, checksums=checksums,
+                              comment=args.comment) as idx:
+        idx.write()
+
+def update(args):
+    default_tz = local_time_zone()
+    with photoidx.index.Index(idxfile=args.directory, imgdir=args.directory,
+                              default_tz=default_tz, checksums=None,
+                              comment=args.comment) as idx:
         idx.write()
 
 def ls(args):
@@ -78,12 +85,16 @@ argparser.add_argument('-d', '--directory',
 subparsers = argparser.add_subparsers(title='subcommands')
 
 create_parser = subparsers.add_parser('create', help="create the index")
+create_parser.add_argument('--comment', help="Comment text")
 create_parser.add_argument('--checksums', default="md5", 
                            help=("comma separated list of "
                                  "hash algorithms to calculate checksums"))
-create_parser.add_argument('--update', action='store_true', 
-                           help="add images to an existing index")
 create_parser.set_defaults(func=create)
+
+update_parser = subparsers.add_parser('update',
+                                      help="add images to an existing index")
+update_parser.add_argument('--comment', help="Comment text")
+update_parser.set_defaults(func=update)
 
 ls_parser = subparsers.add_parser('ls', help="list image files")
 ls_parser.add_argument('--checksum', help="hash algorithm to print checksums")

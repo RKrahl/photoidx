@@ -2,7 +2,6 @@
 """
 
 import datetime
-import filecmp
 import shutil
 import pytest
 import photoidx.index
@@ -19,8 +18,8 @@ testimgfiles = [ gettestdata(i) for i in testimgs ]
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
     for fname in testimgfiles:
-        shutil.copy(fname, str(tmpdir))
-    shutil.copy(gettestdata("index-tagged.yaml"), str(tmpdir / ".index.yaml"))
+        shutil.copy(fname, tmpdir)
+    shutil.copy(gettestdata("index-tagged.yaml"), tmpdir / ".index.yaml")
     return tmpdir
 
 def test_by_date(imgdir):
