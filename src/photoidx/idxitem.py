@@ -28,7 +28,7 @@ def _checksum(fname, checksums):
 
 class IdxItem(object):
 
-    def __init__(self, index, data=None, filename=None, default_tz=None):
+    def __init__(self, index, data=None, filename=None):
         self.exifdata = None
         if data is not None:
             self.filename = Path(data.get('filename'))
@@ -59,8 +59,9 @@ class IdxItem(object):
             self.createDate = self.exifdata.createDate
             self.orientation = self.exifdata.orientation
             self.gpsPosition = self.exifdata.gpsPosition
-            tzinfo = self.get_createDate_tzinfo(fallback=default_tz)
-            self.createDate = self.createDate.replace(tzinfo=tzinfo)
+            if index.timeZone is not None:
+                tzinfo = self.get_createDate_tzinfo(fallback=index.timeZone)
+                self.createDate = self.createDate.replace(tzinfo=tzinfo)
             self.tags = set()
             self.selected = False
         if self.gpsPosition:

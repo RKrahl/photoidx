@@ -23,11 +23,11 @@ class Index(MutableSequence):
     idxFileVersion = "1.0"
     defIdxFilename = Path(".index.yaml")
 
-    def _readdir(self, imgdir, default_tz, known=set()):
+    def _readdir(self, imgdir, known=set()):
         for f in sorted(imgdir.iterdir()):
             rel = f.relative_to(self.directory)
             if f.is_file() and f.suffix == '.jpg' and rel not in known:
-                yield IdxItem(self, filename=rel, default_tz=default_tz)
+                yield IdxItem(self, filename=rel)
 
     def _get_common_checksums(self):
         if len(self.items):
@@ -49,14 +49,16 @@ class Index(MutableSequence):
             self.read(idxfile)
         if comment:
             self.head['Comment'] = comment
+        if default_tz:
+            self.head['TimeZone'] = default_tz
         if imgdir:
             imgdir = Path(imgdir).resolve()
             if not self.directory:
                 self.directory = imgdir
             if idxfile:
-                self.extend_dir(imgdir, default_tz)
+                self.extend_dir(imgdir)
             else:
-                newitems = self._readdir(imgdir, default_tz)
+                newitems = self._readdir(imgdir)
                 self.items = LazyList(newitems)
 
     @property
@@ -81,10 +83,10 @@ class Index(MutableSequence):
     def checksums(self):
         return self.head.get("Checksums")
 
-    def extend_dir(self, imgdir, default_tz=None):
+    def extend_dir(self, imgdir):
         imgdir = Path(imgdir).resolve()
         known = { i.filename for i in self.items }
-        newitems = self._readdir(imgdir, default_tz, known)
+        newitems = self._readdir(imgdir, known)
         self.items.extend(newitems)
 
     def close(self):
