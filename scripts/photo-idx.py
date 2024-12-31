@@ -1,7 +1,7 @@
 #! /usr/bin/python
 
 import argparse
-from photoidx.datetools import local_time_zone
+from photoidx.datetools import gettz
 import photoidx.index
 import photoidx.idxfilter
 from photoidx.stats import Stats
@@ -13,7 +13,7 @@ def create(args):
         imgdir = args.directory,
         checksums = args.checksums.split(',') if args.checksums else [],
         comment = args.comment,
-        default_tz = local_time_zone(),
+        default_tz = gettz(),
     )
     with photoidx.index.Index(**kwargs) as idx:
         idx.write()
@@ -24,7 +24,7 @@ def update(args):
         imgdir = args.directory,
         checksums = None,
         comment = args.comment,
-        default_tz = local_time_zone(),
+        default_tz = gettz(),
     )
     with photoidx.index.Index(**kwargs) as idx:
         idx.write()

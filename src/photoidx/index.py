@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 from packaging.version import Version
 import yaml
+from .datetools import gettz, gettz_name
 from .idxitem import IdxItem
 from .listtools import LazyList
 
@@ -44,14 +45,15 @@ class Index(MutableSequence):
         self.head = dict(Checksums=checksums)
         self.directory = None
         self.idxfile = None
+        self.timeZone = default_tz
         self.items = []
         if idxfile:
             self.read(idxfile)
         if comment:
             self.head['Comment'] = comment
-        if default_tz:
-            self.head['TimeZone'] = default_tz
         if imgdir:
+            if self.timeZone and default_tz:
+                self.timeZone = default_tz
             imgdir = Path(imgdir).resolve()
             if not self.directory:
                 self.directory = imgdir
@@ -74,10 +76,6 @@ class Index(MutableSequence):
     @property
     def comment(self):
         return self.head.get("Comment")
-
-    @property
-    def timeZone(self):
-        return self.head.get("TimeZone")
 
     @property
     def checksums(self):
@@ -168,6 +166,10 @@ class Index(MutableSequence):
             }
         else:
             self.head = head
+            if self.head['TimeZone']:
+                self.timeZone = gettz(self.head['TimeZone'])
+            else:
+                self.timeZone = None
             self.items = [ IdxItem(self, data=i) for i in items ]
 
     def write(self, idxfile=None):
@@ -176,7 +178,7 @@ class Index(MutableSequence):
         head = {
             'Version': self.idxFileVersion,
             'Date': datetime.datetime.now(tz=self.timeZone),
-            'TimeZone': self.timeZone,
+            'TimeZone': gettz_name(self.timeZone) if self.timeZone else None,
             'Checksums': self.checksums,
         }
         if self.comment:

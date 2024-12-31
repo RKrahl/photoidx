@@ -4,7 +4,7 @@
 import datetime
 import hashlib
 from pathlib import Path
-from .datetools import timedelta_round_to_minute
+from .datetools import get_rounded_timezone
 from .exif import Orientation, Exif
 from .geo import GeoPosition
 
@@ -80,7 +80,7 @@ class IdxItem(object):
             # Assume gpsDateTime to be UTC and use the offset between
             # createDate and gpsDateTime to generate time zone info.
             offs = self.createDate - self.exifdata.gpsDateTime
-            return datetime.timezone(timedelta_round_to_minute(offs))
+            return get_rounded_timezone(offs)
         # No luck, return fallback.
         return fallback
 
