@@ -13,7 +13,7 @@ def create(args):
         imgdir = args.directory,
         checksums = args.checksums.split(',') if args.checksums else [],
         comment = args.comment,
-        default_tz = gettz(),
+        default_tz = args.timezone,
     )
     with photoidx.index.Index(**kwargs) as idx:
         idx.write()
@@ -24,7 +24,7 @@ def update(args):
         imgdir = args.directory,
         checksums = None,
         comment = args.comment,
-        default_tz = gettz(),
+        default_tz = args.timezone,
     )
     with photoidx.index.Index(**kwargs) as idx:
         idx.write()
@@ -93,6 +93,9 @@ subparsers = argparser.add_subparsers(title='subcommands')
 
 create_parser = subparsers.add_parser('create', help="create the index")
 create_parser.add_argument('--comment', help="Comment text")
+create_parser.add_argument('--timezone',
+                           help="Time zone to set for image create time",
+                           type=gettz, default=gettz())
 create_parser.add_argument('--checksums', default="md5", 
                            help=("comma separated list of "
                                  "hash algorithms to calculate checksums"))
@@ -101,6 +104,9 @@ create_parser.set_defaults(func=create)
 update_parser = subparsers.add_parser('update',
                                       help="add images to an existing index")
 update_parser.add_argument('--comment', help="Comment text")
+update_parser.add_argument('--timezone',
+                           help="Time zone to set for image create time",
+                           type=gettz, default=gettz())
 update_parser.set_defaults(func=update)
 
 ls_parser = subparsers.add_parser('ls', help="list image files")
