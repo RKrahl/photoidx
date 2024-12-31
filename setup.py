@@ -133,7 +133,7 @@ setup(
     python_requires = ">=3.6",
     install_requires = [
         "setuptools", "packaging",
-        "PyYAML >=5.4", "ExifRead >=2.2.0", "PySide2",
+        "PyYAML >=5.4", "ExifRead >=2.2.0", "python-dateutil", "PySide2",
     ],
     cmdclass = dict(cmdclass, build_py=build_py, sdist=sdist, meta=meta),
 )

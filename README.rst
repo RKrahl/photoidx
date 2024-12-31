@@ -36,6 +36,11 @@ Required library packages:
 
 + `ExifRead`_ >= 2.2.0
 
++ `python-dateutil`_
+
+  If this package is not available, the core functions might still
+  work, but some features will be degraded, spurious errors may occur.
+
 + `PySide2`_
 
 Optional library packages:
@@ -147,6 +152,7 @@ permissions and limitations under the License.
 .. _packaging: https://github.com/pypa/packaging/
 .. _PyYAML: https://github.com/yaml/pyyaml
 .. _ExifRead: https://github.com/ianare/exif-py
+.. _python-dateutil: https://dateutil.readthedocs.io/en/stable/
 .. _PySide2: https://www.pyside.org/
 .. _vignette: https://github.com/hydrargyrum/vignette
 .. _Pillow: https://python-pillow.org/

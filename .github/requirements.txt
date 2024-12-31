@@ -4,4 +4,5 @@ distutils-pytest
 git-props
 pytest >= 3.6.0
 pytest-dependency
+python-dateutil
 setuptools
