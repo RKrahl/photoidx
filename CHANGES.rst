@@ -10,6 +10,8 @@ New features
 
 + `#68`_, `#70`_: Extend the index file format to store attributes of
   the index itself.
++ `#7`_, `#67`_: Support time zone information in the `createDate`
+  attribute in the index.
 + `#38`_, `#62`_: Add geo information to the output of the `stats`
   subcommand in :ref:`photo-idx`.
 
@@ -21,15 +23,20 @@ Incompatible changes
   file silently to the new format when writing it back.  But the tools
   from earlier versions will not be able to read the new format.
 
++ Change the argument list for :class:`~photoidx.idxfilter.IdxFilter`
+  and :class:`~photoidx.stats.Stats`: add the idx as new first argument.
+
 Internal changes
 ----------------
 
 + `#66`_: Review build tool chain.
 + `#69`_: Refactor test suite.
 
+.. _#7: https://github.com/RKrahl/photoidx/issues/7
 .. _#38: https://github.com/RKrahl/photoidx/issues/38
 .. _#62: https://github.com/RKrahl/photoidx/pull/62
 .. _#66: https://github.com/RKrahl/photoidx/pull/66
+.. _#67: https://github.com/RKrahl/photoidx/issues/67
 .. _#68: https://github.com/RKrahl/photoidx/issues/68
 .. _#69: https://github.com/RKrahl/photoidx/pull/69
 .. _#70: https://github.com/RKrahl/photoidx/pull/70
