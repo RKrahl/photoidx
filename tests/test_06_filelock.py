@@ -44,8 +44,8 @@ def ls_bytag(imgdir, tag, qres, qwait):
     """List files by tag.
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter(tags=tag)
-        qres.put((tag, [ str(i.filename) for i in idxfilter.filter(idx) ]))
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, tags=tag)
+        qres.put((tag, [ str(i.filename) for i in idxfilter.filter() ]))
         qwait.get()
 
 def add_tag(imgdir, tag, qres):

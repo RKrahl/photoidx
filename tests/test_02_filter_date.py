@@ -8,41 +8,46 @@ import photoidx.idxfilter
 from conftest import gettestdata
 
 testimgs = [ "dsc_%04d.jpg" % i for i in range(1,13) ]
-indexfile = gettestdata("index-date.yaml")
 
 
-def test_single_date():
+@pytest.fixture(scope="module",
+                params=["index-date-naive.yaml", "index-date-aware.yaml"])
+def indexfile(request):
+    return gettestdata(request.param)
+
+
+def test_single_date(indexfile):
     """Select by single date.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         date = (datetime.datetime(2016, 2, 29), datetime.datetime(2016, 3, 1))
-        idxfilter = photoidx.idxfilter.IdxFilter(date=date)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, date=date)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[1:4]
 
 
-def test_interval_date_date():
+def test_interval_date_date(indexfile):
     """Select by an interval between two dates.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         date = (datetime.datetime(2016, 2, 29), datetime.datetime(2016, 3, 6))
-        idxfilter = photoidx.idxfilter.IdxFilter(date=date)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, date=date)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[1:11]
 
 
-def test_interval_date_datetime():
+def test_interval_date_datetime(indexfile):
     """Select by an interval between start date and end date/time.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         date = (datetime.datetime(2016, 2, 29), 
                 datetime.datetime(2016, 3, 5, 3, 47, 9))
-        idxfilter = photoidx.idxfilter.IdxFilter(date=date)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, date=date)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[1:9]
 
 
-def test_single_datetime():
+def test_single_datetime(indexfile):
     """Select by single date/time.
 
     Probably not very useful in the praxis, but valid.
@@ -50,28 +55,28 @@ def test_single_datetime():
     with photoidx.index.Index(idxfile=indexfile) as idx:
         date = (datetime.datetime(2016, 3, 3, 11, 21, 40), 
                 datetime.datetime(2016, 3, 3, 11, 21, 41))
-        idxfilter = photoidx.idxfilter.IdxFilter(date=date)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, date=date)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[6:7]
 
 
-def test_interval_datetime_date():
+def test_interval_datetime_date(indexfile):
     """Select by an interval between start date/time and end date.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         date = (datetime.datetime(2016, 3, 3, 11, 21, 40), 
                 datetime.datetime(2016, 3, 6))
-        idxfilter = photoidx.idxfilter.IdxFilter(date=date)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, date=date)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[6:11]
 
 
-def test_interval_datetime_datetime():
+def test_interval_datetime_datetime(indexfile):
     """Select by an interval between two date/times.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         date = (datetime.datetime(2016, 3, 3, 11, 21, 41), 
                 datetime.datetime(2016, 3, 5, 3, 47, 9))
-        idxfilter = photoidx.idxfilter.IdxFilter(date=date)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, date=date)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[7:9]

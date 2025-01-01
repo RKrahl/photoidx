@@ -28,6 +28,7 @@ def test_createupdate(tmpdir):
     for fname in testimgfiles[2:]:
         shutil.copy(fname, tmpdir)
     callscript("photo-idx.py", ["-d", str(tmpdir), "update",
-                                "--comment", "Japan 2016"])
+                                "--comment", "Japan 2016",
+                                "--timezone", "Asia/Tokyo"])
     idxfile = tmpdir / ".index.yaml"
     assert index_cmp(idxfile, refindex), "index file differs from reference"

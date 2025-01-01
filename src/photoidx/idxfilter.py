@@ -39,19 +39,28 @@ def strpdate(s):
         enddate = _dt(match.group('y1', 'm1', 'd1', 'h1', 'min1', 's1'))
     return (startdate, enddate)
 
+def _set_date_timezone(tz, datetimes):
+    """Replace the time zone in a tuple of datetime objects.
+    """
+    if datetimes:
+        return tuple(dt.replace(tzinfo=tz) for dt in datetimes)
+    else:
+        return None
+
 
 class IdxFilter(object):
 
     @classmethod
-    def from_args(cls, args):
+    def from_args(cls, idx, args):
         kwargs = {}
         for a in ("tags", "select", "date", "gpspos", "gpsradius", "files"):
             kwargs[a] = getattr(args, a)
-        return cls(**kwargs)
+        return cls(idx, **kwargs)
 
-    def __init__(self, 
+    def __init__(self, idx,
                  tags=None, select=None, date=None, 
                  gpspos=None, gpsradius=3.0, files=None):
+        self.idx = idx
         if tags is not None:
             self.taglist = set()
             self.negtaglist = set()
@@ -65,7 +74,7 @@ class IdxFilter(object):
             self.taglist = None
             self.negtaglist = None
         self.select = select
-        self.date = date
+        self.date = _set_date_timezone(self.idx.timeZone, date)
         if gpspos:
             self.gpspos = gpspos
             self.gpsradius = gpsradius
@@ -98,8 +107,8 @@ class IdxFilter(object):
                 return False
         return True
 
-    def filter(self, idx):
-        return filter(self, idx)
+    def filter(self):
+        return filter(self, self.idx)
 
 
 def addFilterArguments(argparser):

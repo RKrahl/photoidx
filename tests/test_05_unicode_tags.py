@@ -14,7 +14,7 @@ testimgs = [
     "dsc_5126.jpg", "dsc_5167.jpg" 
 ]
 testimgfiles = [ gettestdata(i) for i in testimgs ]
-baseindex = gettestdata("index-nocomment.yaml")
+baseindex = gettestdata("index.yaml")
 refindex = gettestdata("index-unicode-tags.yaml")
 
 tags = {
@@ -34,7 +34,7 @@ def imgdir(tmpdir):
     return tmpdir
 
 def test_tag_unicode(imgdir):
-    with photoidx.index.Index(imgdir=imgdir) as idx:
+    with photoidx.index.Index(idxfile=imgdir) as idx:
         for item in idx:
             for t in tags[str(item.filename)]:
                 item.tags.add(t)

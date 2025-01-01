@@ -1,26 +1,38 @@
 #! /usr/bin/python
 
 import argparse
+from photoidx.datetools import gettz
 import photoidx.index
 import photoidx.idxfilter
 from photoidx.stats import Stats
 
 
 def create(args):
-    checksums = args.checksums.split(',') if args.checksums else []
-    with photoidx.index.Index(idxfile=None, imgdir=args.directory,
-                              checksums=checksums, comment=args.comment) as idx:
+    kwargs = dict(
+        idxfile = None,
+        imgdir = args.directory,
+        checksums = args.checksums.split(',') if args.checksums else [],
+        comment = args.comment,
+        default_tz = args.timezone,
+    )
+    with photoidx.index.Index(**kwargs) as idx:
         idx.write()
 
 def update(args):
-    with photoidx.index.Index(idxfile=args.directory, imgdir=args.directory,
-                              checksums=None, comment=args.comment) as idx:
+    kwargs = dict(
+        idxfile = args.directory,
+        imgdir = args.directory,
+        checksums = None,
+        comment = args.comment,
+        default_tz = args.timezone,
+    )
+    with photoidx.index.Index(**kwargs) as idx:
         idx.write()
 
 def ls(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        for i in idxfilter.filter(idx):
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        for i in idxfilter.filter():
             if args.checksum:
                 try:
                     checksum = i.checksum[args.checksum]
@@ -32,45 +44,45 @@ def ls(args):
 
 def lstags(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
         tags = set()
-        for i in idxfilter.filter(idx):
+        for i in idxfilter.filter():
             tags.update(i.tags)
         for t in sorted(tags):
             print(t)
 
 def addtag(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        for i in idxfilter.filter(idx):
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        for i in idxfilter.filter():
             i.tags.add(args.tag)
         idx.write()
 
 def rmtag(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        for i in idxfilter.filter(idx):
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        for i in idxfilter.filter():
             i.tags.discard(args.tag)
         idx.write()
 
 def select(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        for i in idxfilter.filter(idx):
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        for i in idxfilter.filter():
             i.selected = True
         idx.write()
 
 def deselect(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        for i in idxfilter.filter(idx):
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        for i in idxfilter.filter():
             i.selected = False
         idx.write()
 
 def stats(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        stats = Stats(idxfilter.filter(idx))
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        stats = Stats(idx, idxfilter.filter())
         print(str(stats))
 
 
@@ -81,6 +93,9 @@ subparsers = argparser.add_subparsers(title='subcommands')
 
 create_parser = subparsers.add_parser('create', help="create the index")
 create_parser.add_argument('--comment', help="Comment text")
+create_parser.add_argument('--timezone',
+                           help="Time zone to set for image create time",
+                           type=gettz, default=gettz())
 create_parser.add_argument('--checksums', default="md5", 
                            help=("comma separated list of "
                                  "hash algorithms to calculate checksums"))
@@ -89,6 +104,9 @@ create_parser.set_defaults(func=create)
 update_parser = subparsers.add_parser('update',
                                       help="add images to an existing index")
 update_parser.add_argument('--comment', help="Comment text")
+update_parser.add_argument('--timezone',
+                           help="Time zone to set for image create time",
+                           type=gettz, default=gettz())
 update_parser.set_defaults(func=update)
 
 ls_parser = subparsers.add_parser('ls', help="list image files")

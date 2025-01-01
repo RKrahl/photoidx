@@ -12,7 +12,7 @@ import photoidx.idxfilter
 from conftest import gettestdata
 
 testimgs = [ "dsc_%04d.jpg" % i for i in range(1,13) ]
-indexfile = gettestdata("index-date.yaml")
+
 
 @pytest.fixture(scope="module")
 def argparser():
@@ -20,65 +20,70 @@ def argparser():
     photoidx.idxfilter.addFilterArguments(parser)
     return parser
 
+@pytest.fixture(scope="module",
+                params=["index-date-naive.yaml", "index-date-aware.yaml"])
+def indexfile(request):
+    return gettestdata(request.param)
 
-def test_single_date(argparser):
+
+def test_single_date(argparser, indexfile):
     """Select by single date.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         args = argparser.parse_args(["--date=2016-02-29"])
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[1:4]
 
 
-def test_interval_date_date(argparser):
+def test_interval_date_date(argparser, indexfile):
     """Select by an interval between two dates.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         args = argparser.parse_args(["--date=2016-02-29--2016-03-06"])
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[1:11]
 
 
-def test_interval_date_datetime(argparser):
+def test_interval_date_datetime(argparser, indexfile):
     """Select by an interval between start date and end date/time.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         args = argparser.parse_args(["--date=2016-02-29/2016-03-05T03:47:09"])
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[1:9]
 
 
-def test_single_datetime(argparser):
+def test_single_datetime(argparser, indexfile):
     """Select by single date/time.
 
     Probably not very useful in the praxis, but valid.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         args = argparser.parse_args(["--date=2016-03-03T11:21:40"])
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[6:7]
 
 
-def test_interval_datetime_date(argparser):
+def test_interval_datetime_date(argparser, indexfile):
     """Select by an interval between start date/time and end date.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         args = argparser.parse_args(["--date=2016-03-03T11:21:40/2016-03-06"])
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[6:11]
 
 
-def test_interval_datetime_datetime(argparser):
+def test_interval_datetime_datetime(argparser, indexfile):
     """Select by an interval between two date/times.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         args = argparser.parse_args(["--date=2016-03-03T11:21:41"
                                      "--2016-03-05T03:47:09"])
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[7:9]

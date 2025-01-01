@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 from packaging.version import Version
 import yaml
+from .datetools import gettz, gettz_name
 from .idxitem import IdxItem
 from .listtools import LazyList
 
@@ -39,17 +40,20 @@ class Index(MutableSequence):
             return self.checksums
 
     def __init__(self, idxfile=None, imgdir=None,
-                 checksums=['md5'], comment=None):
+                 checksums=['md5'], comment=None, default_tz=None):
         super().__init__()
         self.head = dict(Checksums=checksums)
         self.directory = None
         self.idxfile = None
+        self.timeZone = default_tz
         self.items = []
         if idxfile:
             self.read(idxfile)
         if comment:
             self.head['Comment'] = comment
         if imgdir:
+            if self.timeZone and default_tz:
+                self.timeZone = default_tz
             imgdir = Path(imgdir).resolve()
             if not self.directory:
                 self.directory = imgdir
@@ -72,10 +76,6 @@ class Index(MutableSequence):
     @property
     def comment(self):
         return self.head.get("Comment")
-
-    @property
-    def timeZone(self):
-        return self.head.get("TimeZone")
 
     @property
     def checksums(self):
@@ -166,19 +166,25 @@ class Index(MutableSequence):
             }
         else:
             self.head = head
+            if self.head['TimeZone']:
+                self.timeZone = gettz(self.head['TimeZone'])
+            else:
+                self.timeZone = None
             self.items = [ IdxItem(self, data=i) for i in items ]
 
     def write(self, idxfile=None):
         """Write the index to a file.
         """
+        now = datetime.datetime.now(tz=self.timeZone).replace(microsecond=0)
         head = {
             'Version': self.idxFileVersion,
-            'Date': datetime.datetime.now(tz=self.timeZone),
-            'TimeZone': self.timeZone,
+            'Date': now,
+            'TimeZone': gettz_name(self.timeZone) if self.timeZone else None,
             'Checksums': self.checksums,
         }
         if self.comment:
             head['Comment'] = self.comment
+        self.head = head
         items = [ i.as_dict() for i in self.items ]
         self._get_idxfile(idxfile, os.O_RDWR|os.O_CREAT)
         self._lockf(mode=fcntl.LOCK_EX)

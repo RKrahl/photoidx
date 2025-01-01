@@ -8,11 +8,17 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import pytest
 import photoidx
 
 
 testdir = Path(__file__).parent
+
+# Some tests might need to make assumptions on the local time zone.
+# So define that boundary condition right from the beginning.
+os.environ["TZ"] = "Europe/Berlin"
+time.tzset()
 
 def gettestdata(fname):
     fname = testdir / "data" / fname

@@ -2,13 +2,14 @@
 ---
 Checksums:
 - md5
-Date: 2024-12-29 16:24:17.195751
-TimeZone: null
+Comment: Japan 2016
+Date: 2025-01-01 10:26:00+09:00
+TimeZone: Asia/Tokyo
 Version: '1.0'
 ---
 - checksum:
     md5: e08205e982f5649088ab0ef047d60706
-  createDate: 2016-02-28 17:26:39
+  createDate: 2016-02-28 17:26:39+09:00
   filename: dsc_4623.jpg
   gpsPosition:
     E: 139.76603333333333
@@ -18,7 +19,7 @@ Version: '1.0'
   tags: []
 - checksum:
     md5: bc8605c7394fbf818dbc694776db6534
-  createDate: 2016-02-29 11:37:51
+  createDate: 2016-02-29 11:37:51+09:00
   filename: dsc_4664.jpg
   gpsPosition:
     E: 139.70024333333333
@@ -27,7 +28,7 @@ Version: '1.0'
   tags: []
 - checksum:
     md5: 8753a712e0f426a7ac8b9c47368b7528
-  createDate: 2016-03-05 14:53:42
+  createDate: 2016-03-05 14:53:42+09:00
   filename: dsc_4831.jpg
   gpsPosition:
     E: 139.02553666666668
@@ -36,7 +37,7 @@ Version: '1.0'
   tags: []
 - checksum:
     md5: 761bd27c888b4a8a8fbb616daceee443
-  createDate: 2016-03-08 15:44:32
+  createDate: 2016-03-08 15:44:32+09:00
   filename: dsc_5126.jpg
   gpsPosition: null
   name: geisha.jpg
@@ -44,7 +45,7 @@ Version: '1.0'
   tags: []
 - checksum:
     md5: 0f6f58cdb353b837fb340d107a1f5fb0
-  createDate: 2016-03-09 10:07:48
+  createDate: 2016-03-09 10:07:48+09:00
   filename: dsc_5167.jpg
   gpsPosition:
     E: 135.718705

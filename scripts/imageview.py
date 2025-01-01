@@ -33,6 +33,6 @@ except OSError:
     else:
         readOnly = not args.create
         dirty = args.create
-idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
+idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
 imageViewer = ImageViewer(idx, idxfilter, args.scale, readOnly, dirty)
 sys.exit(app.exec_())

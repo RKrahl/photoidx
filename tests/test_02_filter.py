@@ -27,8 +27,8 @@ def test_by_date(imgdir):
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
         date = (datetime.datetime(2016, 3, 5), datetime.datetime(2016, 3, 6))
-        idxfilter = photoidx.idxfilter.IdxFilter(date=date)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, date=date)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == ["dsc_4831.jpg"]
 
 def test_by_gpspos(imgdir):
@@ -36,8 +36,9 @@ def test_by_gpspos(imgdir):
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
         pos = GeoPosition("35.6883 N, 139.7544 E")
-        idxfilter = photoidx.idxfilter.IdxFilter(gpspos=pos, gpsradius=20.0)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        filter_args = dict(gpspos=pos, gpsradius=20.0)
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, **filter_args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == ["dsc_4623.jpg", "dsc_4664.jpg"]
 
 def test_by_files(imgdir):
@@ -45,16 +46,16 @@ def test_by_files(imgdir):
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
         files = ["dsc_4664.jpg", "dsc_4831.jpg"]
-        idxfilter = photoidx.idxfilter.IdxFilter(files=files)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, files=files)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == files
 
 def test_by_single_tag(imgdir):
     """Select by one single tag.
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter(tags="Shinto_shrine")
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, tags="Shinto_shrine")
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == ["dsc_4664.jpg", "dsc_4831.jpg"]
 
 def test_by_mult_tags(imgdir):
@@ -64,8 +65,9 @@ def test_by_mult_tags(imgdir):
     having all the tags set.
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter(tags="Tokyo,Shinto_shrine")
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        filter_args = dict(tags="Tokyo,Shinto_shrine")
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, **filter_args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == ["dsc_4664.jpg"]
 
 def test_by_neg_tags(imgdir):
@@ -75,8 +77,9 @@ def test_by_neg_tags(imgdir):
     the tag not set.
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter(tags="Tokyo,!Shinto_shrine")
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        filter_args = dict(tags="Tokyo,!Shinto_shrine")
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, **filter_args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == ["dsc_4623.jpg"]
 
 def test_by_empty_tag(imgdir):
@@ -85,8 +88,8 @@ def test_by_empty_tag(imgdir):
     The empty string as tag selects images having no tag.
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter(tags="")
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, tags="")
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == ["dsc_5126.jpg", "dsc_5167.jpg"]
 
 def test_by_date_and_tag(imgdir):
@@ -97,31 +100,31 @@ def test_by_date_and_tag(imgdir):
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
         date = (datetime.datetime(2016, 2, 28), datetime.datetime(2016, 2, 29))
-        idxfilter = photoidx.idxfilter.IdxFilter(tags="Tokyo", date=date)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, tags="Tokyo", date=date)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == ["dsc_4623.jpg"]
 
 def test_by_selected(imgdir):
     """Select by selected flag.
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter(select=True)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, select=True)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == ["dsc_4664.jpg", "dsc_5126.jpg"]
 
 def test_by_selected_and_tag(imgdir):
     """Select by selected flag and tag.
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter(select=True, tags="Tokyo")
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        filter_args = dict(select=True, tags="Tokyo")
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, **filter_args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == ["dsc_4664.jpg"]
 
 def test_by_not_selected(imgdir):
     """Select by not-selected flag.
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter(select=False)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, select=False)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == ["dsc_4623.jpg", "dsc_4831.jpg", "dsc_5167.jpg"]
-

@@ -7,11 +7,11 @@ from .geo import GeoPosition
 
 class Stats(object):
 
-    def __init__(self, items):
+    def __init__(self, idx, items):
         self.count = 0
         self.selected = 0
-        self.oldest = datetime.datetime.max
-        self.newest = datetime.datetime.min
+        self.oldest = datetime.datetime.max.replace(tzinfo=idx.timeZone)
+        self.newest = datetime.datetime.min.replace(tzinfo=idx.timeZone)
         self.by_date = {}
         self.by_tag = {}
         gpsPositions = []

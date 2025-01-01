@@ -1,8 +1,10 @@
 """Provide the class IdxItem which represents an item in the index.
 """
 
+import datetime
 import hashlib
 from pathlib import Path
+from .datetools import get_rounded_timezone
 from .exif import Orientation, Exif
 from .geo import GeoPosition
 
@@ -27,6 +29,7 @@ def _checksum(fname, checksums):
 class IdxItem(object):
 
     def __init__(self, index, data=None, filename=None):
+        self.exifdata = None
         if data is not None:
             self.filename = Path(data.get('filename'))
             self.name = data.get('name', None)
@@ -52,14 +55,34 @@ class IdxItem(object):
             if index.directory is not None:
                 filename = index.directory / filename
             self.checksum = _checksum(filename, index.checksums)
-            exifdata = Exif(filename)
-            self.createDate = exifdata.createDate
-            self.orientation = exifdata.orientation
-            self.gpsPosition = exifdata.gpsPosition
+            self.exifdata = Exif(filename)
+            self.createDate = self.exifdata.createDate
+            self.orientation = self.exifdata.orientation
+            self.gpsPosition = self.exifdata.gpsPosition
+            if index.timeZone is not None:
+                tzinfo = self.get_createDate_tzinfo(fallback=index.timeZone)
+                self.createDate = self.createDate.replace(tzinfo=tzinfo)
             self.tags = set()
             self.selected = False
         if self.gpsPosition:
             self.gpsPosition = GeoPosition(self.gpsPosition)
+
+    def get_createDate_tzinfo(self, fallback=None):
+        """Get time zone info from createDate.
+
+        If createDate is naive, e.g. does not have time zone
+        information, try to derive that information from other
+        attributes.
+        """
+        if self.createDate.tzinfo:
+            return self.createDate.tzinfo
+        if self.exifdata and self.exifdata.gpsDateTime:
+            # Assume gpsDateTime to be UTC and use the offset between
+            # createDate and gpsDateTime to generate time zone info.
+            offs = self.createDate - self.exifdata.gpsDateTime
+            return get_rounded_timezone(offs)
+        # No luck, return fallback.
+        return fallback
 
     def as_dict(self):
         tags = self.tags.copy()

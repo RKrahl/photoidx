@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import pytest
 import yaml
+from photoidx.datetools import gettz
 from conftest import tmpdir, gettestdata, callscript, index_cmp
 
 testimgs = [ 
@@ -14,8 +15,11 @@ testimgs = [
     "dsc_5126.jpg", "dsc_5167.jpg" 
 ]
 testimgfiles = [ gettestdata(i) for i in testimgs ]
-
 refindex = gettestdata("index.yaml")
+tz = gettz("Asia/Tokyo")
+date1 = datetime.datetime(2016, 2, 28, 17, 26, 39, tzinfo=tz)
+date2 = datetime.datetime(2016, 2, 29, 11, 37, 51, tzinfo=tz)
+date3 = datetime.datetime(2016, 3, 9, 10, 7, 48, tzinfo=tz)
 
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
@@ -35,7 +39,8 @@ def test_create(imgdir, monkeypatch):
     """Create the index.
     """
     monkeypatch.chdir(imgdir)
-    callscript("photo-idx.py", ["create", "--comment", "Japan 2016"])
+    args = ["create", "--comment", "Japan 2016", "--timezone", "Asia/Tokyo"]
+    callscript("photo-idx.py", args)
     idxfile = imgdir / ".index.yaml"
     assert index_cmp(idxfile, refindex), "index file differs from reference"
 
@@ -331,8 +336,8 @@ def test_stats_all(imgdir):
     with fname.open("rt") as f:
         stats = yaml.safe_load(f)
     assert stats["Count"] == 5
-    assert stats["Oldest"] == datetime.datetime(2016, 2, 28, 17, 26, 39)
-    assert stats["Newest"] == datetime.datetime(2016, 3, 9, 10, 7, 48)
+    assert stats["Oldest"] == date1
+    assert stats["Newest"] == date3
     assert stats["By date"] == {
         datetime.date(2016, 2, 28) : 1,
         datetime.date(2016, 2, 29) : 1,
@@ -360,8 +365,8 @@ def test_stats_filtered(imgdir):
     with fname.open("rt") as f:
         stats = yaml.safe_load(f)
     assert stats["Count"] == 2
-    assert stats["Oldest"] == datetime.datetime(2016, 2, 28, 17, 26, 39)
-    assert stats["Newest"] == datetime.datetime(2016, 2, 29, 11, 37, 51)
+    assert stats["Oldest"] == date1
+    assert stats["Newest"] == date2
     assert stats["By date"] == {
         datetime.date(2016, 2, 28) : 1,
         datetime.date(2016, 2, 29) : 1,

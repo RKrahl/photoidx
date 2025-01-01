@@ -13,6 +13,7 @@ import subprocess
 import pytest
 import photoidx.index
 import photoidx.idxfilter
+from photoidx.datetools import gettz
 from photoidx.geo import GeoPosition
 from conftest import tmpdir, gettestdata, index_cmp
 
@@ -39,7 +40,7 @@ def imgdir(tmpdir):
 def test_create(imgdir):
     """Create the index.
     """
-    with photoidx.index.Index(imgdir=imgdir) as idx:
+    with photoidx.index.Index(imgdir=imgdir, default_tz=gettz()) as idx:
         for k in ("Japan", "Quebec"):
             idx.extend_dir(imgdir / k)
         idx.write()
@@ -72,16 +73,18 @@ def test_tag(imgdir, monkeypatch):
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
         tokyo = GeoPosition("35.68 N, 139.77 E")
-        idxfilter = photoidx.idxfilter.IdxFilter(gpspos=tokyo, gpsradius=500.0)
-        for i in idxfilter.filter(idx):
+        filter_args = dict(gpspos=tokyo, gpsradius=500.0)
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, **filter_args)
+        for i in idxfilter.filter():
             i.tags.add("Japan")
         quebec = GeoPosition("46.81 N, 71.22 W")
-        idxfilter = photoidx.idxfilter.IdxFilter(gpspos=quebec, gpsradius=500.0)
-        for i in idxfilter.filter(idx):
+        filter_args = dict(gpspos=quebec, gpsradius=500.0)
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, **filter_args)
+        for i in idxfilter.filter():
             i.tags.add("Quebec")
         idx.write()
     with photoidx.index.Index(idxfile=imgdir) as idx:
         for k in ("Japan", "Quebec"):
-            idxfilter = photoidx.idxfilter.IdxFilter(tags=k)
-            fnames = [ i.filename for i in idxfilter.filter(idx) ]
+            idxfilter = photoidx.idxfilter.IdxFilter(idx, tags=k)
+            fnames = [ i.filename for i in idxfilter.filter() ]
             assert fnames == [ Path(k, f) for f in testimgs[k] ]

@@ -194,7 +194,8 @@ class FilterDialog(QtWidgets.QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("Filter options")
 
-    def setfilter(self, imgFilter):
+    def setfilter(self, idx, imgFilter):
+        self.idx = idx
         self.imgFilter = imgFilter
         self.tagFilterOption.setOption(imgFilter.taglist, imgFilter.negtaglist)
         self.selectFilterOption.setOption(imgFilter.select)
@@ -209,5 +210,5 @@ class FilterDialog(QtWidgets.QDialog):
         filterArgs.update(self.dateFilterOption.getOption())
         filterArgs.update(self.gpsFilterOption.getOption())
         filterArgs.update(self.filelistFilterOption.getOption())
-        self.imgFilter = IdxFilter(**filterArgs)
+        self.imgFilter = IdxFilter(self.idx, **filterArgs)
         super().accept()

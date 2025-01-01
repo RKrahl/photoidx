@@ -5,6 +5,7 @@ import datetime
 import shutil
 import pytest
 import yaml
+from photoidx.datetools import gettz
 import photoidx.index
 import photoidx.idxfilter
 from photoidx.stats import Stats
@@ -16,6 +17,10 @@ testimgs = [
     "dsc_5126.jpg", "dsc_5167.jpg" 
 ]
 testimgfiles = [ gettestdata(i) for i in testimgs ]
+tz = gettz("Asia/Tokyo")
+date1 = datetime.datetime(2016, 2, 28, 17, 26, 39, tzinfo=tz)
+date2 = datetime.datetime(2016, 2, 29, 11, 37, 51, tzinfo=tz)
+date3 = datetime.datetime(2016, 3, 9, 10, 7, 48, tzinfo=tz)
 
 @pytest.fixture(scope="module")
 def imgdir(tmpdir):
@@ -29,11 +34,11 @@ def test_stats_all(imgdir):
     """Get statistics on all images.
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
-        stats = Stats(idx)
+        stats = Stats(idx, idx)
     assert stats.count == 5
     assert stats.selected == 2
-    assert stats.oldest == datetime.datetime(2016, 2, 28, 17, 26, 39)
-    assert stats.newest == datetime.datetime(2016, 3, 9, 10, 7, 48)
+    assert stats.oldest == date1
+    assert stats.newest == date3
     assert stats.by_date == {
         datetime.date(2016, 2, 28).toordinal() : 1,
         datetime.date(2016, 2, 29).toordinal() : 1,
@@ -51,11 +56,11 @@ def test_stats_all_yaml(imgdir):
     """The string representation of a Stats object is YAML.
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
-        stats = yaml.safe_load(str(Stats(idx)))
+        stats = yaml.safe_load(str(Stats(idx, idx)))
     assert stats["Count"] == 5
     assert stats["Selected"] == 2
-    assert stats["Oldest"] == datetime.datetime(2016, 2, 28, 17, 26, 39)
-    assert stats["Newest"] == datetime.datetime(2016, 3, 9, 10, 7, 48)
+    assert stats["Oldest"] == date1
+    assert stats["Newest"] == date3
     assert stats["By date"] == {
         datetime.date(2016, 2, 28) : 1,
         datetime.date(2016, 2, 29) : 1,
@@ -73,12 +78,12 @@ def test_stats_filtered(imgdir):
     """Get statistics on a selection of images.
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter(tags="Tokyo")
-        stats = Stats(idxfilter.filter(idx))
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, tags="Tokyo")
+        stats = Stats(idx, idxfilter.filter())
     assert stats.count == 2
     assert stats.selected == 1
-    assert stats.oldest == datetime.datetime(2016, 2, 28, 17, 26, 39)
-    assert stats.newest == datetime.datetime(2016, 2, 29, 11, 37, 51)
+    assert stats.oldest == date1
+    assert stats.newest == date2
     assert stats.by_date == {
         datetime.date(2016, 2, 28).toordinal() : 1,
         datetime.date(2016, 2, 29).toordinal() : 1,
@@ -87,4 +92,3 @@ def test_stats_filtered(imgdir):
         "Shinto_shrine": 1,
         "Tokyo": 2,
     }
-
