@@ -34,7 +34,7 @@ def imgdir(tmpdir):
     return tmpdir
 
 def test_tag_unicode(imgdir):
-    with photoidx.index.Index(imgdir=imgdir) as idx:
+    with photoidx.index.Index(idxfile=imgdir) as idx:
         for item in idx:
             for t in tags[str(item.filename)]:
                 item.tags.add(t)
