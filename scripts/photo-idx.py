@@ -82,7 +82,7 @@ def deselect(args):
 def stats(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
         idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
-        stats = Stats(idxfilter.filter())
+        stats = Stats(idx, idxfilter.filter())
         print(str(stats))
 
 
