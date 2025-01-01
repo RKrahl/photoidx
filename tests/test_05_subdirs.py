@@ -13,6 +13,7 @@ import subprocess
 import pytest
 import photoidx.index
 import photoidx.idxfilter
+from photoidx.datetools import gettz
 from photoidx.geo import GeoPosition
 from conftest import tmpdir, gettestdata, index_cmp
 
@@ -39,7 +40,7 @@ def imgdir(tmpdir):
 def test_create(imgdir):
     """Create the index.
     """
-    with photoidx.index.Index(imgdir=imgdir) as idx:
+    with photoidx.index.Index(imgdir=imgdir, default_tz=gettz()) as idx:
         for k in ("Japan", "Quebec"):
             idx.extend_dir(imgdir / k)
         idx.write()
