@@ -175,9 +175,10 @@ class Index(MutableSequence):
     def write(self, idxfile=None):
         """Write the index to a file.
         """
+        now = datetime.datetime.now(tz=self.timeZone).replace(microsecond=0)
         head = {
             'Version': self.idxFileVersion,
-            'Date': datetime.datetime.now(tz=self.timeZone),
+            'Date': now,
             'TimeZone': gettz_name(self.timeZone) if self.timeZone else None,
             'Checksums': self.checksums,
         }
