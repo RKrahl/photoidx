@@ -31,8 +31,8 @@ def test_single_date(argparser, indexfile):
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         args = argparser.parse_args(["--date=2016-02-29"])
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[1:4]
 
 
@@ -41,8 +41,8 @@ def test_interval_date_date(argparser, indexfile):
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         args = argparser.parse_args(["--date=2016-02-29--2016-03-06"])
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[1:11]
 
 
@@ -51,8 +51,8 @@ def test_interval_date_datetime(argparser, indexfile):
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         args = argparser.parse_args(["--date=2016-02-29/2016-03-05T03:47:09"])
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[1:9]
 
 
@@ -63,8 +63,8 @@ def test_single_datetime(argparser, indexfile):
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         args = argparser.parse_args(["--date=2016-03-03T11:21:40"])
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[6:7]
 
 
@@ -73,8 +73,8 @@ def test_interval_datetime_date(argparser, indexfile):
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
         args = argparser.parse_args(["--date=2016-03-03T11:21:40/2016-03-06"])
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[6:11]
 
 
@@ -84,6 +84,6 @@ def test_interval_datetime_datetime(argparser, indexfile):
     with photoidx.index.Index(idxfile=indexfile) as idx:
         args = argparser.parse_args(["--date=2016-03-03T11:21:41"
                                      "--2016-03-05T03:47:09"])
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        fnames = [ str(i.filename) for i in idxfilter.filter(idx) ]
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        fnames = [ str(i.filename) for i in idxfilter.filter() ]
         assert fnames == testimgs[7:9]

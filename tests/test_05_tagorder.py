@@ -54,8 +54,8 @@ def test_tag_ref(imgdir):
         taglist = [ "Japan", "Tokyo", "Hakone", "Kyoto", 
                     "Ginza", "Shinto_shrine", "Geisha", "Ryoan-ji" ]
         for t in taglist:
-            idxfilter = photoidx.idxfilter.IdxFilter(files=tags[t])
-            for i in idxfilter.filter(idx):
+            idxfilter = photoidx.idxfilter.IdxFilter(idx, files=tags[t])
+            for i in idxfilter.filter():
                 i.tags.add(t)
         idx.write()
     shutil.copy(idxfname, reffname)
@@ -71,8 +71,8 @@ def test_tag_shuffle(imgdir):
         taglist = [ "Ginza", "Hakone", "Japan", "Geisha", 
                     "Shinto_shrine", "Tokyo", "Kyoto", "Ryoan-ji" ]
         for t in taglist:
-            idxfilter = photoidx.idxfilter.IdxFilter(files=tags[t])
-            for i in idxfilter.filter(idx):
+            idxfilter = photoidx.idxfilter.IdxFilter(idx, files=tags[t])
+            for i in idxfilter.filter():
                 i.tags.add(t)
         idx.write()
     assert index_cmp(idxfname, reffname), "index file differs from reference"
@@ -110,8 +110,8 @@ def test_tag_extra(imgdir):
         for i in idx:
             i.tags.add("extra")
         for t in taglist:
-            idxfilter = photoidx.idxfilter.IdxFilter(files=tags[t])
-            for i in idxfilter.filter(idx):
+            idxfilter = photoidx.idxfilter.IdxFilter(idx, files=tags[t])
+            for i in idxfilter.filter():
                 i.tags.add(t)
         for i in idx:
             i.tags.remove("extra")

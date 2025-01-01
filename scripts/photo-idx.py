@@ -31,8 +31,8 @@ def update(args):
 
 def ls(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        for i in idxfilter.filter(idx):
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        for i in idxfilter.filter():
             if args.checksum:
                 try:
                     checksum = i.checksum[args.checksum]
@@ -44,45 +44,45 @@ def ls(args):
 
 def lstags(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
         tags = set()
-        for i in idxfilter.filter(idx):
+        for i in idxfilter.filter():
             tags.update(i.tags)
         for t in sorted(tags):
             print(t)
 
 def addtag(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        for i in idxfilter.filter(idx):
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        for i in idxfilter.filter():
             i.tags.add(args.tag)
         idx.write()
 
 def rmtag(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        for i in idxfilter.filter(idx):
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        for i in idxfilter.filter():
             i.tags.discard(args.tag)
         idx.write()
 
 def select(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        for i in idxfilter.filter(idx):
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        for i in idxfilter.filter():
             i.selected = True
         idx.write()
 
 def deselect(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        for i in idxfilter.filter(idx):
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        for i in idxfilter.filter():
             i.selected = False
         idx.write()
 
 def stats(args):
     with photoidx.index.Index(idxfile=args.directory) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter.from_args(args)
-        stats = Stats(idxfilter.filter(idx))
+        idxfilter = photoidx.idxfilter.IdxFilter.from_args(idx, args)
+        stats = Stats(idxfilter.filter())
         print(str(stats))
 
 

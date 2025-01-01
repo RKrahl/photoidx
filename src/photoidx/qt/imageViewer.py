@@ -426,7 +426,7 @@ class ImageViewer(QtWidgets.QMainWindow):
             self._reevalFilter()
 
     def filterOptions(self):
-        self.filterDialog.setfilter(self.imgFilter)
+        self.filterDialog.setfilter(self.images, self.imgFilter)
         if self.filterDialog.exec_():
             if self.overviewwindow:
                 # The overview window would need to be rebuild in any case.

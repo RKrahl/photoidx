@@ -73,8 +73,8 @@ def test_stats_filtered(imgdir):
     """Get statistics on a selection of images.
     """
     with photoidx.index.Index(idxfile=imgdir) as idx:
-        idxfilter = photoidx.idxfilter.IdxFilter(tags="Tokyo")
-        stats = Stats(idxfilter.filter(idx))
+        idxfilter = photoidx.idxfilter.IdxFilter(idx, tags="Tokyo")
+        stats = Stats(idxfilter.filter())
     assert stats.count == 2
     assert stats.selected == 1
     assert stats.oldest == datetime.datetime(2016, 2, 28, 17, 26, 39)
@@ -87,4 +87,3 @@ def test_stats_filtered(imgdir):
         "Shinto_shrine": 1,
         "Tokyo": 2,
     }
-
