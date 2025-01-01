@@ -35,7 +35,8 @@ def test_create(imgdir, monkeypatch):
     """Create the index.
     """
     monkeypatch.chdir(imgdir)
-    callscript("photo-idx.py", ["create", "--comment", "Japan 2016"])
+    args = ["create", "--comment", "Japan 2016", "--timezone", "Asia/Tokyo"]
+    callscript("photo-idx.py", args)
     idxfile = imgdir / ".index.yaml"
     assert index_cmp(idxfile, refindex), "index file differs from reference"
 

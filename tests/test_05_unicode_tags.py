@@ -14,7 +14,7 @@ testimgs = [
     "dsc_5126.jpg", "dsc_5167.jpg" 
 ]
 testimgfiles = [ gettestdata(i) for i in testimgs ]
-baseindex = gettestdata("index-nocomment.yaml")
+baseindex = gettestdata("index.yaml")
 refindex = gettestdata("index-unicode-tags.yaml")
 
 tags = {
