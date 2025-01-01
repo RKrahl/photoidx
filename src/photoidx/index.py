@@ -183,6 +183,7 @@ class Index(MutableSequence):
         }
         if self.comment:
             head['Comment'] = self.comment
+        self.head = head
         items = [ i.as_dict() for i in self.items ]
         self._get_idxfile(idxfile, os.O_RDWR|os.O_CREAT)
         self._lockf(mode=fcntl.LOCK_EX)
