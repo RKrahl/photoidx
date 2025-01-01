@@ -12,7 +12,7 @@ import photoidx.idxfilter
 from conftest import gettestdata
 
 testimgs = [ "dsc_%04d.jpg" % i for i in range(1,13) ]
-indexfile = gettestdata("index-date.yaml")
+
 
 @pytest.fixture(scope="module")
 def argparser():
@@ -20,8 +20,13 @@ def argparser():
     photoidx.idxfilter.addFilterArguments(parser)
     return parser
 
+@pytest.fixture(scope="module",
+                params=["index-date-naive.yaml", "index-date-aware.yaml"])
+def indexfile(request):
+    return gettestdata(request.param)
 
-def test_single_date(argparser):
+
+def test_single_date(argparser, indexfile):
     """Select by single date.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
@@ -31,7 +36,7 @@ def test_single_date(argparser):
         assert fnames == testimgs[1:4]
 
 
-def test_interval_date_date(argparser):
+def test_interval_date_date(argparser, indexfile):
     """Select by an interval between two dates.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
@@ -41,7 +46,7 @@ def test_interval_date_date(argparser):
         assert fnames == testimgs[1:11]
 
 
-def test_interval_date_datetime(argparser):
+def test_interval_date_datetime(argparser, indexfile):
     """Select by an interval between start date and end date/time.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
@@ -51,7 +56,7 @@ def test_interval_date_datetime(argparser):
         assert fnames == testimgs[1:9]
 
 
-def test_single_datetime(argparser):
+def test_single_datetime(argparser, indexfile):
     """Select by single date/time.
 
     Probably not very useful in the praxis, but valid.
@@ -63,7 +68,7 @@ def test_single_datetime(argparser):
         assert fnames == testimgs[6:7]
 
 
-def test_interval_datetime_date(argparser):
+def test_interval_datetime_date(argparser, indexfile):
     """Select by an interval between start date/time and end date.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
@@ -73,7 +78,7 @@ def test_interval_datetime_date(argparser):
         assert fnames == testimgs[6:11]
 
 
-def test_interval_datetime_datetime(argparser):
+def test_interval_datetime_datetime(argparser, indexfile):
     """Select by an interval between two date/times.
     """
     with photoidx.index.Index(idxfile=indexfile) as idx:
